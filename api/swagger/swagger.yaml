@@ -41,7 +41,7 @@ paths:
   /test:
     x-swagger-router-controller: user
     get:
-      description: Get existence of value
+      description: Get value of the key
       operationId: test
       parameters:
         - name: key
@@ -97,6 +97,26 @@ paths:
           schema:
             $ref: "#/definitions/UserResponse"
         "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /user/favorite:
+    x-swagger-router-controller: user
+    get:
+      description: Get list favorite song
+      operationId: getFavoriteSong
+      parameters:
+        - name: token
+          in: query
+          description: Token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/TrackInfoResponse"
+        default:
           description: Error
           schema:
             $ref: "#/definitions/Response"
@@ -194,6 +214,14 @@ definitions:
         type: string
       password:
         type: string
+  FavoriteTrackResponse:
+    properties:
+      status:
+        type: integer
+      listTrackInfo:
+        type: array
+        items:
+          $ref: "#/definitions/TrackInfoResponse"
   Response:
     properties:
       status:
