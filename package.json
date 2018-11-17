@@ -11,6 +11,8 @@
     "hapi": "^10.0.0",
     "jsonwebtoken": "^8.4.0",
     "level-rocksdb": "^3.0.1",
+    "node-arff": "^1.1.0",
+    "node-weka": "0.0.8",
     "spotify-web-api-node": "^4.0.0",
     "swagger-hapi": "^0.1.0"
   },
