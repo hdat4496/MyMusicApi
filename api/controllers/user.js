@@ -8,6 +8,7 @@ module.exports = {
     login: login,
     signup: signUp,
     test: test,
+    getFavoriteSong: getFavoriteSong,
 
 };
 function test(req, res) {
@@ -89,5 +90,69 @@ function signUp(req, res) {
 
     } catch (err) {
         res.json({ status: 400, message: 'Registration fail' });
+    }
+}
+
+function getFavoriteSong(req, res) {
+    var token = req.swagger.params.token.value;
+    var check = checkToken(token);
+    if (check.isValid && !check.isExpired) {
+        var idList = [];
+        var resultList = [];
+        get(`user.${check.user}.favorite`, (err, value) => {
+            if (!err) {
+                if (value != '') {
+                    idList = value.split(";");
+                    idList.map((value) => {
+                        var id = value;
+                        get(`track.${id}.info`, (err, value) => {
+                            if (!err) {
+                                var content = value.split(";");
+                                get(`track.${id}.like`, (err, value) => {
+                                    if (!err) {
+                                        var like = value;
+                                        get(`track.${id}.listen`, (err, value) => {
+                                            var listen = value;
+                                            if (!err) {
+                                                var trackInfo = {
+                                                    id: id,
+                                                    title: content[0],
+                                                    artist: content[1],
+                                                    artist_imageurl: content[2],
+                                                    genre: content[3],
+                                                    genre_imageurl: content[4],
+                                                    imageurl: content[5],
+                                                    url: content[6],
+                                                    like: like,
+                                                    listen: listen,
+                                                }
+                                                resultList.push(trackInfo);
+                                                if (resultList.length === idList.length) {
+                                                    res.json({
+                                                        status: 200,
+                                                        listTrackInfo: resultList
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+                else {
+                    res.json({
+                        status: 200,
+                        listTrackInfo: resultList
+                    });
+                }
+            } else {
+                res.json({ status: 404, message: 'Favorite songs not found' });
+            }
+        });
+    }
+    else {
+        res.json({ status: 400, message: 'Token is invalid or expired' });
     }
 }
