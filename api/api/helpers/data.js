@@ -82,6 +82,18 @@ function runData() {
     putSync('chart.1.2.5', '24LS4lQShWyixJ0ZrJXfJ5');
 
     putSync('chart.1.latedid', 2);
+
+    putSync('user.hoanghtk', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
+    putSync('user.hoanghtk.fullname', 'Kim Hoàng');
+    putSync('user.hoanghtk.playlist', '1');
+    putSync('user.hoanghtk.favorite', '2V65y3PX4DkRhy1djlxd9p;3uGDAwRPcOu6tHuKUjk02H');
+
+
+    putSync('user.toanhad', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
+    putSync('user.toanhad.fullname', 'Anh Toàn');
+    putSync('user.toanhad.playlist', '1;2');
+    putSync('user.toanhad.favorite', '2V65y3PX4DkRhy1djlxd9p;3uGDAwRPcOu6tHuKUjk02H');
+    
 }
 
 runData();
