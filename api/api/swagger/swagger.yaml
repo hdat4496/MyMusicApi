@@ -2,59 +2,110 @@ swagger: "2.0"
 info:
   version: "0.0.1"
   title: Hello World App
-# during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
 basePath: /
-# 
+#
 schemes:
-  # tip: remove http to make production-grade
   - http
   - https
-# format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
 paths:
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+  /track/get-track:
+    x-swagger-router-controller: track
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
+      description: Returns 'Hello' to the caller\
+      operationId: getTrack
       parameters:
-        - name: name
+        - name: token
           in: query
-          description: The name of the person to whom to say hello
-          required: false
+          description: User's token
+          required: true
+          type: string
+        - name: id
+          in: query
+          description: Track's id
+          required: true
           type: string
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/TrackResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
   ErrorResponse:
     required:
       - message
     properties:
       message:
         type: string
+  TrackInfoResponse:
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      artist:
+        type: string
+      artist_imageurl:
+        type: string
+      genre:
+        type: string
+      genre_imageurl:
+        type: string
+      imageurl:
+        type: string
+      url:
+        type: string
+      like:
+        type: number
+      listen:
+        type: number
+  TrackFeatureResponse:
+    properties:
+      speechiness:
+        type: number
+      acousticness:
+        type: number
+      instrumentalness:
+        type: number
+      liveness:
+        type: number
+      valence:
+        type: number
+      duration_ms:
+        type: number
+      tempo:
+        type: number
+      time_signature:
+        type: number
+      mode:
+        type: number
+      key:
+        type: number
+      loudness:
+        type: number
+      danceability:
+        type: number
+      energy:
+        type: number
+  TrackResponse:
+    properties:
+      info:
+        type: object
+        $ref: "#/definitions/TrackInfoResponse"
+      lyric:
+        type: string
+      feature:
+        type: object
+        $ref: "#/definitions/TrackFeatureResponse"
+      hit:
+        type: boolean
