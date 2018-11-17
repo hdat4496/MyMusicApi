@@ -9,6 +9,8 @@
   "main": "app.js",
   "dependencies": {
     "hapi": "^10.0.0",
+    "jsonwebtoken": "^8.4.0",
+    "level-rocksdb": "^3.0.1",
     "swagger-hapi": "^0.1.0"
   },
   "devDependencies": {

@@ -1,68 +1,77 @@
 var { putSync } = require('./db');
 
 function runData() {
-    // user
-    putSync('u.toan', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
-    putSync('u.toan.status', 'hôm nay chán quá');
-    putSync('u.toan.cons', '1;2');
-    putSync('u.toan.groups', '1');
-    putSync('u.toan.user', 'thao;hoang');
+    // Track
+    putSync('track.1.url', 'spotify:track:11dFghVXANMlKmJXsNCbNl');
+    putSync('track.1.title', 'We don\'t talk anymore');
+    putSync('track.1.artist.1', 'Charlie Puth;https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee'); // value contains: artist name, artist image url
+    putSync('track.1.artist.2', 'Selena Gomes;https://i.scdn.co/image/107819f5dc557d5d0a4b216781c6ec1b2f3c5ab2');
+    putSync('track.1.artist.count', 2);
+    putSync('track.1.genres', 'dance;rock;R&B');
+    putSync('track.1.charts', 'dance.1;dance.2');
+    putSync('track.1.imageurl', 'https://i.scdn.co/image/107819f5dc557d5d0a4b216781c6ec1b2f3c5ab2');
+    putSync('track.1.listen', 1);
+    putSync('track.1.like', 1);
+    // Track's musical features: 143 features
+    putSync('track.1.speechiness', '0.7');
+    putSync('track.1.acousticness', '0.5');
+    putSync('track.1.beatdiff_mean', '0.5');
+
+
+    putSync('track.lastedid',1);
+
+
+    // Artist
+    putSync('artist.1.name', 'Charlie Puth');
+    putSync('artist.1.imageurl', 'https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee');
+    putSync('artist.1.track', '1;2;3;4');
+    putSync('artist.2.name', 'Selena Gomez');
+    putSync('artist.2.imageurl', 'https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee');
+    putSync('artist.2.track', '1;2;3;4');
+
+    putSync('artist.lastedid',2);
     
-    putSync('u.thao', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
-    putSync('u.thao.status', 'trời đẹp');
-    putSync('u.thao.cons', '1;3');
-    putSync('u.thao.groups', '1');
-    putSync('u.thao.user', 'toan;hoang');
 
-    putSync('u.hoang', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
-    putSync('u.hoang.status', 'Ngày vui');
-    putSync('u.hoang.cons', '3;2');
-    putSync('u.hoang.groups', '1');
-    putSync('u.hoang.user', 'toan;thao');
+    // Gerne
+    putSync('genre.1.name', 'dance');
+    putSync('genre.1.track', '1;2;3;4');
+    putSync('genre.1.imageurl.1', 'https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee');
+    putSync('genre.1.imageurl.2', 'https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee');
+    putSync('genre.2.name', 'R&B');
+    putSync('genre.2.track', '1;2;3;4');
+    putSync('genre.2.imageurl.1', 'https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee');
+    putSync('genre.2.imageurl.2', 'https://i.scdn.co/image/966ade7a8c43b72faa53822b74a899c675aaafee');
 
-    putSync('con.1.user', 'toan;thao');
-    putSync('con.1.lastedmsg', 2);
-    putSync('con.1.msg.1', Date.now() + ';toan;chào');
-    putSync('con.1.msg.2', Date.now() + ';thao;hê hê');
-    putSync('con.1.read.toan', 2);
-    putSync('con.1.read.thao', 2);
+    putSync('genre.lastedid',2);
 
-    putSync('con.2.user', 'toan;hoang');
-    putSync('con.2.lastedmsg', 3);
-    putSync('con.2.msg.1', Date.now() + ';toan;chào');
-    putSync('con.2.msg.2', Date.now() + ';hoang;hê hê');
-    putSync('con.2.msg.3', Date.now() + ';hoang;hi hi');
-    putSync('con.2.read.toan', 2);
-    putSync('con.2.read.hoang', 3);
+    // Chart
+    putSync('chart.1.1.date', '03/08/2018');
+    putSync('chart.1.1.numbertrack', 9);
+    putSync('chart.1.1.1', '2;0.5;0.6;0.7;134;0.9;...;0.9'); //format is (chart.[genre_id].[chart_id].[position], [track_id];[music_feature_1];[music_feature_2];...;[music_feature_143];)
+    putSync('chart.1.1.2', '1;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.3', '4;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.4', '6;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.5', '3;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.6', '6;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.7', '8;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.8', '12;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.1.1.9', '20;0.5;0.6;0.7;134;0.9;...;0.9'); 
 
-    putSync('con.3.user', 'thao;hoang');
-    putSync('con.3.lastedmsg', 3);
-    putSync('con.3.msg.1', Date.now() + ';thao;chào hoang');
-    putSync('con.3.msg.2', Date.now() + ';thao;mình là thảo');
-    putSync('con.3.msg.3', Date.now() + ';hoang;chào thảo');
-    putSync('con.3.read.thao', 1);
-    putSync('con.3.read.hoang', 3);
-
-    putSync('con.lastedid', 3);
+    putSync('chart.1.lastedid', 1);
 
 
-    putSync('group.1', 'zpx');
-    putSync('group.1.user', 'toan;thao;hoang');
-    putSync('group.1.lastedmsg', 5);
-    putSync('group.1.msg.1', Date.now() +';toan;hello mọi người!');
-    putSync('group.1.msg.2', Date.now() +';toan;mình là toàn');
-    putSync('group.1.msg.3', Date.now() +';thao;hi!!!');
-    putSync('group.1.msg.4', Date.now() +';hoang;hello!');
-    putSync('group.1.msg.5', Date.now() +';hoang;zalopay!');
-    putSync('group.1.read.toan', 2);
-    putSync('group.1.read.thao', 3);
-    putSync('group.1.read.hoang', 5);
+    putSync('chart.2.1.date', '03/08/2018');
+    putSync('chart.2.1.numbertrack', 9);
+    putSync('chart.2.1.2', '11;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.3', '40;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.4', '61;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.5', '31;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.6', '62;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.7', '80;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.8', '21;0.5;0.6;0.7;134;0.9;...;0.9'); 
+    putSync('chart.2.1.9', '22;0.5;0.6;0.7;134;0.9;...;0.9'); 
 
-    putSync('group.lastedid', 1);
-
-    putSync('u.all.user', 'toan;hoang;thao');
-
-
+    putSync('chart.rock.lastedid', 1);
 
 }
 
