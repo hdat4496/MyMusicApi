@@ -16,7 +16,7 @@ paths:
   /track/get-track:
     x-swagger-router-controller: track
     get:
-      description: Returns 'Hello' to the caller\
+      description: Get track's data
       operationId: getTrack
       parameters:
         - name: token
@@ -38,8 +38,69 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /swagger:
-    x-swagger-pipe: swagger_raw
+  /test:
+    x-swagger-router-controller: user
+    get:
+      description: Get existence of value
+      operationId: test
+      parameters:
+        - name: key
+          in: query
+          description: Token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /user/signup:
+    x-swagger-router-controller: user
+    post:
+      description: Sign up
+      operationId: signup
+      parameters:
+        - name: user_info_signup
+          in: body
+          description: User info sign up
+          required: true
+          schema:
+            $ref: "#/definitions/UserInfoSignUp"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/UserResponse"
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /user/login:
+    x-swagger-router-controller: user
+    post:
+      description: Login and get token for user
+      operationId: login
+      parameters:
+        - name: user_info
+          in: body
+          description: User info
+          required: true
+          schema:
+            $ref: "#/definitions/UserInfo"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/UserResponse"
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+# complex objects have schema definitions
 definitions:
   ErrorResponse:
     required:
@@ -109,3 +170,34 @@ definitions:
         $ref: "#/definitions/TrackFeatureResponse"
       hit:
         type: boolean
+  UserResponse:
+    properties:
+      username:
+        type: string
+      fullname:
+        type: string
+      expire:
+        type: number
+      token:
+        type: string
+  UserInfoSignUp:
+    properties:
+      username:
+        type: string
+      fullname:
+        type: string
+      password:
+        type: string 
+  UserInfo:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  Response:
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+  
