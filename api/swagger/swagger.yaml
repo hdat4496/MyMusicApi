@@ -157,6 +157,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
+  /crawl:
+    x-swagger-router-controller: crawler
+    get:
+      description: crawl data
+      operationId: crawl
+      parameters:
+        - name: key
+          in: query
+          description: Token
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
 # complex objects have schema definitions
 definitions:
   ErrorResponse:

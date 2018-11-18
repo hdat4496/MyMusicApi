@@ -17,7 +17,9 @@
     "swagger-hapi": "^0.1.0",
     "async": "*",
     "underscore": "*",
-    "underscore.string": "*"
+    "underscore.string": "*",
+    "cheerio": "^1.0.0-rc.2",
+    "crawler": "*"
   },
   "devDependencies": {
     "should": "^7.1.0",
