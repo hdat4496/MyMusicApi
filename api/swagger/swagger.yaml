@@ -47,7 +47,6 @@ paths:
         - name: key
           in: query
           description: Token
-          required: true
           type: string
       responses:
         "200":
@@ -115,7 +114,45 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/TrackInfoResponse"
+            $ref: "#/definitions/ListTrackInfoResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /track/search:
+    x-swagger-router-controller: track
+    get:
+      description: Search track
+      operationId: searchTrack
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ListTrackInfoResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /artist/search:
+    x-swagger-router-controller: track
+    get:
+      description: Search artist
+      operationId: searchArtist
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ListArtistResponse"
         default:
           description: Error
           schema:
@@ -214,7 +251,7 @@ definitions:
         type: string
       password:
         type: string
-  FavoriteTrackResponse:
+  ListTrackInfoResponse:
     properties:
       status:
         type: integer
@@ -222,6 +259,22 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/TrackInfoResponse"
+  ListArtistResponse:
+    properties:
+      status:
+        type: integer
+      listArtistResponse:
+        type: array
+        items:
+          $ref: "#/definitions/ArtistResponse"
+  ArtistResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      imageurl:
+        type: string
   Response:
     properties:
       status:

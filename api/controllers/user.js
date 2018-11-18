@@ -2,7 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-//const { runData } = require('../helpers/data.js');
+// const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 module.exports = {
     login: login,
@@ -12,15 +12,37 @@ module.exports = {
 
 };
 function test(req, res) {
-    var key = req.swagger.params.key.value;
-    get(`${key}`, (err, value) => {
-        if (!err) {
-            res.json({ status: 200, message: value });
-        }
-        else {
-            res.json({ status: 400, message: 'Key is not found' });
-        }
-    });
+    // var key = req.swagger.params.key.value;
+    // get(`test2`, (err, value) => {
+    //     if (!err) {
+    //          let abc = JSON.parse(value);
+    //          console.log(abc);
+    //         for (var k in abc){
+    //             console.log(k);
+    //             console.log(abc[k])
+    //         }
+    //     abc  = {}
+    //         res.json({ status: 200, message: value });
+    //     }
+    //     else {
+    //         res.json({ status: 400, message: 'Key is not found' });
+    //     }
+    // });
+    // var obj = {};
+    // obj['2V65y3PX4DkRhy1djlxd9p'] = 'DON\'T YOU WORRY CHILD';
+    // obj['24LS4lQShWyixJ0ZrJXfJ5'] = 'SWEET NOTHING';
+    // obj['3uGDAwRPcOu6tHuKUjk02H'] = 'ONE POUND FISH';
+    // obj['61gnmKsVhB4TuSJWZzjI3N'] = 'GOLD DUST';
+    // obj['6i8w8Zdud22ehgJrrzqIVi'] = 'CAN YOU HEAR ME';
+    // putSync(`track.all`, JSON.stringify(obj));
+
+    // var obj = {};
+    // obj['1'] = 'SWEDISH HOUSE MAFIA';
+    // obj['2'] = 'CALVIN HARRIS';
+    // obj['3'] = 'DJ FRESH';
+    // obj['4'] = 'WILEY';
+
+    // putSync(`artist.all`, JSON.stringify(obj));
 }
 
 
