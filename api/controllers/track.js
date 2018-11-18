@@ -117,6 +117,7 @@ function searchTrack(req, res) {
         });
 
     }
+}
 
 function buildModel() {
     var data = 'api/public/arff/training.arff';
@@ -135,18 +136,6 @@ function getTrack_2(req, res) {
     });
 
 }
-
-function getTrack_2(req, res) {
-    arff.load('api/public/arff/abc.arff', function (err, data) {
-        if (err) {
-            return console.error(err);
-        }
-        // console.log(data)
-        var options = {
-            'classifier': 'weka.classifiers.bayes.NaiveBayes',
-            'params': '-D'
-        };
-
 
 function getTrack(req, res) {
     var token = req.swagger.params.token.value;
@@ -219,10 +208,6 @@ function getTrack(req, res) {
             res.json({ status: 404, message: '404 Not found' });
         }
     });
-
-
-
-
 
 
 }
