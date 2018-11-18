@@ -5,8 +5,12 @@ const { generateToken, checkToken } = require('../helpers/token');
 // const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 var arff = require('node-arff');
-var weka = require('/home/lap12526-local/MyMusicApi/node_modules/node-weka/lib/weka-lib.js');
-
+var weka = require('../helpers/weka-lib.js');
+var options = {
+    'classifier': 'weka.classifiers.bayes.NaiveBayes',
+    'params': ''
+};
+var model = 'api/public/arff/abcmodel.model';
 
 // var weka = require("node-weka")
 module.exports = {
@@ -114,6 +118,22 @@ function searchTrack(req, res) {
 
     }
 
+function buildModel() {
+    var data = 'api/public/arff/training.arff';
+    weka.classify(data, model, options, function (err, result) {
+        console.log(err);
+        console.log(result);
+    });
+
+}
+function getTrack_2(req, res) {
+    //buildModel();
+    var testData = 'api/public/arff/training.arff';
+    weka.predict(model, testData, options, function (err, result) {
+        console.log(err);
+        console.log(result);
+    });
+
 }
 
 function getTrack_2(req, res) {
@@ -127,24 +147,6 @@ function getTrack_2(req, res) {
             'params': '-D'
         };
 
-
-        var testData = {
-            outlook: 'sunny',
-            windy: 'TRUE',
-            temperature: 30,
-            humidity: 2,
-            play: 'no' // last is class attribute
-        };
-
-        weka.classify(data, testData, options, function (err, result) {
-
-
-            console.log(err); //{ predicted: 'yes', prediction: '1' }
-            console.log(result); //{ predicted: 'yes', prediction: '1' }
-            res.json({ status: 404, message: '404 Not found' });
-        });
-    });
-}
 
 function getTrack(req, res) {
     var token = req.swagger.params.token.value;
