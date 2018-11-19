@@ -23,11 +23,13 @@ spotifyApi.clientCredentialsGrant().then(
 );
 
 module.exports = {
-    crawl: searchTrackSpotifyAPI,
+    crawl: crawl,
     searchTrackSpotifyAPI: searchTrackSpotifyAPI
 };
 
-function crawl(req, res) {
+
+function crawl() {
+    console.log('Crawl data');
     var c = new Crawler({
         maxConnections: 10,
         // This will be called for each crawled page
@@ -36,68 +38,199 @@ function crawl(req, res) {
                 console.log(error);
             } else {
                 var $ = res.$;
+                var tracks = [];
                 console.log($('.article-date').text().trim());
-
                 $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
-                    console.log($(ele).find('.position').text().trim());
-                    console.log($(ele).find('.title').text().trim());
-                    console.log($(ele).find('.artist').text().trim());
+                    var position = $(ele).find('.position').text().trim();
+                    var title = $(ele).find('.title').text().trim();
+                    var artist = $(ele).find('.artist').text().trim();
+
+                    title = normalizeTitle(title);
+                    artist = normalizeArtistName(artist);
+                    console.log(position);
+                    console.log(title);
+                    console.log(artist);
+                    var track = {
+                        position: position,
+                        title: title,
+                        artist: artist
+                    }
+                    tracks.push(track);
                 });
+
+                console.log('Crawled data length: ', tracks.length);
+                getTrackData(tracks);
             }
             done();
         }
     });
 
     // Queue a list of URLs
-    c.queue(['https://www.officialcharts.com/charts/dance-singles-chart/20091227/104/',
-        'https://www.officialcharts.com/charts/dance-singles-chart/20100103/104/']);
+    c.queue(['https://www.officialcharts.com/charts/dance-singles-chart/20130101/104/']);
+
 }
 
-function searchTrackSpotifyAPI(res, req) {
-    var title = 'Bad romance';
-    var artist = 'Lady gaga';
-    spotifyApi.searchTracks('track:' + title + ' artist:' + artist).then(
+async function getTrackData(tracks) {
+    var trackIds = await getTrackInfo(tracks);
+    getAudioFeaturesAPI(trackIds);
+    
+    for(var trackIds of trackIds) {
+        getAudioAnalysisAPI(trackIds);
+    }
+}
+
+async function getTrackInfo(tracks) {
+    var trackIds = [];
+    await Promise.all(tracks.map(async (track) => {
+        var trackid = await searchTrackSpotifyAPI(track.position, track.title, track.artist);
+        if (trackid != undefined) {
+            trackIds.push(trackid);
+        }
+    }));
+    return trackIds;
+}
+
+
+async function searchTrackSpotifyAPI(position, title, artist) {
+    console.log('Search track');
+    var id;
+    await spotifyApi.searchTracks('track:' + title + ' artist:' + artist).then(
         function (data) {
-            var trackInfo = data.body['tracks']['items'][0];
+            var total = data.body.tracks.total;
+            if (total == 0) {
+                console.log('---------------', position, '----------');
+                console.log('---------------NOT FOUND----------');
+                return '';
+            }
+            var trackInfo = data.body.tracks.items[0];
+            console.log('---------------', position, '----------');
             // track id
-            console.log(trackInfo['id']);
+            console.log(trackInfo.id);
+            //callback(trackInfo.id);
+            id = trackInfo.id;
             // title
-            console.log(trackInfo['name']);
+            console.log(trackInfo.name);
             // track url
-            console.log(trackInfo['href']);
+            console.log(trackInfo.href);
             // track image url
-            console.log(trackInfo['album']['images'][0]['url']);
-            var artists = trackInfo['artists'];
+            console.log(trackInfo.album.images[0].url);
+            var artists = trackInfo.artists;
             var artistIds = [];
             for (var i = 0; i < artists.length; i++) {
                 // artist id
-                console.log(artists[i]['id']);
-                artistIds.push(artists[i]['id']);
+                console.log(artists[i].id);
+                artistIds.push(artists[i].id);
                 // artist name
-                console.log(artists[i]['name']);
+                console.log(artists[i].name);
             }
-
-            getArtistsAPI(artistIds);
+            // //getArtistsAPI(artistIds);
+            return artistIds;
         },
         function (err) {
             console.log('Search fail', err);
         }
-    );
+    )
+        .then(function (artistIds) {
+            if (artistIds === '') {
+                return;
+            }
+            spotifyApi.getArtists(artistIds)
+                .then(function (data) {
+                    var artists = data.body.artists;
+                    for (var i = 0; i < artists.length; i++) {
+                        // artist id
+                        console.log(artists[i].id);
+                        // artist image url
+                        console.log(artists[i].images[0].url);
+                    }
+                }, function (err) {
+                    console.error('Get artist error', err);
+                });
+        });
+        return id;
 }
 
 // get list of artists
 function getArtistsAPI(artistIds) {
+    console.log('get artist');
     spotifyApi.getArtists(artistIds)
         .then(function (data) {
-            var artists = data.body['artists'];
-            for (var i =0 ;i < artists.length; i++) {
+            var artists = data.body.artists;
+            for (var i = 0; i < artists.length; i++) {
                 // artist id
-                console.log(artists[i]['id']);
+                console.log(artists[i].id);
                 // artist image url
-                console.log(artists[i]['images'][0]['url']);
+                console.log(artists[i].images[0].url);
+            }
+        }, function (err) {
+            console.error('Get artist error', err);
+        });
+}
+
+// get audio features of track list
+function getAudioFeaturesAPI(trackIds) {
+    console.log('Get audio feature:', trackIds);
+    spotifyApi.getAudioFeaturesForTracks(trackIds)
+        .then(function (data) {
+            console.log('Get audio feature success');
+            var tracks = data.body.audio_features;
+            for (var i = 0; i < tracks.length; i++) {
+                // track id
+                console.log(tracks[i].id);
+                // danceability
+                console.log('danceability', tracks[i].danceability);
+                // energy
+                console.log('energy', tracks[i].energy);
             }
         }, function (err) {
             console.error(err);
         });
+}
+
+// get audio analysis of one track 
+function getAudioAnalysisAPI(trackId) {
+    console.log('Get audio analysis:', trackId);
+    spotifyApi.getAudioAnalysisForTrack(trackId)
+        .then(function (data) {
+            console.log('Get audio analysis success');
+        }, function (err) {
+            console.error(err);
+        });
+}
+
+function normalizeTitle(title) {
+    if (title.includes("(")) {
+        var pos = title.indexOf("(");
+        var title_re = title.substr(pos);
+        title = title.replace(title_re, " ");
+    }
+
+    title = title.replace("'", "\\'")
+
+    return title;
+}
+
+function normalizeArtistName(artist) {
+    while (artist.includes(" FT ")) {
+        artist = artist.replace(" FT ", " OR ");
+    }
+
+    while (artist.includes(" / ")) {
+        artist = artist.replace(" / ", " OR ");
+    }
+
+    while (artist.includes("/")) {
+        artist = artist.replace("/", " OR ");
+    }
+
+    while (artist.includes(" & ")) {
+        artist = artist.replace(" & ", " OR ");
+    }
+
+    while (artist.includes(" FEATURING ")) {
+        artist = artist.replace(" FEATURING ", " OR ");
+    }
+
+    return artist;
 }
 
