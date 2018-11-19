@@ -2,7 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-// const { runData } = require('../helpers/data.js');
+//const { runData } = require('../helpers/data.js');
 var Crawler = require("crawler");
 var SpotifyWebApi = require('spotify-web-api-node');
 // Set necessary parts of the credentials on the constructor
@@ -28,7 +28,7 @@ module.exports = {
 };
 
 
-function crawl() {
+function crawl(req, res) {
     console.log('Crawl data');
     var c = new Crawler({
         maxConnections: 10,
@@ -67,14 +67,13 @@ function crawl() {
 
     // Queue a list of URLs
     c.queue(['https://www.officialcharts.com/charts/dance-singles-chart/20130101/104/']);
-
 }
 
 async function getTrackData(tracks) {
     var trackIds = await getTrackInfo(tracks);
     getAudioFeaturesAPI(trackIds);
-    
-    for(var trackIds of trackIds) {
+
+    for (var trackIds of trackIds) {
         getAudioAnalysisAPI(trackIds);
     }
 }
@@ -90,40 +89,41 @@ async function getTrackInfo(tracks) {
     return trackIds;
 }
 
+async function checkTrackExist(trackId) {
+    console.log('check track exist ?');
+    await new Promise((resolve, reject) => {
+        get(`track.${trackId}.info`, (err, value) => {
+            if (err) {
+                return resolve('Track is not exist -> store new track');
+            }
+            else {
+                return reject('Track is already exist');
+            }
+        });
+    });
+}
 
 async function searchTrackSpotifyAPI(position, title, artist) {
     console.log('Search track');
-    var id;
+    var trackInfo;
+    var artistNames = [];
+    var artistImageUrl;
     await spotifyApi.searchTracks('track:' + title + ' artist:' + artist).then(
-        function (data) {
+        async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
                 console.log('---------------', position, '----------');
                 console.log('---------------NOT FOUND----------');
-                return '';
+                return;
             }
-            var trackInfo = data.body.tracks.items[0];
-            console.log('---------------', position, '----------');
-            // track id
-            console.log(trackInfo.id);
-            //callback(trackInfo.id);
-            id = trackInfo.id;
-            // title
-            console.log(trackInfo.name);
-            // track url
-            console.log(trackInfo.href);
-            // track image url
-            console.log(trackInfo.album.images[0].url);
+            trackInfo = data.body.tracks.items[0];
+            // check if track exist in database
+            var exists = await checkTrackExist(trackInfo.id);
             var artists = trackInfo.artists;
             var artistIds = [];
-            for (var i = 0; i < artists.length; i++) {
-                // artist id
-                console.log(artists[i].id);
-                artistIds.push(artists[i].id);
-                // artist name
-                console.log(artists[i].name);
+            for (var artist of artists) {
+                artistIds.push(artist.id);
             }
-            // //getArtistsAPI(artistIds);
             return artistIds;
         },
         function (err) {
@@ -131,23 +131,43 @@ async function searchTrackSpotifyAPI(position, title, artist) {
         }
     )
         .then(function (artistIds) {
-            if (artistIds === '') {
+            if (artistIds == undefined) {
                 return;
             }
             spotifyApi.getArtists(artistIds)
                 .then(function (data) {
                     var artists = data.body.artists;
-                    for (var i = 0; i < artists.length; i++) {
-                        // artist id
-                        console.log(artists[i].id);
-                        // artist image url
-                        console.log(artists[i].images[0].url);
+                    for (var artist of artists) {
+                        var artistInfo = {
+                            id: artist.id,
+                            name: artist.name,
+                            imageurl: artist.images[0].url
+                        }
+                        // put artist info
+                        putArtistInfo(artistInfo, trackInfo.id);
+                        artistNames.push(artist.name);
                     }
+                    artistImageUrl = artists[0].images[0].url;
+                    var track = {
+                        id: trackInfo.id,
+                        title: trackInfo.name,
+                        artist: artistNames.join(" ft "),
+                        artist_imageurl: artistImageUrl,
+                        genre: '',
+                        genre_imageurl: '',
+                        track_url: trackInfo.href,
+                        track_imageurl: trackInfo.album.images[0].url
+                    }
+                    putTrackInfo(track);
                 }, function (err) {
                     console.error('Get artist error', err);
                 });
+        })
+        .catch(e => {
+            console.log('Exception search track: ', e);
+            next(e);
         });
-        return id;
+    return trackInfo.id;
 }
 
 // get list of artists
@@ -233,4 +253,55 @@ function normalizeArtistName(artist) {
 
     return artist;
 }
+
+
+function putTrackInfo(trackInfo) {
+    console.log("Put track info:", trackInfo);
+    if (trackInfo.id == '') {
+        return;
+    }
+    var info = trackInfo.title + ';' + trackInfo.artist + ';' + trackInfo.artist_imageurl  + ';' 
+    + trackInfo.genre + ';'  + trackInfo.genre_imageurl + ';'  + trackInfo.track_url + ';'  + trackInfo.track_imageurl;
+    if (info == '') {
+        return;
+    }
+    putSync(`track.${trackInfo.id}.info`, info);
+
+    get(`track.number`, (err, value) => {
+        if (!err) {
+            console.log('Add number of track', parseInt(value)+1);
+            putSync(`track.number`, parseInt(value) + 1);
+        }
+    });
+    
+    get(`track`, (err, value) => {
+        if (!err) {
+            console.log('put track id list', trackInfo.id);
+            putSync(`track`, value + ';' + trackInfo.id);
+        }
+    });
+}
+
+function putArtistInfo(artistInfo, trackId) {
+    console.log("Put artist:", artistInfo, trackId);
+    if (artistInfo.id == '') {
+        return;
+    }
+    get(`artist.${artistInfo.id}.track`, (err, value) => {
+        // exist: update by adding track value
+        if (!err) {
+            var trackValue = value + ';' + trackId;
+            putSync(`artist.${artistInfo.id}.track`, trackValue);
+        }
+        else {
+            // no exist in database: create new artist
+            if (err.notFound) {
+                putSync(`artist.${artistInfo.id}.name`, artistInfo.name);
+                putSync(`artist.${artistInfo.id}.imageurl`, artistInfo.imageurl);
+                putSync(`artist.${artistInfo.id}.track`, trackId);
+            }
+        }
+    });
+}
+
 

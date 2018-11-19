@@ -12,6 +12,15 @@ module.exports = {
 
 };
 function test(req, res) {
+    var key = req.swagger.params.key.value;
+    get(`${key}`, (err, value) => {
+        if (!err) {
+            res.json({ status: 200, message: value });
+        }
+        else {
+            res.json({ status: 400, message: 'Key is not found' });
+        }
+    });
     // var key = req.swagger.params.key.value;
     // get(`test2`, (err, value) => {
     //     if (!err) {
