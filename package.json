@@ -19,7 +19,8 @@
     "underscore": "*",
     "underscore.string": "*",
     "cheerio": "^1.0.0-rc.2",
-    "crawler": "*"
+    "crawler": "*",
+    "simple-statistics": "6.1.1"
   },
   "devDependencies": {
     "should": "^7.1.0",
