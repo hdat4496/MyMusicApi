@@ -31,17 +31,19 @@ module.exports = {
 
 function crawl(req, res) {
     console.log('Crawl data');
+
+    var promise;
     var c = new Crawler({
-        rateLimit: 10000,
-        maxConnections: 10,
+        maxConnections: 1,
         // This will be called for each crawled page
-        callback: function (error, res, done) {
+        callback: async function (error, res, done) {
             if (error) {
                 console.log(error);
             } else {
                 var $ = res.$;
                 var tracks = [];
-                console.log($('.article-date').text().trim());
+                var date = $('.article-date').first().text().trim();
+                console.log(date);
                 $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
                     var position = $(ele).find('.position').text().trim();
                     var title = $(ele).find('.title').text().trim();
@@ -49,9 +51,10 @@ function crawl(req, res) {
 
                     title = normalizeTitle(title);
                     artist = normalizeArtistName(artist);
-                    // console.log(position);
-                    // console.log(title);
-                    // console.log(artist);
+                    //console.log(position, title, artist);
+                    if ((position == '') || (title == '') || (artist == '')) {
+                        return;
+                    }
                     var track = {
                         position: position,
                         title: title,
@@ -61,54 +64,69 @@ function crawl(req, res) {
                 });
 
                 console.log('Crawled data length: ', tracks.length);
-                getTrackData(tracks);
+                var genreType = res.options.genreType;
+                await putData(genreType, date, tracks);
             }
             done();
         }
     });
 
     // Queue a list of URLs
-    c.queue(['https://www.officialcharts.com/charts/dance-singles-chart/20130626/104/']);
-    //'https://www.officialcharts.com/charts/dance-singles-chart/20130329/104/',
-    //'https://www.officialcharts.com/charts/dance-singles-chart/20130405/104/',
-    //'https://www.officialcharts.com/charts/dance-singles-chart/20130412/104/',
-    //'https://www.officialcharts.com/charts/dance-singles-chart/20130419/104/',
-    //'https://www.officialcharts.com/charts/dance-singles-chart/20130426/104/']);
-    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130212/104/',
-    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130219/104/',
-    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130226/104/',
-    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130305/104/',
-    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130312/104/']);
+    var url = {
+        uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20140226/104/',
+        genreType: '1'
+    }
+    var url1 = {
+        uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20140626/104/',
+        genreType: '1'
+    }
+    var url2 = {
+        uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20140726/104/',
+        genreType: '1'
+    }
+    c.queue([url, url1, url2]);
 }
 
-async function getTrackData(tracks) {
-    var trackIds = await getTrackInfo(tracks);
-    console.log("Number of new track: ", trackIds.length);
+async function putData(genre, date, tracks) {
+    var trackInfoList = await putTrackData(tracks);
+    putChartData(genre, date, trackInfoList);
+}
 
-    if (trackIds.length == 0) {
+async function putTrackData(tracks) {
+    var trackInfoList = await getTrackInfo(tracks);
+    var newTrackIds = [];
+    console.log("Number of track info: ", trackInfoList.length);
+    for (var trackInfo of trackInfoList) {
+        if (trackInfo.trackId != undefined && trackInfo.exist == false) {
+            newTrackIds.push(trackInfo.trackId);
+        }
+    }
+    console.log("Number of new track: ", newTrackIds.length);
+
+    if (newTrackIds.length == 0) {
         console.log('Get track data done because of no new track')
         return;
     }
-    getAudioFeaturesAPI(trackIds);
+    getAudioFeaturesAPI(newTrackIds);
 
-    for (var trackId of trackIds) {
+    for (var trackId of newTrackIds) {
         getAudioAnalysisAPI(trackId);
     }
+
+    return trackInfoList;
 }
 
 async function getTrackInfo(tracks) {
-    var trackIds = [];
+    var trackInfoList = [];
 
     for (var track of tracks) {
-        var trackid = await searchTrackSpotifyAPI(track.position, track.title, track.artist);
+        var trackInfo = await searchTrackSpotifyAPI(track.position, track.title, track.artist);
         //console.log("Get track info done: ", trackid);
-        if (trackid != undefined) {
-            trackIds.push(trackid);
-        }
+        trackInfoList.push(trackInfo);
     }
 
-    console.log("Get all track info done: ", trackIds.length);
-    return trackIds;
+    console.log("Get all track info done: ", trackInfoList.length);
+    return trackInfoList;
 }
 
 async function checkTrackExist(trackId) {
@@ -127,22 +145,23 @@ async function checkTrackExist(trackId) {
 }
 
 async function searchTrackSpotifyAPI(position, title, artist) {
-    console.log('Search track');
+    //console.log('Search track: ', title, artist);
     var trackInfo;
     var trackId;
     var artistNames = [];
     var artistImageUrl;
+    var exist;
     await spotifyApi.searchTracks('track:' + title + ' artist:' + artist).then(
         async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
-                console.log(title,';',artist,'---------------NOT FOUND----------');
+                console.log(title, ';', artist, '---------------NOT FOUND----------');
                 return;
             }
             trackInfo = data.body.tracks.items[0];
-            // check if track exist in database
-            var exists = await checkTrackExist(trackInfo.id);
             trackId = trackInfo.id;
+            // check if track exist in database
+            exist = await checkTrackExist(trackInfo.id);
             var artists = trackInfo.artists;
             var artistIds = [];
             for (var artist of artists) {
@@ -192,7 +211,12 @@ async function searchTrackSpotifyAPI(position, title, artist) {
             console.log('Exception search track: ', e);
             //next(e);
         });
-    return trackId;
+    var trackInfoResult = {
+        position: position,
+        trackId: trackId,
+        exist: exist
+    }
+    return trackInfoResult;
 }
 
 // get list of artists
@@ -223,7 +247,7 @@ function getAudioFeaturesAPI(trackIds) {
                 putTrackAudioFeature(trackFeature);
             }
         }, function (err) {
-            console.error('Get audio feature list of track error:',err);
+            console.error('Get audio feature list of track error:', err);
         });
 }
 
@@ -627,7 +651,66 @@ async function getTrackAudioFeaturesFromAPI(trackId) {
                 + audioFeatures.liveness + ';' + audioFeatures.valence + ';' + audioFeatures.duration_ms + ';' + audioFeatures.tempo + ';' + audioFeatures.time_signature + ';'
                 + audioFeatures.mode + ';' + audioFeatures.key + ';' + audioFeatures.loudness + ';' + audioFeatures.danceability + ';' + audioFeatures.energy;
         }, function (err) {
-            console.error('Get audio feature one track error',err);
+            console.error('Get audio feature one track error', err);
         });
     return audioFeaturesValue;
+}
+
+function putChartData(genre, date, trackInfoList) {
+    console.log("Put chart data: ", genre, date);
+    var dateFormat = convertDate(date);
+    //console.log("Date format", dateFormat);
+    var dateKey = dateFormat.day + dateFormat.month + dateFormat.year;
+    putSync(`chart.${dateKey}.${genre}.date`, dateFormat.day + '/' + dateFormat.month + '/' + dateFormat.year);
+    putSync(`chart.${dateKey}.${genre}.numbertrack`, trackInfoList.length);
+
+    var trackIdChart = [];
+    for (var trackInfo of trackInfoList) {
+        var position = trackInfo.position;
+        if (trackInfo.trackId != undefined) {
+            trackIdChart[position - 1] = trackInfo.trackId;
+        }
+        else {
+            trackIdChart[position - 1] = '';
+        }
+    }
+    var trackIdsValue = trackIdChart.join(";")
+    //console.log('Chart track ids:', trackIdsValue);
+    putSync(`chart.${dateKey}.${genre}`, trackIdsValue);
+}
+
+function convertDate(date) {
+    // 19 May 2013 -  25 May 2013
+    if (date == undefined) {
+        return;
+    }
+    var stringArray = date.split(" ");
+    if (stringArray.length < 3) {
+        return;
+    }
+
+    var day = stringArray[0];
+    var month = stringArray[1].toLowerCase();
+    var year = stringArray[2];
+    var monthArray = ['january', 'february', 'farch', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+    for (var i = 0; i < monthArray.length; i++) {
+        if (month === monthArray[i]) {
+            month = i + 1;
+            break;
+        }
+    }
+
+    if (month < 10) {
+        month = '0' + month;
+    }
+    else {
+        month = month.toString();
+    }
+
+    var date = {
+        day: day,
+        month: month,
+        year: year
+    }
+    return date;
 }
