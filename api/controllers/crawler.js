@@ -32,6 +32,7 @@ module.exports = {
 function crawl(req, res) {
     console.log('Crawl data');
     var c = new Crawler({
+        rateLimit: 10000,
         maxConnections: 10,
         // This will be called for each crawled page
         callback: function (error, res, done) {
@@ -48,9 +49,9 @@ function crawl(req, res) {
 
                     title = normalizeTitle(title);
                     artist = normalizeArtistName(artist);
-                    console.log(position);
-                    console.log(title);
-                    console.log(artist);
+                    // console.log(position);
+                    // console.log(title);
+                    // console.log(artist);
                     var track = {
                         position: position,
                         title: title,
@@ -67,7 +68,17 @@ function crawl(req, res) {
     });
 
     // Queue a list of URLs
-    c.queue(['https://www.officialcharts.com/charts/dance-singles-chart/20130726/104/']);
+    c.queue(['https://www.officialcharts.com/charts/dance-singles-chart/20130626/104/']);
+    //'https://www.officialcharts.com/charts/dance-singles-chart/20130329/104/',
+    //'https://www.officialcharts.com/charts/dance-singles-chart/20130405/104/',
+    //'https://www.officialcharts.com/charts/dance-singles-chart/20130412/104/',
+    //'https://www.officialcharts.com/charts/dance-singles-chart/20130419/104/',
+    //'https://www.officialcharts.com/charts/dance-singles-chart/20130426/104/']);
+    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130212/104/',
+    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130219/104/',
+    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130226/104/',
+    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130305/104/',
+    // 'https://www.officialcharts.com/charts/dance-singles-chart/20130312/104/']);
 }
 
 async function getTrackData(tracks) {
@@ -83,28 +94,29 @@ async function getTrackData(tracks) {
     for (var trackId of trackIds) {
         getAudioAnalysisAPI(trackId);
     }
-
 }
 
 async function getTrackInfo(tracks) {
     var trackIds = [];
-    await Promise.all(tracks.map(async (track) => {
+
+    for (var track of tracks) {
         var trackid = await searchTrackSpotifyAPI(track.position, track.title, track.artist);
-        console.log("Get track info done: ", trackid);
+        //console.log("Get track info done: ", trackid);
         if (trackid != undefined) {
             trackIds.push(trackid);
         }
-    }));
-    console.log("Get all track info done");
+    }
+
+    console.log("Get all track info done: ", trackIds.length);
     return trackIds;
 }
 
 async function checkTrackExist(trackId) {
-    console.log('check track exist ?');
+    //console.log('check track exist ?');
     return new Promise((resolve, reject) => {
         get(`track.${trackId}.info`, (err, value) => {
             if (err) {
-                console.log('Track is not exist -> store new track');
+                //console.log('Track is not exist -> store new track');
                 resolve(false);
             }
             else {
@@ -124,8 +136,7 @@ async function searchTrackSpotifyAPI(position, title, artist) {
         async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
-                console.log('---------------', position, '----------');
-                console.log('---------------NOT FOUND----------');
+                console.log(title,';',artist,'---------------NOT FOUND----------');
                 return;
             }
             trackInfo = data.body.tracks.items[0];
@@ -141,6 +152,7 @@ async function searchTrackSpotifyAPI(position, title, artist) {
         },
         function (err) {
             console.log('Search fail', err);
+            //searchTrackSpotifyAPI('track:' + title + ' artist:' + artist);
         }
     )
         .then(function (artistIds) {
@@ -205,13 +217,13 @@ function getAudioFeaturesAPI(trackIds) {
     console.log('Get audio feature:', trackIds);
     spotifyApi.getAudioFeaturesForTracks(trackIds)
         .then(function (data) {
-            console.log('Get audio feature success');
+            console.log('Get audio feature list of track success');
             var result = data.body.audio_features;
             for (var trackFeature of result) {
                 putTrackAudioFeature(trackFeature);
             }
         }, function (err) {
-            console.error(err);
+            console.error('Get audio feature list of track error:',err);
         });
 }
 
@@ -267,7 +279,7 @@ function normalizeArtistName(artist) {
 
 
 function putTrackInfo(trackInfo) {
-    console.log("Put track info:", trackInfo);
+    console.log("Put track info:", trackInfo.id);
     if (trackInfo.id == '') {
         return;
     }
@@ -311,12 +323,13 @@ function putTrackAudioFeature(audioFeatures) {
 
     putSync(`track.${audioFeatures.id}.feature`, audioFeaturesValue);
 
-    console.log("Put track audio features success:", audioFeatures.id, audioFeaturesValue);
+    console.log("Put track audio features success:", audioFeatures.id);
+    //console.log("Put track audio features success:", audioFeatures.id, audioFeaturesValue);
 }
 
 
 function putArtistInfo(artistInfo, trackId) {
-    console.log("Put artist:", artistInfo, trackId);
+    console.log("Put artist:", artistInfo.id, trackId);
     if (artistInfo.id == '') {
         return;
     }
@@ -529,10 +542,14 @@ async function putTrackAudioAnalysis(trackid, audioAnalysis) {
     console.log('Put track audio analysis', trackid);
     var audioAnalysisValue;
     var audioFeatures = await getTrackAudioFeatures(trackid);
-    console.log('Audio feature value:', audioFeatures);
+    if (audioFeatures == undefined) {
+        console.log('Audio feature value not found');
+        return;
+    }
+    //console.log('Audio feature value:', audioFeatures);
     var audioFeaturesFilter = await filterAudioFeatureForAnalysis(audioFeatures);
-    console.log('Audio feature filter value:', audioFeaturesFilter);
-    console.log('Number audio analysis key', Object.keys(audioAnalysis).length);
+    //console.log('Audio feature filter value:', audioFeaturesFilter);
+    //console.log('Number audio analysis key', Object.keys(audioAnalysis).length);
     for (var key of Object.keys(audioAnalysis)) {
         if (audioAnalysisValue == undefined) {
             audioAnalysisValue = audioAnalysis[key];
@@ -542,7 +559,7 @@ async function putTrackAudioAnalysis(trackid, audioAnalysis) {
     }
 
     var value = audioFeaturesFilter + ";" + audioAnalysisValue
-    console.log('Audio analysis value:', value);
+    //console.log('Audio analysis value:', value);
     putSync(`track.${trackid}.analysis`, value);
 
 }
@@ -566,14 +583,14 @@ async function getTrackAudioFeatures(trackId) {
     console.log('Get track audio feature for :', trackId);
     var dataFromDatabase = await getTrackAudioFeaturesFromDatabase(trackId);
 
-    console.log('Audio feature from database :', dataFromDatabase);
+    //console.log('Audio feature from database :', dataFromDatabase);
     if (dataFromDatabase != undefined) {
         console.log('Return track audio feature from database :', trackId);
         return dataFromDatabase;
     }
 
     var dataFromAPI = await getTrackAudioFeaturesFromAPI(trackId);
-    console.log('Return track audio feature from api :', trackId);
+    console.log('Return track audio feature from api :', trackId, dataFromAPI);
     return dataFromAPI;
     ;
 }
@@ -584,11 +601,11 @@ function getTrackAudioFeaturesFromDatabase(trackId) {
     return new Promise((resolve, reject) => {
         get(`track.${trackId}.feature`, (err, value) => {
             if (!err) {
-                console.log('get audio feature from database success:', value);
+                //console.log('get audio feature from database success:', value);
                 resolve(value);
             }
             else {
-                console.log('get audio feature from database not found');
+                //console.log('get audio feature from database not found');
                 resolve(undefined);
             }
         });
@@ -598,18 +615,19 @@ function getTrackAudioFeaturesFromDatabase(trackId) {
 
 // get audio features of a track from Spotify API
 async function getTrackAudioFeaturesFromAPI(trackId) {
+    var audioFeaturesValue;
     console.log('Get audio feature from api:', trackId);
     await spotifyApi.getAudioFeaturesForTrack(trackId)
         .then(async function (data) {
-            console.log('Get audio feature success');
+            console.log('Get audio feature one track success');
             var audioFeatures = data.body;
             putTrackAudioFeature(audioFeatures);
 
-            var audioFeaturesValue = audioFeatures.speechiness + ';' + audioFeatures.acousticness + ';' + audioFeatures.instrumentalness + ';'
+            audioFeaturesValue = audioFeatures.speechiness + ';' + audioFeatures.acousticness + ';' + audioFeatures.instrumentalness + ';'
                 + audioFeatures.liveness + ';' + audioFeatures.valence + ';' + audioFeatures.duration_ms + ';' + audioFeatures.tempo + ';' + audioFeatures.time_signature + ';'
                 + audioFeatures.mode + ';' + audioFeatures.key + ';' + audioFeatures.loudness + ';' + audioFeatures.danceability + ';' + audioFeatures.energy;
-            return audioFeaturesValue;
         }, function (err) {
-            console.error(err);
+            console.error('Get audio feature one track error',err);
         });
+    return audioFeaturesValue;
 }
