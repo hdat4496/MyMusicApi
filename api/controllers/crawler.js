@@ -31,8 +31,8 @@ module.exports = {
 
 function crawl(req, res) {
     console.log('Crawl data');
-
-    var promise;
+    var urlList = createUrlList("01/01/2013","01/01/2015",1);
+    console.log("url list:", urlList.length);
     var c = new Crawler({
         maxConnections: 1,
         // This will be called for each crawled page
@@ -70,21 +70,7 @@ function crawl(req, res) {
             done();
         }
     });
-
-    // Queue a list of URLs
-    var url = {
-        uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20140226/104/',
-        genreType: '1'
-    }
-    var url1 = {
-        uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20140626/104/',
-        genreType: '1'
-    }
-    var url2 = {
-        uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20140726/104/',
-        genreType: '1'
-    }
-    c.queue([url, url1, url2]);
+    c.queue(urlList);
 }
 
 async function putData(genre, date, tracks) {
@@ -101,13 +87,14 @@ async function putTrackData(tracks) {
             newTrackIds.push(trackInfo.trackId);
         }
     }
+    
     console.log("Number of new track: ", newTrackIds.length);
 
     if (newTrackIds.length == 0) {
         console.log('Get track data done because of no new track')
-        return;
+        return trackInfoList;
     }
-    getAudioFeaturesAPI(newTrackIds);
+    await getAudioFeaturesAPI(newTrackIds);
 
     for (var trackId of newTrackIds) {
         getAudioAnalysisAPI(trackId);
@@ -125,12 +112,12 @@ async function getTrackInfo(tracks) {
         trackInfoList.push(trackInfo);
     }
 
-    console.log("Get all track info done: ", trackInfoList.length);
+    //console.log("Get all track info done: ", trackInfoList.length);
     return trackInfoList;
 }
 
 async function checkTrackExist(trackId) {
-    //console.log('check track exist ?');
+    //console.log('check track exist ?', trackId);
     return new Promise((resolve, reject) => {
         get(`track.${trackId}.info`, (err, value) => {
             if (err) {
@@ -155,7 +142,7 @@ async function searchTrackSpotifyAPI(position, title, artist) {
         async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
-                console.log(title, ';', artist, '---------------NOT FOUND----------');
+                //console.log(title, ';', artist, '---------------NOT FOUND----------');
                 return;
             }
             trackInfo = data.body.tracks.items[0];
@@ -171,7 +158,6 @@ async function searchTrackSpotifyAPI(position, title, artist) {
         },
         function (err) {
             console.log('Search fail', err);
-            //searchTrackSpotifyAPI('track:' + title + ' artist:' + artist);
         }
     )
         .then(function (artistIds) {
@@ -208,8 +194,7 @@ async function searchTrackSpotifyAPI(position, title, artist) {
                 });
         })
         .catch(e => {
-            console.log('Exception search track: ', e);
-            //next(e);
+            //console.log('Exception search track: ', e);
         });
     var trackInfoResult = {
         position: position,
@@ -241,7 +226,7 @@ function getAudioFeaturesAPI(trackIds) {
     console.log('Get audio feature:', trackIds);
     spotifyApi.getAudioFeaturesForTracks(trackIds)
         .then(function (data) {
-            console.log('Get audio feature list of track success');
+            //console.log('Get audio feature list of track success');
             var result = data.body.audio_features;
             for (var trackFeature of result) {
                 putTrackAudioFeature(trackFeature);
@@ -256,12 +241,12 @@ async function getAudioAnalysisAPI(trackId) {
     console.log('Get audio analysis:', trackId);
     await spotifyApi.getAudioAnalysisForTrack(trackId)
         .then(async function (data) {
-            console.log('Get audio analysis success');
+            //console.log('Get audio analysis success');
             var audioAnalysis = await calculateAudioAnalysis(data.body);
             putTrackAudioAnalysis(trackId, audioAnalysis);
         }, function (err) {
             getAudioAnalysisAPI(trackId);
-            console.error('Get audio analysis error', err);
+            //console.error('Get audio analysis error', err);
         });
 }
 
@@ -303,7 +288,7 @@ function normalizeArtistName(artist) {
 
 
 function putTrackInfo(trackInfo) {
-    console.log("Put track info:", trackInfo.id);
+    //console.log("Put track info:", trackInfo.id);
     if (trackInfo.id == '') {
         return;
     }
@@ -321,21 +306,21 @@ function putTrackInfo(trackInfo) {
 
     get(`track.number`, (err, value) => {
         if (!err) {
-            console.log('Add number of track', parseInt(value) + 1);
+            //console.log('Add number of track', parseInt(value) + 1);
             putSync(`track.number`, parseInt(value) + 1);
         }
     });
 
     get(`track`, (err, value) => {
         if (!err) {
-            console.log('put track id list', trackInfo.id);
+            //console.log('put track id list', trackInfo.id);
             putSync(`track`, value + ';' + trackInfo.id);
         }
     });
 }
 
 function putTrackAudioFeature(audioFeatures) {
-    console.log("Put track audio features:", audioFeatures.id);
+    //console.log("Put track audio features:", audioFeatures.id);
     if (audioFeatures == undefined) {
         return;
     }
@@ -347,13 +332,13 @@ function putTrackAudioFeature(audioFeatures) {
 
     putSync(`track.${audioFeatures.id}.feature`, audioFeaturesValue);
 
-    console.log("Put track audio features success:", audioFeatures.id);
+    //console.log("Put track audio features success:", audioFeatures.id);
     //console.log("Put track audio features success:", audioFeatures.id, audioFeaturesValue);
 }
 
 
 function putArtistInfo(artistInfo, trackId) {
-    console.log("Put artist:", artistInfo.id, trackId);
+    //console.log("Put artist:", artistInfo.id, trackId);
     if (artistInfo.id == '') {
         return;
     }
@@ -375,7 +360,7 @@ function putArtistInfo(artistInfo, trackId) {
 }
 
 function calculateAudioAnalysis(audioAnalysis) {
-    console.log('calculateAudioAnalysis')
+    //console.log('calculateAudioAnalysis')
     if (audioAnalysis == undefined) {
         return;
     }
@@ -563,11 +548,11 @@ function calculateAudioAnalysis(audioAnalysis) {
 
 
 async function putTrackAudioAnalysis(trackid, audioAnalysis) {
-    console.log('Put track audio analysis', trackid);
+    //console.log('Put track audio analysis', trackid);
     var audioAnalysisValue;
     var audioFeatures = await getTrackAudioFeatures(trackid);
     if (audioFeatures == undefined) {
-        console.log('Audio feature value not found');
+        //console.log('Audio feature value not found');
         return;
     }
     //console.log('Audio feature value:', audioFeatures);
@@ -604,24 +589,24 @@ function filterAudioFeatureForAnalysis(audioFeatures) {
 
 // get audio features of a track
 async function getTrackAudioFeatures(trackId) {
-    console.log('Get track audio feature for :', trackId);
+    //console.log('Get track audio feature for :', trackId);
     var dataFromDatabase = await getTrackAudioFeaturesFromDatabase(trackId);
 
     //console.log('Audio feature from database :', dataFromDatabase);
     if (dataFromDatabase != undefined) {
-        console.log('Return track audio feature from database :', trackId);
+        //console.log('Return track audio feature from database :', trackId);
         return dataFromDatabase;
     }
 
     var dataFromAPI = await getTrackAudioFeaturesFromAPI(trackId);
-    console.log('Return track audio feature from api :', trackId, dataFromAPI);
+    //console.log('Return track audio feature from api :', trackId, dataFromAPI);
     return dataFromAPI;
     ;
 }
 
 // get audio features of a track from database
 function getTrackAudioFeaturesFromDatabase(trackId) {
-    console.log('get audio feature from database');
+    //console.log('get audio feature from database');
     return new Promise((resolve, reject) => {
         get(`track.${trackId}.feature`, (err, value) => {
             if (!err) {
@@ -640,10 +625,10 @@ function getTrackAudioFeaturesFromDatabase(trackId) {
 // get audio features of a track from Spotify API
 async function getTrackAudioFeaturesFromAPI(trackId) {
     var audioFeaturesValue;
-    console.log('Get audio feature from api:', trackId);
+    //console.log('Get audio feature from api:', trackId);
     await spotifyApi.getAudioFeaturesForTrack(trackId)
         .then(async function (data) {
-            console.log('Get audio feature one track success');
+            //console.log('Get audio feature one track success');
             var audioFeatures = data.body;
             putTrackAudioFeature(audioFeatures);
 
@@ -713,4 +698,78 @@ function convertDate(date) {
         year: year
     }
     return date;
+}
+
+const dancePageId = '/104/';
+const danceType = 1;
+const danceBaseUrl = 'https://www.officialcharts.com/charts/dance-singles-chart/';
+const rockPageId = '/111/';
+const rockType = 2;
+const rockBaseUrl = 'https://www.officialcharts.com/charts/rock-and-metal-singles-chart/';
+const rbPageId = '/114/';
+const rbType = 3;
+const rbBaseUrl = 'https://www.officialcharts.com/charts/r-and-b-singles-chart/';
+const daysInterval = 7;
+
+function createUrlList(startDate, endDate, genreType) {
+    var result = [];
+    if (startDate > endDate) {
+        console.log("Date is invalid");
+        return;
+    }
+    var urlInfo = getUrlInfo(genreType);
+    if (urlInfo == undefined || urlInfo.baseUrl == undefined || urlInfo.pageId == undefined) {
+        console.log("Not get url info");
+        return;
+    }
+
+    var date = new Date(startDate);
+    var endDate = new Date(endDate);
+    while (date <= endDate) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var day_str = day.toString();
+        var month_str = month.toString();
+        var year_str = year.toString();
+        if (day < 10) {
+            day_str = "0" + day_str;
+        }
+        if (month < 10) {
+            month_str = "0" + month_str;
+        }
+        date = new Date(date.setTime( date.getTime() + daysInterval * 86400000 ));
+        var date_str = year_str + month_str + day_str;
+        var url = urlInfo.baseUrl + date_str + urlInfo.pageId;
+        var urlResult = {
+            uri: url,
+            genreType: genreType
+        }
+        result.push(urlResult)
+    }
+    return result;
+}
+
+function getUrlInfo(genreType) {
+    var baseUrl;
+    var pageId;
+    switch (genreType) {
+        case danceType:
+            baseUrl = danceBaseUrl;
+            pageId = dancePageId;
+            break;
+        case rockType:
+            baseUrl = rockBaseUrl;
+            pageId = rockPageId;
+            break;
+        case rbType:
+            baseUrl = rbBaseUrl;
+            pageId = rbPageId;
+            break;
+    }
+    var result = {
+        baseUrl: baseUrl,
+        pageId: pageId
+    }
+    return result;
 }
