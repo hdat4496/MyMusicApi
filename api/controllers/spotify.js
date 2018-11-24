@@ -2,36 +2,52 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
+const { getAudioAnalysisKey } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
 var Statistics = require("simple-statistics");
 var SpotifyWebApi = require('spotify-web-api-node');
-var spotifyApi;
 
 module.exports = {
     putTrackData: putTrackData,
-    searchTrackSpotifyAPI: searchTrackSpotifyAPI
+    searchTrackSpotifyAPI: searchTrackSpotifyAPI,
+    getTrackAudioAnalysis: getTrackAudioAnalysis
 };
 
-async function authenticateSpotify() {
-    // Set necessary parts of the credentials on the constructor
-    spotifyApi = new SpotifyWebApi({
-        clientId: '9858429e40ac4516838c142ae439f27b',
-        clientSecret: '0f0eadd372d94b19ab7c98f5d910fe4c'
-    });
-    // Get an access token and 'save' it using a setter
-    await spotifyApi.clientCredentialsGrant().then(
-        function (data) {
-            console.log('The access token is ' + data.body['access_token']);
-            spotifyApi.setAccessToken(data.body['access_token']);
-        },
-        function (err) {
-            console.log('Something went wrong!', err);
-        }
-    );
-}
+// Set necessary parts of the credentials on the constructor
+var spotifyApi = new SpotifyWebApi({
+    clientId: '9858429e40ac4516838c142ae439f27b',
+    clientSecret: '0f0eadd372d94b19ab7c98f5d910fe4c'
+});
+// Get an access token and 'save' it using a setter
+spotifyApi.clientCredentialsGrant().then(
+    function (data) {
+        console.log('The access token is ' + data.body['access_token']);
+        spotifyApi.setAccessToken(data.body['access_token']);
+    },
+    function (err) {
+        console.log('Something went wrong!', err);
+    }
+);
+
+// async function authenticateSpotify() {
+//     // Set necessary parts of the credentials on the constructor
+//     spotifyApi = new SpotifyWebApi({
+//         clientId: '9858429e40ac4516838c142ae439f27b',
+//         clientSecret: '0f0eadd372d94b19ab7c98f5d910fe4c'
+//     });
+//     // Get an access token and 'save' it using a setter
+//     await spotifyApi.clientCredentialsGrant().then(
+//         function (data) {
+//             console.log('The access token is ' + data.body['access_token']);
+//             spotifyApi.setAccessToken(data.body['access_token']);
+//         },
+//         function (err) {
+//             console.log('Something went wrong!', err);
+//         }
+//     );
+// }
 
 async function putTrackData(tracks) {
-    await authenticateSpotify();
     var trackInfoList = await getTrackInfo(tracks);
     var newTrackIds = [];
     console.log("Number of track info: ", trackInfoList.length);
@@ -192,16 +208,21 @@ function getAudioFeaturesAPI(trackIds) {
 
 // get audio analysis of one track 
 async function getAudioAnalysisAPI(trackId) {
+    var analysis;
     console.log('Get audio analysis:', trackId);
     await spotifyApi.getAudioAnalysisForTrack(trackId)
         .then(async function (data) {
             //console.log('Get audio analysis success');
             var audioAnalysis = await calculateAudioAnalysis(data.body);
-            putTrackAudioAnalysis(trackId, audioAnalysis);
+            analysis = putTrackAudioAnalysis(trackId, audioAnalysis);
         }, function (err) {
-            getAudioAnalysisAPI(trackId);
-            //console.error('Get audio analysis error', err);
+            //getAudioAnalysisAPI(trackId);
+            console.error('Get audio analysis error', err);
+            if (err.statusCode == 504) {
+                getAudioAnalysisAPI(trackId);
+            }
         });
+    return analysis;
 }
 
 function putTrackInfo(trackInfo) {
@@ -487,6 +508,7 @@ async function putTrackAudioAnalysis(trackid, audioAnalysis) {
     var value = audioFeaturesFilter + ";" + audioAnalysisValue
     //console.log('Audio analysis value:', value);
     putSync(`track.${trackid}.analysis`, value);
+    return value;
 
 }
 
@@ -557,5 +579,59 @@ async function getTrackAudioFeaturesFromAPI(trackId) {
         });
     return audioFeaturesValue;
 }
+
+
+// get audio analysis of a track
+async function getTrackAudioAnalysis(trackId) {
+    console.log('Get track audio analysis for :', trackId);
+    var dataFromDatabase = await getTrackAnalysisFromDatabase(trackId);
+
+    //console.log('Analysis from database :', dataFromDatabase);
+    if (dataFromDatabase != undefined) {
+        console.log('Return track analysis from database :', trackId);
+        return dataFromDatabase;
+    }
+
+    var dataFromAPI = await getAudioAnalysisAPI(trackId);
+    if (dataFromAPI == undefined) {
+        console.log("Get track analysis error");
+        return;
+    }
+    dataFromAPI = convertAnalysis(dataFromAPI.split(";"));
+    console.log('Return track analysis from api :', trackId);
+    return dataFromAPI;
+}
+
+async function getTrackAnalysisFromDatabase(trackId) {
+    var trackAnalysis;
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.analysis`, async (err, value) => {
+            if (!err) {
+                var analysis_value = value.split(";");
+                trackAnalysis = convertAnalysis(analysis_value);
+                resolve(trackAnalysis);
+            }
+            else {
+                console.log('Get track analysis error', err);
+                resolve(undefined);
+            }
+        });
+    });
+}
+
+function convertAnalysis(analysis_value) {
+    var trackAnalysis = new Object;
+    var analysis_key = getAudioAnalysisKey();
+    if (analysis_value.length != analysis_key.length) {
+        console.log('Track analysis is invalid');
+        resolve(undefined);
+    }
+    for (var i = 0; i < analysis_value.length; i++) {
+        var key = analysis_key[i];
+        trackAnalysis[key] = analysis_value[i];
+    }
+    return trackAnalysis;
+}
+
 
 

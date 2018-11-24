@@ -107,6 +107,7 @@ const rockBaseUrl = 'https://www.officialcharts.com/charts/rock-and-metal-single
 const rbPageId = '/114/';
 const rbType = 3;
 const rbBaseUrl = 'https://www.officialcharts.com/charts/r-and-b-singles-chart/';
+const allType = 0;
 
 function createUrlList(startDate, endDate, genreType) {
     var result = [];

@@ -20,7 +20,8 @@
     "underscore.string": "*",
     "cheerio": "^1.0.0-rc.2",
     "crawler": "*",
-    "simple-statistics": "6.1.1"
+    "simple-statistics": "6.1.1",
+    "arff-utils": "0.0.5"
   },
   "devDependencies": {
     "should": "^7.1.0",
