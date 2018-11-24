@@ -209,5 +209,16 @@ function getTrack(req, res) {
         }
     });
 
-
+    function getTrackList() {
+        get(`track`, (err, value) => {
+            if (!err) {
+                var trackList = value.split(";");
+                console.log("track list");
+                for (var trackId of trackList) {
+                    console.log(trackId);
+                }
+    
+            }
+        });
+    }
 }
