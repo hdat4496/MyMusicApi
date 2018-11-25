@@ -21,7 +21,8 @@
     "cheerio": "^1.0.0-rc.2",
     "crawler": "*",
     "simple-statistics": "6.1.1",
-    "arff-utils": "0.0.5"
+    "arff-utils": "0.0.5",
+    "arff": "0.1.1"
   },
   "devDependencies": {
     "should": "^7.1.0",

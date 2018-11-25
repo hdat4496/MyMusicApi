@@ -2,14 +2,17 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-const { getTrackAudioAnalysis } = require('../controllers/spotify');
+const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset } = require('../controllers/spotify');
 const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
 var weka = require('../helpers/weka-lib.js');
 var Arff = require('arff-utils');
+var arffReadFile = require('arff');
+var stream = require('fs');
 
 module.exports = {
-    buildModel: buildModel
+    buildModel: buildModel,
+    saveArffData: saveArffData
 };
 
 function buildModel(req, res) {
@@ -153,5 +156,32 @@ async function getTrackListForChart(date, genreType) {
                 resolve(undefined);
             }
         });
+    });
+}
+
+function saveArffData() {
+    var filenameList = [pathArff + 'dance_data.arff',
+    pathArff + 'rock_data.arff',
+    pathArff + 'rb_data.arff'];
+
+    for (var filename of filenameList) {
+        readArff(filename);
+    }
+}
+
+function readArff(filename) {
+    var readFile = stream.readFile;
+
+    readFile(filename, 'utf8', function (error, content) {
+        if (error) {
+            return console.error(error); 
+        }
+        var data = arffReadFile.parse(content).data;
+        console.log("Row : ", data.length);
+        for (var row of data) {
+            putTrackAudioAnalysisForDataset(row);
+            putTrackAudioFeature(row);
+        }
+        console.log("Done save data from "+ filename +" file to database");
     });
 }

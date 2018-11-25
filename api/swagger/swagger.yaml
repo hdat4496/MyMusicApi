@@ -163,10 +163,18 @@ paths:
       description: crawl data
       operationId: crawl
       parameters:
-        - name: key
+        - name: startDate
           in: query
-          description: Token
+          description: start date MM/dd/yyyy
           type: string
+        - name: endDate
+          in: query
+          description: end date MM/dd/yyyy
+          type: string
+        - name: genreType
+          in: query
+          description: genreType
+          type: integer
       responses:
         "200":
           description: Success
@@ -194,6 +202,25 @@ paths:
           in: query
           description: genreType
           type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /savearff:
+    x-swagger-router-controller: model
+    get:
+      description: save arff data to database
+      operationId: saveArffData
+      parameters:
+        - name: key
+          in: query
+          description: key
+          type: string
       responses:
         "200":
           description: Success

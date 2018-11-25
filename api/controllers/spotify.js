@@ -10,7 +10,9 @@ var SpotifyWebApi = require('spotify-web-api-node');
 module.exports = {
     putTrackData: putTrackData,
     searchTrackSpotifyAPI: searchTrackSpotifyAPI,
-    getTrackAudioAnalysis: getTrackAudioAnalysis
+    getTrackAudioAnalysis: getTrackAudioAnalysis,
+    putTrackAudioAnalysisForDataset: putTrackAudioAnalysisForDataset,
+    putTrackAudioFeature: putTrackAudioFeature
 };
 
 // Set necessary parts of the credentials on the constructor
@@ -63,10 +65,16 @@ async function putTrackData(tracks) {
         console.log('Get track data done because of no new track')
         return trackInfoList;
     }
-    await getAudioFeaturesAPI(newTrackIds);
+    getAudioFeaturesAPI(newTrackIds);
 
     for (var trackId of newTrackIds) {
-        getAudioAnalysisAPI(trackId);
+        var hasAnalysisInDatabase = await checkHasTrackAnalysis(trackId);
+        if (hasAnalysisInDatabase == false) {
+            getAudioAnalysisAPI(trackId);
+        }
+        else {
+            console.log("Track has analysis in database");
+        }
     }
 
     return trackInfoList;
@@ -95,6 +103,21 @@ async function checkTrackExist(trackId) {
             }
             else {
                 reject('Track is already exist');
+            }
+        });
+    });
+}
+
+async function checkHasTrackAnalysis(trackId) {
+    //console.log('check has track analysis exist ?', trackId);
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.analysis`, (err, value) => {
+            if (err) {
+                //console.log('Track is not exist -> store new track');
+                resolve(false);
+            }
+            else {
+                resolve(true);
             }
         });
     });
@@ -138,16 +161,33 @@ async function searchTrackSpotifyAPI(position, title, artist) {
                 .then(function (data) {
                     var artists = data.body.artists;
                     for (var artist of artists) {
+                        var imageUrl;
+                        if (artist.images.length == 0) {
+                            imageUrl ="";
+                         }
+                        else {
+                            imageUrl =artist.images[0].url;
+                            artistImageUrl = imageUrl;
+                         }
                         var artistInfo = {
                             id: artist.id,
                             name: artist.name,
-                            imageurl: artist.images[0].url
+                            imageurl: imageUrl
                         }
                         // put artist info
                         putArtistInfo(artistInfo, trackInfo.id);
                         artistNames.push(artist.name);
                     }
-                    artistImageUrl = artists[0].images[0].url;
+                    if (artistImageUrl == undefined) {
+                        artistImageUrl = "";
+                    }
+                    var trackImageUrl;
+                    if (trackInfo.album.images.length == 0) {
+                        trackImageUrl = "";
+                    }
+                    else {
+                        trackImageUrl = trackInfo.album.images[0].url
+                    }
                     var track = {
                         id: trackInfo.id,
                         title: trackInfo.name,
@@ -156,7 +196,7 @@ async function searchTrackSpotifyAPI(position, title, artist) {
                         genre: '',
                         genre_imageurl: '',
                         track_url: trackInfo.href,
-                        track_imageurl: trackInfo.album.images[0].url
+                        track_imageurl: trackImageUrl
                     }
                     putTrackInfo(track);
                 }, function (err) {
@@ -214,12 +254,12 @@ async function getAudioAnalysisAPI(trackId) {
         .then(async function (data) {
             //console.log('Get audio analysis success');
             var audioAnalysis = await calculateAudioAnalysis(data.body);
-            analysis = putTrackAudioAnalysis(trackId, audioAnalysis);
-        }, function (err) {
+            analysis = await putTrackAudioAnalysis(trackId, audioAnalysis);
+        }, async function (err) {
             //getAudioAnalysisAPI(trackId);
             console.error('Get audio analysis error', err);
             if (err.statusCode == 504) {
-                getAudioAnalysisAPI(trackId);
+                await getAudioAnalysisAPI(trackId);
             }
         });
     return analysis;
@@ -511,6 +551,21 @@ async function putTrackAudioAnalysis(trackid, audioAnalysis) {
     return value;
 
 }
+// put data from arff file to database
+async function putTrackAudioAnalysisForDataset(audioAnalysis) {
+    var audioAnalysisValue;
+    var trackid = audioAnalysis.id;
+    var analysis_key = getAudioAnalysisKey();
+    for (var key of analysis_key) {
+        if (audioAnalysisValue == undefined) {
+            audioAnalysisValue = audioAnalysis[key];
+        } else {
+            audioAnalysisValue = audioAnalysisValue + ';' + audioAnalysis[key];
+        }
+    }
+    //console.log('Audio analysis value:', trackid);
+    putSync(`track.${trackid}.analysis`, audioAnalysisValue);
+}
 
 function filterAudioFeatureForAnalysis(audioFeatures) {
     var features = audioFeatures.split(";");
@@ -591,13 +646,12 @@ async function getTrackAudioAnalysis(trackId) {
         console.log('Return track analysis from database :', trackId);
         return dataFromDatabase;
     }
-
     var dataFromAPI = await getAudioAnalysisAPI(trackId);
     if (dataFromAPI == undefined) {
-        console.log("Get track analysis error");
+        console.log("Get track analysis from api error");
         return;
     }
-    dataFromAPI = convertAnalysis(dataFromAPI.split(";"));
+    dataFromAPI = convertAnalysis(dataFromAPI.split(";"), trackId);
     console.log('Return track analysis from api :', trackId);
     return dataFromAPI;
 }
@@ -608,7 +662,7 @@ async function getTrackAnalysisFromDatabase(trackId) {
         get(`track.${trackId}.analysis`, async (err, value) => {
             if (!err) {
                 var analysis_value = value.split(";");
-                trackAnalysis = convertAnalysis(analysis_value);
+                trackAnalysis = convertAnalysis(analysis_value, trackId);
                 resolve(trackAnalysis);
             }
             else {
@@ -619,12 +673,12 @@ async function getTrackAnalysisFromDatabase(trackId) {
     });
 }
 
-function convertAnalysis(analysis_value) {
+function convertAnalysis(analysis_value, trackId) {
     var trackAnalysis = new Object;
     var analysis_key = getAudioAnalysisKey();
     if (analysis_value.length != analysis_key.length) {
-        console.log('Track analysis is invalid');
-        resolve(undefined);
+        console.log('Convert analysis error: track analysis length is invalid: ', analysis_value);
+        return;
     }
     for (var i = 0; i < analysis_value.length; i++) {
         var key = analysis_key[i];
