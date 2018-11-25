@@ -230,6 +230,26 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
+  /predict:
+    x-swagger-router-controller: model
+    get:
+      description: predict one track hit or not
+      operationId: predict
+      parameters:
+        - name: trackid
+          in: query
+          description: track id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"          
 # complex objects have schema definitions
 definitions:
   ErrorResponse:

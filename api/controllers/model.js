@@ -12,7 +12,8 @@ var stream = require('fs');
 
 module.exports = {
     buildModel: buildModel,
-    saveArffData: saveArffData
+    saveArffData: saveArffData,
+    predict: predict
 };
 
 function buildModel(req, res) {
@@ -27,6 +28,17 @@ const pathArff = 'api/public/arff/';
 const arffType = ".arff";
 const pathModel = 'api/public/model/';
 const modelType = ".model";
+const danceType = 1;
+const rockType = 2;
+const rbType = 3
+var danceModelName;
+var rockModelName;
+var rbModelName;
+var classifier = {
+    'classifier': 'weka.classifiers.bayes.NaiveBayes',
+    'params': ''
+};
+
 async function createModel(startDate, endDate, genreType) {
     var data = await getDataForBuildModel(startDate, endDate, genreType);
     var filename = getGenreName(genreType) + "_" + convertDateToString(startDate) + "_" + convertDateToString(endDate);
@@ -34,10 +46,6 @@ async function createModel(startDate, endDate, genreType) {
     console.log("file name data" + filenameData);
     createArff(data, filenameData);
     var modelName = pathModel + filename + modelType;
-    var classifier = {
-        'classifier': 'weka.classifiers.bayes.NaiveBayes',
-        'params': ''
-    };
     console.log("model name" + modelName);
     weka.classify(filenameData, modelName, classifier, function (err, result) {
         if (err) {
@@ -45,6 +53,7 @@ async function createModel(startDate, endDate, genreType) {
         }
         else {
             console.log("Build model success" + result);
+            putSync(`model.${genreType}`, modelName);
         }
     });
 }
@@ -183,5 +192,56 @@ function readArff(filename) {
             putTrackAudioFeature(row);
         }
         console.log("Done save data from "+ filename +" file to database");
+    });
+}
+
+function predict(req, res) {
+    var trackid = req.swagger.params.trackid.value;
+    predictModel(trackid);
+}
+var fileNameTest = 'api/public/arff/test.arff';
+async function predictModel(trackid) {
+    //  var genreType = await getGenreType(trackid);
+    var genreType = 1;
+    var modelName = await getModelName(genreType);
+    if (modelName == undefined ) {
+        console.log("Genre type is invalid");
+        return;
+    }
+    var trackAnalysis = new Object;
+    trackAnalysis = await getTrackAudioAnalysis(trackid);
+    if (trackAnalysis == undefined) {
+        console.log("Track analysis is not found");
+        return;
+    }
+    trackAnalysis.hit ='hit';
+    var trackData = [];
+    trackData.push(trackAnalysis);
+    await createArff(trackData, fileNameTest);
+    console.log(modelName, fileNameTest);
+    weka.predict(modelName, fileNameTest, classifier, function (err, result) {
+        if (err) {
+            console.log("Predict hit error" + err);
+        }
+        else {
+            console.log("Predict hit success: " + result.predicted, result.prediction);
+        }
+    });
+
+}
+
+// get model name
+function getModelName(genreType) {
+    return new Promise((resolve, reject) => {
+        get(`model.${genreType}`, (err, value) => {
+            if (!err) {
+                //console.log('get model name:', value);
+                resolve(value);
+            }
+            else {
+                //console.log('model name not found');
+                resolve(undefined);
+            }
+        });
     });
 }
