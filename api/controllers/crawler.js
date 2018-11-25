@@ -13,9 +13,12 @@ module.exports = {
 };
 
 
-function crawl() {
+function crawl(req, res) {
+    var startDate = req.swagger.params.startDate.value;
+    var endDate = req.swagger.params.endDate.value;
+    var genreType = req.swagger.params.genreType.value;
     console.log('Crawl data');
-    var urlList = createUrlList("08/01/2018", "08/20/2018", 1);
+    var urlList = createUrlList(startDate, endDate, genreType);
     console.log("url list:", urlList.length);
     var c = new Crawler({
         maxConnections: 1,

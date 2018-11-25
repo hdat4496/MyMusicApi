@@ -342,39 +342,43 @@ function calculateAudioAnalysis(audioAnalysis) {
     if (audioAnalysis == undefined) {
         return;
     }
-
+   
     var song = new Object;
     var duration_arr = [];
-    var timebre1_arr = [];
-    var timebre2_arr = [];
-    var timebre3_arr = [];
-    var timebre4_arr = [];
-    var timebre5_arr = [];
-    var timebre6_arr = [];
-    var timebre7_arr = [];
-    var timebre8_arr = [];
-    var timebre9_arr = [];
-    var timebre10_arr = [];
-    var timebre11_arr = [];
-    var timebre12_arr = [];
+    var timbre1_arr = [];
+    var timbre2_arr = [];
+    var timbre3_arr = [];
+    var timbre4_arr = [];
+    var timbre5_arr = [];
+    var timbre6_arr = [];
+    var timbre7_arr = [];
+    var timbre8_arr = [];
+    var timbre9_arr = [];
+    var timbre10_arr = [];
+    var timbre11_arr = [];
+    var timbre12_arr = [];
 
     for (var beat of audioAnalysis.beats) {
         duration_arr.push(beat.duration);
     }
-
+    if (duration_arr.length == 0) {
+        console.log("Analysis beats empty:", duration_arr);
+        return;
+    }
+    
     for (var segment of audioAnalysis.segments) {
-        timebre1_arr.push(segment.timbre[0]);
-        timebre2_arr.push(segment.timbre[1]);
-        timebre3_arr.push(segment.timbre[2]);
-        timebre4_arr.push(segment.timbre[3]);
-        timebre5_arr.push(segment.timbre[4]);
-        timebre6_arr.push(segment.timbre[5]);
-        timebre7_arr.push(segment.timbre[6]);
-        timebre8_arr.push(segment.timbre[7]);
-        timebre9_arr.push(segment.timbre[8]);
-        timebre10_arr.push(segment.timbre[9]);
-        timebre11_arr.push(segment.timbre[10]);
-        timebre12_arr.push(segment.timbre[11]);
+        timbre1_arr.push(segment.timbre[0]);
+        timbre2_arr.push(segment.timbre[1]);
+        timbre3_arr.push(segment.timbre[2]);
+        timbre4_arr.push(segment.timbre[3]);
+        timbre5_arr.push(segment.timbre[4]);
+        timbre6_arr.push(segment.timbre[5]);
+        timbre7_arr.push(segment.timbre[6]);
+        timbre8_arr.push(segment.timbre[7]);
+        timbre9_arr.push(segment.timbre[8]);
+        timbre10_arr.push(segment.timbre[9]);
+        timbre11_arr.push(segment.timbre[10]);
+        timbre12_arr.push(segment.timbre[11]);
     }
     song.beatdiff_mean = Statistics.mean(duration_arr);
     song.beatdiff_variance = Statistics.variance(duration_arr);
@@ -387,137 +391,137 @@ function calculateAudioAnalysis(audioAnalysis) {
     song.beatdiff_range = song.beatdiff_max - song.beatdiff_min;
     song.beatdiff_median = Statistics.median(duration_arr);
 
-    song.timebre_1_mean = Statistics.mean(timebre1_arr);
-    song.timebre_1_variance = Statistics.variance(timebre1_arr);
-    song.timebre_1_skewness = Statistics.sampleSkewness(timebre1_arr);
-    song.timebre_1_kurtosis = Statistics.sampleKurtosis(timebre1_arr);
-    song.timebre_1_standard_deviation = Statistics.standardDeviation(timebre1_arr);
-    song.timebre_1_80th_percentile = Statistics.quantile(timebre1_arr, 0.8);
-    song.timebre_1_min = Statistics.min(timebre1_arr);
-    song.timebre_1_max = Statistics.max(timebre1_arr);
-    song.timebre_1_range = song.timebre_1_max - song.timebre_1_min;
-    song.timebre_1_median = Statistics.median(timebre1_arr);
+    song.timbre_1_mean = Statistics.mean(timbre1_arr);
+    song.timbre_1_variance = Statistics.variance(timbre1_arr);
+    song.timbre_1_skewness = Statistics.sampleSkewness(timbre1_arr);
+    song.timbre_1_kurtosis = Statistics.sampleKurtosis(timbre1_arr);
+    song.timbre_1_standard_deviation = Statistics.standardDeviation(timbre1_arr);
+    song.timbre_1_80th_percentile = Statistics.quantile(timbre1_arr, 0.8);
+    song.timbre_1_min = Statistics.min(timbre1_arr);
+    song.timbre_1_max = Statistics.max(timbre1_arr);
+    song.timbre_1_range = song.timbre_1_max - song.timbre_1_min;
+    song.timbre_1_median = Statistics.median(timbre1_arr);
 
-    song.timebre_2_mean = Statistics.mean(timebre2_arr);
-    song.timebre_2_variance = Statistics.variance(timebre2_arr);
-    song.timebre_2_skewness = Statistics.sampleSkewness(timebre2_arr);
-    song.timebre_2_kurtosis = Statistics.sampleKurtosis(timebre2_arr);
-    song.timebre_2_standard_deviation = Statistics.standardDeviation(timebre2_arr);
-    song.timebre_2_80th_percentile = Statistics.quantile(timebre2_arr, 0.8);
-    song.timebre_2_min = Statistics.min(timebre2_arr);
-    song.timebre_2_max = Statistics.max(timebre2_arr);
-    song.timebre_2_range = song.timebre_2_max - song.timebre_2_min;
-    song.timebre_2_median = Statistics.median(timebre2_arr);
+    song.timbre_2_mean = Statistics.mean(timbre2_arr);
+    song.timbre_2_variance = Statistics.variance(timbre2_arr);
+    song.timbre_2_skewness = Statistics.sampleSkewness(timbre2_arr);
+    song.timbre_2_kurtosis = Statistics.sampleKurtosis(timbre2_arr);
+    song.timbre_2_standard_deviation = Statistics.standardDeviation(timbre2_arr);
+    song.timbre_2_80th_percentile = Statistics.quantile(timbre2_arr, 0.8);
+    song.timbre_2_min = Statistics.min(timbre2_arr);
+    song.timbre_2_max = Statistics.max(timbre2_arr);
+    song.timbre_2_range = song.timbre_2_max - song.timbre_2_min;
+    song.timbre_2_median = Statistics.median(timbre2_arr);
 
-    song.timebre_3_mean = Statistics.mean(timebre3_arr);
-    song.timebre_3_variance = Statistics.variance(timebre3_arr);
-    song.timebre_3_skewness = Statistics.sampleSkewness(timebre3_arr);
-    song.timebre_3_kurtosis = Statistics.sampleKurtosis(timebre3_arr);
-    song.timebre_3_standard_deviation = Statistics.standardDeviation(timebre3_arr);
-    song.timebre_3_80th_percentile = Statistics.quantile(timebre3_arr, 0.8);
-    song.timebre_3_min = Statistics.min(timebre3_arr);
-    song.timebre_3_max = Statistics.max(timebre3_arr);
-    song.timebre_3_range = song.timebre_3_max - song.timebre_3_min;
-    song.timebre_3_median = Statistics.median(timebre3_arr);
+    song.timbre_3_mean = Statistics.mean(timbre3_arr);
+    song.timbre_3_variance = Statistics.variance(timbre3_arr);
+    song.timbre_3_skewness = Statistics.sampleSkewness(timbre3_arr);
+    song.timbre_3_kurtosis = Statistics.sampleKurtosis(timbre3_arr);
+    song.timbre_3_standard_deviation = Statistics.standardDeviation(timbre3_arr);
+    song.timbre_3_80th_percentile = Statistics.quantile(timbre3_arr, 0.8);
+    song.timbre_3_min = Statistics.min(timbre3_arr);
+    song.timbre_3_max = Statistics.max(timbre3_arr);
+    song.timbre_3_range = song.timbre_3_max - song.timbre_3_min;
+    song.timbre_3_median = Statistics.median(timbre3_arr);
 
-    song.timebre_4_mean = Statistics.mean(timebre4_arr);
-    song.timebre_4_variance = Statistics.variance(timebre4_arr);
-    song.timebre_4_skewness = Statistics.sampleSkewness(timebre4_arr);
-    song.timebre_4_kurtosis = Statistics.sampleKurtosis(timebre4_arr);
-    song.timebre_4_standard_deviation = Statistics.standardDeviation(timebre4_arr);
-    song.timebre_4_80th_percentile = Statistics.quantile(timebre4_arr, 0.8);
-    song.timebre_4_min = Statistics.min(timebre4_arr);
-    song.timebre_4_max = Statistics.max(timebre4_arr);
-    song.timebre_4_range = song.timebre_4_max - song.timebre_4_min;
-    song.timebre_4_median = Statistics.median(timebre4_arr);
+    song.timbre_4_mean = Statistics.mean(timbre4_arr);
+    song.timbre_4_variance = Statistics.variance(timbre4_arr);
+    song.timbre_4_skewness = Statistics.sampleSkewness(timbre4_arr);
+    song.timbre_4_kurtosis = Statistics.sampleKurtosis(timbre4_arr);
+    song.timbre_4_standard_deviation = Statistics.standardDeviation(timbre4_arr);
+    song.timbre_4_80th_percentile = Statistics.quantile(timbre4_arr, 0.8);
+    song.timbre_4_min = Statistics.min(timbre4_arr);
+    song.timbre_4_max = Statistics.max(timbre4_arr);
+    song.timbre_4_range = song.timbre_4_max - song.timbre_4_min;
+    song.timbre_4_median = Statistics.median(timbre4_arr);
 
-    song.timebre_5_mean = Statistics.mean(timebre5_arr);
-    song.timebre_5_variance = Statistics.variance(timebre5_arr);
-    song.timebre_5_skewness = Statistics.sampleSkewness(timebre5_arr);
-    song.timebre_5_kurtosis = Statistics.sampleKurtosis(timebre5_arr);
-    song.timebre_5_standard_deviation = Statistics.standardDeviation(timebre5_arr);
-    song.timebre_5_80th_percentile = Statistics.quantile(timebre5_arr, 0.8);
-    song.timebre_5_min = Statistics.min(timebre5_arr);
-    song.timebre_5_max = Statistics.max(timebre5_arr);
-    song.timebre_5_range = song.timebre_5_max - song.timebre_5_min;
-    song.timebre_5_median = Statistics.median(timebre5_arr);
+    song.timbre_5_mean = Statistics.mean(timbre5_arr);
+    song.timbre_5_variance = Statistics.variance(timbre5_arr);
+    song.timbre_5_skewness = Statistics.sampleSkewness(timbre5_arr);
+    song.timbre_5_kurtosis = Statistics.sampleKurtosis(timbre5_arr);
+    song.timbre_5_standard_deviation = Statistics.standardDeviation(timbre5_arr);
+    song.timbre_5_80th_percentile = Statistics.quantile(timbre5_arr, 0.8);
+    song.timbre_5_min = Statistics.min(timbre5_arr);
+    song.timbre_5_max = Statistics.max(timbre5_arr);
+    song.timbre_5_range = song.timbre_5_max - song.timbre_5_min;
+    song.timbre_5_median = Statistics.median(timbre5_arr);
 
-    song.timebre_6_mean = Statistics.mean(timebre6_arr);
-    song.timebre_6_variance = Statistics.variance(timebre6_arr);
-    song.timebre_6_skewness = Statistics.sampleSkewness(timebre6_arr);
-    song.timebre_6_kurtosis = Statistics.sampleKurtosis(timebre6_arr);
-    song.timebre_6_standard_deviation = Statistics.standardDeviation(timebre6_arr);
-    song.timebre_6_80th_percentile = Statistics.quantile(timebre6_arr, 0.8);
-    song.timebre_6_min = Statistics.min(timebre6_arr);
-    song.timebre_6_max = Statistics.max(timebre6_arr);
-    song.timebre_6_range = song.timebre_6_max - song.timebre_6_min;
-    song.timebre_6_median = Statistics.median(timebre6_arr);
+    song.timbre_6_mean = Statistics.mean(timbre6_arr);
+    song.timbre_6_variance = Statistics.variance(timbre6_arr);
+    song.timbre_6_skewness = Statistics.sampleSkewness(timbre6_arr);
+    song.timbre_6_kurtosis = Statistics.sampleKurtosis(timbre6_arr);
+    song.timbre_6_standard_deviation = Statistics.standardDeviation(timbre6_arr);
+    song.timbre_6_80th_percentile = Statistics.quantile(timbre6_arr, 0.8);
+    song.timbre_6_min = Statistics.min(timbre6_arr);
+    song.timbre_6_max = Statistics.max(timbre6_arr);
+    song.timbre_6_range = song.timbre_6_max - song.timbre_6_min;
+    song.timbre_6_median = Statistics.median(timbre6_arr);
 
-    song.timebre_7_mean = Statistics.mean(timebre7_arr);
-    song.timebre_7_variance = Statistics.variance(timebre7_arr);
-    song.timebre_7_skewness = Statistics.sampleSkewness(timebre7_arr);
-    song.timebre_7_kurtosis = Statistics.sampleKurtosis(timebre7_arr);
-    song.timebre_7_standard_deviation = Statistics.standardDeviation(timebre7_arr);
-    song.timebre_7_80th_percentile = Statistics.quantile(timebre7_arr, 0.8);
-    song.timebre_7_min = Statistics.min(timebre7_arr);
-    song.timebre_7_max = Statistics.max(timebre7_arr);
-    song.timebre_7_range = song.timebre_7_max - song.timebre_7_min;
-    song.timebre_7_median = Statistics.median(timebre7_arr);
+    song.timbre_7_mean = Statistics.mean(timbre7_arr);
+    song.timbre_7_variance = Statistics.variance(timbre7_arr);
+    song.timbre_7_skewness = Statistics.sampleSkewness(timbre7_arr);
+    song.timbre_7_kurtosis = Statistics.sampleKurtosis(timbre7_arr);
+    song.timbre_7_standard_deviation = Statistics.standardDeviation(timbre7_arr);
+    song.timbre_7_80th_percentile = Statistics.quantile(timbre7_arr, 0.8);
+    song.timbre_7_min = Statistics.min(timbre7_arr);
+    song.timbre_7_max = Statistics.max(timbre7_arr);
+    song.timbre_7_range = song.timbre_7_max - song.timbre_7_min;
+    song.timbre_7_median = Statistics.median(timbre7_arr);
 
-    song.timebre_8_mean = Statistics.mean(timebre8_arr);
-    song.timebre_8_variance = Statistics.variance(timebre8_arr);
-    song.timebre_8_skewness = Statistics.sampleSkewness(timebre8_arr);
-    song.timebre_8_kurtosis = Statistics.sampleKurtosis(timebre8_arr);
-    song.timebre_8_standard_deviation = Statistics.standardDeviation(timebre8_arr);
-    song.timebre_8_80th_percentile = Statistics.quantile(timebre8_arr, 0.8);
-    song.timebre_8_min = Statistics.min(timebre8_arr);
-    song.timebre_8_max = Statistics.max(timebre8_arr);
-    song.timebre_8_range = song.timebre_8_max - song.timebre_8_min;
-    song.timebre_8_median = Statistics.median(timebre8_arr);
+    song.timbre_8_mean = Statistics.mean(timbre8_arr);
+    song.timbre_8_variance = Statistics.variance(timbre8_arr);
+    song.timbre_8_skewness = Statistics.sampleSkewness(timbre8_arr);
+    song.timbre_8_kurtosis = Statistics.sampleKurtosis(timbre8_arr);
+    song.timbre_8_standard_deviation = Statistics.standardDeviation(timbre8_arr);
+    song.timbre_8_80th_percentile = Statistics.quantile(timbre8_arr, 0.8);
+    song.timbre_8_min = Statistics.min(timbre8_arr);
+    song.timbre_8_max = Statistics.max(timbre8_arr);
+    song.timbre_8_range = song.timbre_8_max - song.timbre_8_min;
+    song.timbre_8_median = Statistics.median(timbre8_arr);
 
-    song.timebre_9_mean = Statistics.mean(timebre9_arr);
-    song.timebre_9_variance = Statistics.variance(timebre9_arr);
-    song.timebre_9_skewness = Statistics.sampleSkewness(timebre9_arr);
-    song.timebre_9_kurtosis = Statistics.sampleKurtosis(timebre9_arr);
-    song.timebre_9_standard_deviation = Statistics.standardDeviation(timebre9_arr);
-    song.timebre_9_80th_percentile = Statistics.quantile(timebre9_arr, 0.8);
-    song.timebre_9_min = Statistics.min(timebre9_arr);
-    song.timebre_9_max = Statistics.max(timebre9_arr);
-    song.timebre_9_range = song.timebre_9_max - song.timebre_9_min;
-    song.timebre_9_median = Statistics.median(timebre9_arr);
+    song.timbre_9_mean = Statistics.mean(timbre9_arr);
+    song.timbre_9_variance = Statistics.variance(timbre9_arr);
+    song.timbre_9_skewness = Statistics.sampleSkewness(timbre9_arr);
+    song.timbre_9_kurtosis = Statistics.sampleKurtosis(timbre9_arr);
+    song.timbre_9_standard_deviation = Statistics.standardDeviation(timbre9_arr);
+    song.timbre_9_80th_percentile = Statistics.quantile(timbre9_arr, 0.8);
+    song.timbre_9_min = Statistics.min(timbre9_arr);
+    song.timbre_9_max = Statistics.max(timbre9_arr);
+    song.timbre_9_range = song.timbre_9_max - song.timbre_9_min;
+    song.timbre_9_median = Statistics.median(timbre9_arr);
 
-    song.timebre_10_mean = Statistics.mean(timebre10_arr);
-    song.timebre_10_variance = Statistics.variance(timebre10_arr);
-    song.timebre_10_skewness = Statistics.sampleSkewness(timebre10_arr);
-    song.timebre_10_kurtosis = Statistics.sampleKurtosis(timebre10_arr);
-    song.timebre_10_standard_deviation = Statistics.standardDeviation(timebre10_arr);
-    song.timebre_10_80th_percentile = Statistics.quantile(timebre10_arr, 0.8);
-    song.timebre_10_min = Statistics.min(timebre10_arr);
-    song.timebre_10_max = Statistics.max(timebre10_arr);
-    song.timebre_10_range = song.timebre_10_max - song.timebre_10_min;
-    song.timebre_10_median = Statistics.median(timebre10_arr);
+    song.timbre_10_mean = Statistics.mean(timbre10_arr);
+    song.timbre_10_variance = Statistics.variance(timbre10_arr);
+    song.timbre_10_skewness = Statistics.sampleSkewness(timbre10_arr);
+    song.timbre_10_kurtosis = Statistics.sampleKurtosis(timbre10_arr);
+    song.timbre_10_standard_deviation = Statistics.standardDeviation(timbre10_arr);
+    song.timbre_10_80th_percentile = Statistics.quantile(timbre10_arr, 0.8);
+    song.timbre_10_min = Statistics.min(timbre10_arr);
+    song.timbre_10_max = Statistics.max(timbre10_arr);
+    song.timbre_10_range = song.timbre_10_max - song.timbre_10_min;
+    song.timbre_10_median = Statistics.median(timbre10_arr);
 
-    song.timebre_11_mean = Statistics.mean(timebre11_arr);
-    song.timebre_11_variance = Statistics.variance(timebre11_arr);
-    song.timebre_11_skewness = Statistics.sampleSkewness(timebre11_arr);
-    song.timebre_11_kurtosis = Statistics.sampleKurtosis(timebre11_arr);
-    song.timebre_11_standard_deviation = Statistics.standardDeviation(timebre11_arr);
-    song.timebre_11_80th_percentile = Statistics.quantile(timebre11_arr, 0.8);
-    song.timebre_11_min = Statistics.min(timebre11_arr);
-    song.timebre_11_max = Statistics.max(timebre11_arr);
-    song.timebre_11_range = song.timebre_11_max - song.timebre_11_min;
-    song.timebre_11_median = Statistics.median(timebre11_arr);
+    song.timbre_11_mean = Statistics.mean(timbre11_arr);
+    song.timbre_11_variance = Statistics.variance(timbre11_arr);
+    song.timbre_11_skewness = Statistics.sampleSkewness(timbre11_arr);
+    song.timbre_11_kurtosis = Statistics.sampleKurtosis(timbre11_arr);
+    song.timbre_11_standard_deviation = Statistics.standardDeviation(timbre11_arr);
+    song.timbre_11_80th_percentile = Statistics.quantile(timbre11_arr, 0.8);
+    song.timbre_11_min = Statistics.min(timbre11_arr);
+    song.timbre_11_max = Statistics.max(timbre11_arr);
+    song.timbre_11_range = song.timbre_11_max - song.timbre_11_min;
+    song.timbre_11_median = Statistics.median(timbre11_arr);
 
-    song.timebre_12_mean = Statistics.mean(timebre12_arr);
-    song.timebre_12_variance = Statistics.variance(timebre12_arr);
-    song.timebre_12_skewness = Statistics.sampleSkewness(timebre12_arr);
-    song.timebre_12_kurtosis = Statistics.sampleKurtosis(timebre12_arr);
-    song.timebre_12_standard_deviation = Statistics.standardDeviation(timebre12_arr);
-    song.timebre_12_80th_percentile = Statistics.quantile(timebre12_arr, 0.8);
-    song.timebre_12_min = Statistics.min(timebre12_arr);
-    song.timebre_12_max = Statistics.max(timebre12_arr);
-    song.timebre_12_range = song.timebre_12_max - song.timebre_12_min;
-    song.timebre_12_median = Statistics.median(timebre12_arr);
+    song.timbre_12_mean = Statistics.mean(timbre12_arr);
+    song.timbre_12_variance = Statistics.variance(timbre12_arr);
+    song.timbre_12_skewness = Statistics.sampleSkewness(timbre12_arr);
+    song.timbre_12_kurtosis = Statistics.sampleKurtosis(timbre12_arr);
+    song.timbre_12_standard_deviation = Statistics.standardDeviation(timbre12_arr);
+    song.timbre_12_80th_percentile = Statistics.quantile(timbre12_arr, 0.8);
+    song.timbre_12_min = Statistics.min(timbre12_arr);
+    song.timbre_12_max = Statistics.max(timbre12_arr);
+    song.timbre_12_range = song.timbre_12_max - song.timbre_12_min;
+    song.timbre_12_median = Statistics.median(timbre12_arr);
 
     //console.log('calculateAudioAnalysis success', song);
 
@@ -529,7 +533,7 @@ async function putTrackAudioAnalysis(trackid, audioAnalysis) {
     //console.log('Put track audio analysis', trackid);
     var audioAnalysisValue;
     var audioFeatures = await getTrackAudioFeatures(trackid);
-    if (audioFeatures == undefined) {
+    if (audioFeatures == undefined || audioAnalysis == undefined) {
         //console.log('Audio feature value not found');
         return;
     }
