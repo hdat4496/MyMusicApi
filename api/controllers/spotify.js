@@ -12,7 +12,8 @@ module.exports = {
     searchTrackSpotifyAPI: searchTrackSpotifyAPI,
     getTrackAudioAnalysis: getTrackAudioAnalysis,
     putTrackAudioAnalysisForDataset: putTrackAudioAnalysisForDataset,
-    putTrackAudioFeature: putTrackAudioFeature
+    putTrackAudioFeature: putTrackAudioFeature,
+    getTrackAudioFeatures: getTrackAudioFeatures
 };
 
 // Set necessary parts of the credentials on the constructor

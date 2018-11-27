@@ -249,6 +249,33 @@ paths:
         default:
           description: Error
           schema:
+            $ref: "#/definitions/Response"      
+  /chart/buildfeatures:
+    x-swagger-router-controller: chart
+    get:
+      description: build chart features
+      operationId: buildChartFeatures
+      parameters:
+        - name: startDate
+          in: query
+          description: start date MM/dd/yyyy
+          type: string
+        - name: endDate
+          in: query
+          description: end date MM/dd/yyyy
+          type: string
+        - name: genreType
+          in: query
+          description: genreType
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
             $ref: "#/definitions/Response"          
 # complex objects have schema definitions
 definitions:
