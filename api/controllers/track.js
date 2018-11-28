@@ -4,6 +4,7 @@ const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures } = require('../controllers/spotify');
+const { predictModel } = require('../controllers/model');
 // const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 var arff = require('node-arff');
@@ -128,13 +129,13 @@ function getTrackDetail(trackId) {
             reject("Get track info error");
         }
         track.trackInfo = trackInfo;
-        // var trackFeatures = await getTrackAudioFeatures(trackId);
-        // if(trackFeatures == undefined) {
-        //     track[trackFeatures] == '';
-        // }
-        // else {
-        //     track[trackFeatures] == trackFeatures;
-        // }
+        console.log("get track audio features", trackId);
+        var trackFeaturesString = await getTrackAudioFeatures(trackId);
+        console.log("Audio features", trackFeaturesString);
+        var trackFeatures = convertAudioFeatures(trackFeaturesString);
+        track.trackFeatures = (trackFeatures == undefined) ? '': trackFeatures;
+        var hit = await predictModel(trackId);
+        track.hit = (hit == undefined) ? '' : hit;
         resolve(track);
     });
 }
@@ -203,28 +204,13 @@ async function getTrackInfo(trackId) {
     }
     track = trackGeneralInfo;
     var trackLike = await getTrackInfoExtra(trackId, like);
-    if (trackLike == undefined) {
-        track[like] = 0;
-    }
-    else {
-        track[like] = trackLike;
-    }
+    track[like] = (trackLike == undefined) ? 0 : trackLike;
 
     var trackListen = await getTrackInfoExtra(trackId, listen);
-    if (trackListen == undefined) {
-        track[listen] = 0;
-    }
-    else {
-        track[listen] = trackListen;
-    }
-
+    track[listen] = (trackListen == undefined) ? 0 : trackListen;
+    
     var trackLyric = await getTrackInfoExtra(trackId, lyric);
-    if (trackLyric == undefined) {
-        track[lyric] = '';
-    }
-    else {
-        track[lyric] = trackLyric;
-    }
+    track[lyric] = (trackLyric == undefined) ? '' : trackLyric;
     return track;
 }
 
@@ -264,3 +250,44 @@ function getTrackInfoExtra(trackId, infoType) {
         });
     });
 }
+
+function convertAudioFeatures(featuresString) {
+    if (featuresString == undefined) {
+        return;
+    }
+    var features = featuresString.split(";");
+    if (features.length < 13) {
+        return;
+    }
+    var featureObject = new Object;
+    featureObject.speechiness = parseFloat(features[0]);
+    featureObject.acousticness = parseFloat(features[1]);
+    featureObject.instrumentalness = parseFloat(features[2]);
+    featureObject.liveness = parseFloat(features[3]);
+    featureObject.valence = parseFloat(features[4]);
+    featureObject.duration_ms = parseFloat(features[5]);
+    featureObject.tempo = parseFloat(features[6]);
+    featureObject.time_signature = features[7] + beats;
+    featureObject.mode = (features[8] == 0) ? minorMode : majorMode ;
+    featureObject.key =  keyList[parseInt(features[9])];
+    featureObject.loudness = parseFloat(features[10]);
+    featureObject.danceability = parseFloat(features[11]);
+    featureObject.energy = parseFloat(features[12]);
+    console.log("Feature object", featureObject);
+    return featureObject;
+}
+const minorMode = 'minor';
+const majorMode = 'major';
+const beats = ' beats';
+const keyList = ['C',
+'C#',
+'D',
+'D#',
+'E',
+'F',
+'F#',
+'G',
+'G#',
+'A',
+'A#',
+'B']

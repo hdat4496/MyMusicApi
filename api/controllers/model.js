@@ -16,6 +16,7 @@ module.exports = {
     buildModel: buildModel,
     saveArffData: saveArffData,
     predict: predict,
+    predictModel: predictModel,
     putDistinctKeyToObject: putDistinctKeyToObject
 };
 
@@ -200,16 +201,24 @@ async function predictModel(trackid) {
     var trackData = [];
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
-    console.log(modelName, fileNameTest);
-    weka.predict(modelName, fileNameTest, classifier, function (err, result) {
-        if (err) {
-            console.log("Predict hit error" + err);
-        }
-        else {
-            console.log("Predict hit success: " + result.predicted, result.prediction);
-        }
-    });
+    var result = await predictTrack(modelName, fileNameTest, classifier);
+    console.log("Predicted: ", result)
+    return result;
+}
 
+function predictTrack(modelName, fileNameTest, classifier) {
+    return new Promise((resolve, reject) => {
+        weka.predict(modelName, fileNameTest, classifier, function (err, result) {
+            if (err) {
+                console.log("Predict hit error" + err);
+                resolve(undefined);
+            }
+            else {
+                console.log("Predict hit success: " + result.predicted, result.prediction);
+                resolve(result.prediction);
+            }
+        });
+    });
 }
 
 // get model name
