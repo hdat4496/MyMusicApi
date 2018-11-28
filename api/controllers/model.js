@@ -215,7 +215,7 @@ function predictTrack(modelName, fileNameTest, classifier) {
             }
             else {
                 console.log("Predict hit success: " + result.predicted, result.prediction);
-                resolve(result.prediction);
+                resolve(result.predicted);
             }
         });
     });

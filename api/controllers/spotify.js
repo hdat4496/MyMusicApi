@@ -13,7 +13,10 @@ module.exports = {
     getTrackAudioAnalysis: getTrackAudioAnalysis,
     putTrackAudioAnalysisForDataset: putTrackAudioAnalysisForDataset,
     putTrackAudioFeature: putTrackAudioFeature,
-    getTrackAudioFeatures: getTrackAudioFeatures
+    getTrackAudioFeatures: getTrackAudioFeatures,
+    getTrackInfo: getTrackInfo,
+    getTrackInfoFromDatabase: getTrackInfoFromDatabase,
+    getTrackGeneralInfo: getTrackGeneralInfo
 };
 
 // Set necessary parts of the credentials on the constructor
@@ -51,7 +54,7 @@ spotifyApi.clientCredentialsGrant().then(
 // }
 
 async function putTrackData(tracks) {
-    var trackInfoList = await getTrackInfo(tracks);
+    var trackInfoList = await getTrackInfoWhenCrawlData(tracks);
     var newTrackIds = [];
     console.log("Number of track info: ", trackInfoList.length);
     for (var trackInfo of trackInfoList) {
@@ -81,7 +84,7 @@ async function putTrackData(tracks) {
     return trackInfoList;
 }
 
-async function getTrackInfo(tracks) {
+async function getTrackInfoWhenCrawlData(tracks) {
     var trackInfoList = [];
 
     for (var track of tracks) {
@@ -718,5 +721,146 @@ function convertAnalysis(analysis_value, trackId) {
     return trackAnalysis;
 }
 
+// get detail infor of a track
+async function getTrackInfo(trackId) {
+    var trackInfo = new Object;
+    console.log('Get track detail for :', trackId);
+    await checkTrackExist(trackId)
+    .then(async function(){
+        console.log("Get track infor from API");
+        trackInfo = await getTrackInfoFromAPI(trackId);
+        console.log("Track",trackInfo );
+        if (trackInfo[id] != undefined) {
+            trackInfo[like] = 0;
+            trackInfo[listen] = 0;
+            trackInfo[lyric] = '';
+            var list = [trackId];
+            getAudioFeaturesAPI(list);
+            var hasAnalysisInDatabase = await checkHasTrackAnalysis(trackId);
+            if (hasAnalysisInDatabase == false) {
+                getAudioAnalysisAPI(trackId);
+            }
+        }  
+    })
+    .catch(async function(){
+        trackInfo = await getTrackInfoFromDatabase(trackId);      
+    });
+    return trackInfo;
+}
+// Get track info from API
+async function getTrackInfoFromAPI(trackId) {
+     //console.log('Get track info from API: ', trackId);
+     var track = new Object;
+     var trackInfo;
+     var albumId;
+     await spotifyApi.getTrack(trackId).then(
+         async function (data) {
+            trackInfo = data.body;
+             if (trackInfo == '') {
+                 return;
+             }
+             
+             albumId = trackInfo.album.id;
+             var artists = trackInfo.artists;
+             var artistIds = [];
+             for (var artist of artists) {
+                 artistIds.push(artist.id);
+             }
+             return artistIds;
+         },
+         function (err) {
+             console.log('Get track fail', err);
+         }
+     )
+         .then(async function(artistIds){
+             if (artistIds == undefined) {
+                 return;
+             }
+             //console.log("Get artist ", trackId);
+             var artistInfo = await getArtistAPI(artistIds, trackId);
+             if (artistInfo == undefined || artistInfo.length <2) {
+                 return;
+                 
+             }
+             var trackImageUrl;
+             if (trackInfo.album.images.length == 0) {
+                 trackImageUrl = "";
+             }
+             else {
+                 trackImageUrl = trackInfo.album.images[0].url
+             }
+             track.id = trackInfo.id;
+             track.title = trackInfo.name;
+             track.artist = artistInfo[0];
+             track.artist_imageurl = artistInfo[1];
+             track.track_url = trackInfo.href;
+             track.track_imageurl = trackImageUrl;
+             track.genre = '';
+             track.genre_imageurl = '';
+             //console.log("Put track info ", track.id);
+             putTrackInfo(track);
+         })
+         .catch(e => {
+             //console.log('Exception search track: ', e);
+         });
+     return track;
+}
 
+const like = 'like';
+const listen = 'listen';
+const lyric = 'lyric';
+// Get track info from databse
+async function getTrackInfoFromDatabase(trackId) {
+    var track = new Object;
+    var trackGeneralInfo = await getTrackGeneralInfo(trackId);
+    if (trackGeneralInfo == undefined) {
+        return;
+    }
+    track = trackGeneralInfo;
+    var trackLike = await getTrackInfoExtra(trackId, like);
+    track[like] = (trackLike == undefined) ? 0 : trackLike;
 
+    var trackListen = await getTrackInfoExtra(trackId, listen);
+    track[listen] = (trackListen == undefined) ? 0 : trackListen;
+
+    var trackLyric = await getTrackInfoExtra(trackId, lyric);
+    track[lyric] = (trackLyric == undefined) ? '' : trackLyric;
+    return track;
+}
+
+function getTrackGeneralInfo(trackId) {
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.info`, (err, value) => {
+            if (!err) {
+                var trackInfo = value.split(";");
+                var track = new Object;
+                track.id = trackId;
+                track.title = trackInfo[0];
+                track.artist = trackInfo[1];
+                track.artist_imageurl = trackInfo[2];
+                track.genre = trackInfo[3];
+                track.genre_imageurl = trackInfo[4];
+                track.track_url = trackInfo[5];
+                track.track_imageurl = trackInfo[6];
+                resolve(track);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
+}
+
+// Get track like/listen/lyric
+function getTrackInfoExtra(trackId, infoType) {
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.${infoType}`, (err, value) => {
+            if (err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
+}

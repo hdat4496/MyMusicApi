@@ -3,7 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
-const { getTrackAudioFeatures } = require('../controllers/spotify');
+const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo } = require('../controllers/spotify');
 const { predictModel } = require('../controllers/model');
 // const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
@@ -23,9 +23,7 @@ module.exports = {
     getHomeTrack: getHomeTrack
 };
 
-const like = 'like';
-const listen = 'listen';
-const lyric = 'lyric';
+
 function searchArtist(req, res) {
     var keyword = req.swagger.params.keyword.value;
     if (keyword !== '') {
@@ -81,7 +79,7 @@ function searchTrack(req, res) {
                 }
                 if (ids.length !== 0) {
                     ids.map(async (trackId) => {
-                        var track = await getTrackInfo(trackId);
+                        var track = await getTrackInfoFromDatabase(trackId);
                         if (track != undefined) {
                             track_ls.push(track);
                         }
@@ -126,12 +124,14 @@ function getTrackDetail(trackId) {
         var track = new Object;
         var trackInfo = await getTrackInfo(trackId);
         if (trackInfo == undefined) {
+            console.log("Get track info error");
             reject("Get track info error");
+            return;
         }
         track.trackInfo = trackInfo;
-        console.log("get track audio features", trackId);
+        //console.log("get track audio features", trackId);
         var trackFeaturesString = await getTrackAudioFeatures(trackId);
-        console.log("Audio features", trackFeaturesString);
+        //console.log("Audio features", trackFeaturesString);
         var trackFeatures = convertAudioFeatures(trackFeaturesString);
         track.trackFeatures = (trackFeatures == undefined) ? '': trackFeatures;
         var hit = await predictModel(trackId);
@@ -196,60 +196,6 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-async function getTrackInfo(trackId) {
-    var track = new Object;
-    var trackGeneralInfo = await getTrackGeneralInfo(trackId);
-    if (trackGeneralInfo == undefined) {
-        return;
-    }
-    track = trackGeneralInfo;
-    var trackLike = await getTrackInfoExtra(trackId, like);
-    track[like] = (trackLike == undefined) ? 0 : trackLike;
-
-    var trackListen = await getTrackInfoExtra(trackId, listen);
-    track[listen] = (trackListen == undefined) ? 0 : trackListen;
-    
-    var trackLyric = await getTrackInfoExtra(trackId, lyric);
-    track[lyric] = (trackLyric == undefined) ? '' : trackLyric;
-    return track;
-}
-
-function getTrackGeneralInfo(trackId) {
-    return new Promise((resolve, reject) => {
-        get(`track.${trackId}.info`, (err, value) => {
-            if (!err) {
-                var trackInfo = value.split(";");
-                var track = new Object;
-                track.id = trackId;
-                track.title = trackInfo[0];
-                track.artist = trackInfo[1];
-                track.artist_imageurl = trackInfo[2];
-                track.genre = trackInfo[3];
-                track.genre_imageurl = trackInfo[4];
-                track.track_url = trackInfo[5];
-                track.track_imageurl = trackInfo[6];
-                resolve(track);
-            }
-            else {
-                resolve(undefined);
-            }
-        });
-    });
-}
-
-// Get track like/listen/lyric
-function getTrackInfoExtra(trackId, infoType) {
-    return new Promise((resolve, reject) => {
-        get(`track.${trackId}.${infoType}`, (err, value) => {
-            if (err) {
-                resolve(value);
-            }
-            else {
-                resolve(undefined);
-            }
-        });
-    });
-}
 
 function convertAudioFeatures(featuresString) {
     if (featuresString == undefined) {
