@@ -38,6 +38,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /track/get-home-track:
+    x-swagger-router-controller: track
+    get:
+      description: Get track's data for home page
+      operationId: getHomeTrack
+      parameters:
+        - name: key
+          in: query
+          description: Token
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/TrackResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /test:
     x-swagger-router-controller: user
     get:

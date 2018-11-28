@@ -2,6 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
+const { getLastedChartTracks} = require('../controllers/chart');
 // const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 var arff = require('node-arff');
@@ -16,9 +17,13 @@ var model = 'api/public/arff/abcmodel.model';
 module.exports = {
     getTrack: getTrack_2,
     searchTrack: searchTrack,
-    searchArtist: searchArtist
+    searchArtist: searchArtist,
+    getHomeTrack: getHomeTrack
 };
 
+const like = 'like';
+const listen = 'listen';
+const lyric = 'lyric';
 function searchArtist(req, res) {
     var keyword = req.swagger.params.keyword.value;
     if (keyword !== '') {
@@ -221,4 +226,114 @@ function getTrack(req, res) {
             }
         });
     }
+}
+
+function getHomeTrack() {
+    getNewTrack();
+}
+const newTrackNumber = 8;
+async function getNewTrack() {
+    var trackIds = await getLastedChartTracks();
+    var length = trackIds.length;
+    if (length == 0) {
+        return;
+    }
+    var newTrackIndexes = [];
+    while(newTrackIndexes.length < newTrackNumber) {
+        var index = getRandomInt(length);
+        if (newTrackIndexes.indexOf(index) == -1) {
+            newTrackIndexes.push(index);
+        }
+    }
+    console.log("New Track indexs: ",newTrackIndexes );
+    var selectedTrackIds = [];
+    for (var index of newTrackIndexes) {
+        selectedTrackIds.push(trackIds[index]);
+    }
+    console.log("New Track ids: ",selectedTrackIds );
+    var trackGeneralInfoList = [];
+    for (var trackId of selectedTrackIds) {
+        var trackInfo = await getTrackGeneralInfo(trackId);
+        if (trackInfo == undefined) {
+            console.log('Get track info error: ', trackId);
+            continue;
+        }
+        trackGeneralInfoList.push(trackInfo);
+    }
+    console.log("New Track info: ",trackGeneralInfoList );
+}
+
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+async function getTrackInfo(trackId) {
+    var track = new Object;
+    var trackGeneralInfo = await getTrackGeneralInfo(trackId);
+    if (trackGeneralInfo == undefined) {
+        return;
+    }
+    track = trackGeneralInfo;
+    var trackLike = await getTrackInfoExtra(trackId, like);
+    if (trackLike == undefined) {
+       track[like] = 0;
+    }
+    else {
+        track[like] = trackLike;
+    }
+
+    var trackListen = await getTrackInfoExtra(trackId, listen);
+    if (trackListen == undefined) {
+       track[listen] = 0;
+    }
+    else {
+        track[listen] = trackListen;
+    }
+
+    var trackLyric = await getTrackInfoExtra(trackId, lyric);
+    if (trackLyric == undefined) {
+       track[lyric] = '';
+    }
+    else {
+        track[lyric] = trackLyric;
+    }
+    return track;
+}
+
+function getTrackGeneralInfo(trackId) {
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.info`, (err, value) => {
+            if (!err) {
+                var trackInfo = value.split(";");
+                var track = new Object;
+                track.id = trackId;
+                track.title = trackInfo[0];
+                track.artist = trackInfo[1];
+                track.artist_imageurl = trackInfo[2];
+                track.genre = trackInfo[3];
+                track.genre_imageurl = trackInfo[4];
+                track.track_url = trackInfo[5];
+                track.track_imageurl = trackInfo[6];
+                resolve(track);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
+}
+
+// Get track like/listen/lyric
+function getTrackInfoExtra(trackId, infoType) {
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.${infoType}`, (err, value) => {
+            if (err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
 }

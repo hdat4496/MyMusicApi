@@ -73,6 +73,8 @@ function runData() {
     putSync('chart.13012013.1.numbertrack', 5);
     putSync('chart.13012013.1', '2V65y3PX4DkRhy1djlxd9p;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi;24LS4lQShWyixJ0ZrJXfJ5');
 
+    // Store lasted date chart: value is lasted_date_ge
+    putSync('chart.1.lasted', '13/01/2013');
 
     putSync('user.hoanghtk', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
     putSync('user.hoanghtk.fullname', 'Kim Hoàng');

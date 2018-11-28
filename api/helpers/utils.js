@@ -9,7 +9,8 @@ module.exports = {
     getChartDateList: getChartDateList,
     getAudioAnalysisKey: getAudioAnalysisKey,
     getGenreName: getGenreName,
-    convertDateToString: convertDateToString
+    convertDateToString: convertDateToString,
+    convertStringToDate: convertStringToDate
 };
 
 function convertDate(date) {
@@ -71,7 +72,7 @@ const dayChangeMilestone = new Date("07/05/2015");
 function getChartDateList(startDate, endDate) {
     startDate = new Date(startDate);
     endDate = new Date(endDate);
-    
+
     if (startDate > endDate) {
         console.log("Chart date is invalid");
         return;
@@ -137,6 +138,16 @@ function findStartDate(startDate) {
     //console.log("Day add:", dayAdd);
     return new Date(startDate.setTime(startDate.getTime() + dayAdd * 86400000));
 }
+function convertStringToDate(value) {
+    var dateArray = value.split("/");
+    if (dateArray.length < 3) {
+        console.log("chart lasted date type ", genre, " is not valid");
+        return;
+    }
+    var date = new Date();
+    date.setFullYear(parseInt(dateArray[2]), parseInt(dateArray[1]) - 1, parseInt(dateArray[0]));
+    return date;
+}
 
 function getAudioAnalysisKey() {
     return analysis_key;
@@ -147,10 +158,10 @@ const rb = "R&B";
 const rock = "rock";
 const all = "all";
 function getGenreName(genreType) {
-    switch(genreType) {
+    switch (genreType) {
         case 1:
             return dance;
-        case 2: 
+        case 2:
             return rock;
         case 3:
             return rb;

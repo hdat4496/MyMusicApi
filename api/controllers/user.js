@@ -15,6 +15,12 @@ function test(req, res) {
     var key = req.swagger.params.key.value;
     get(`${key}`, (err, value) => {
         if (!err) {
+            // let abc = JSON.parse(value);
+            // console.log(abc);
+            // for (var k in abc){
+            //     console.log(k);
+            //     console.log(abc[k])
+            // }
             res.json({ status: 200, message: value });
         }
         else {

@@ -3,7 +3,8 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackAudioFeatures} = require('../controllers/spotify')
-const { convertDate, getChartDateList } = require('../helpers/utils');
+const { convertDate, getChartDateList, convertStringToDate } = require('../helpers/utils');
+const { putDistinctKeyToObject } = require('../controllers/model');
 var Statistics = require("simple-statistics");
 //const { runData } = require('../helpers/data.js');
 
@@ -12,7 +13,8 @@ module.exports = {
     putChartData: putChartData,
     getTrackListForChart: getTrackListForChart,
     buildChartFeatures: buildChartFeatures,
-    putChartAnalysis: putChartAnalysis
+    putChartAnalysis: putChartAnalysis,
+    getLastedChartTracks: getLastedChartTracks
 };
 
 function putChartData(genre, date, trackInfoList) {
@@ -20,7 +22,8 @@ function putChartData(genre, date, trackInfoList) {
     var dateFormat = convertDate(date);
     //console.log("Date format", dateFormat);
     var dateKey = dateFormat.day + dateFormat.month + dateFormat.year;
-    putSync(`chart.${dateKey}.${genre}.date`, dateFormat.day + '/' + dateFormat.month + '/' + dateFormat.year);
+    var dateValue = dateFormat.day + '/' + dateFormat.month + '/' + dateFormat.year;
+    putSync(`chart.${dateKey}.${genre}.date`, dateValue);
     putSync(`chart.${dateKey}.${genre}.numbertrack`, trackInfoList.length);
 
     var trackIdChart = [];
@@ -37,6 +40,19 @@ function putChartData(genre, date, trackInfoList) {
     var trackIdsValue = trackIdChart.join(";")
     //console.log('Chart track ids:', trackIdsValue);
     putSync(`chart.${dateKey}.${genre}`, trackIdsValue);
+
+    get(`chart.${genre}.lasted`, async (err, value) => {
+        if (!err) {
+            var lastedDate = convertStringToDate(value);
+            var chartDate = convertStringToDate(dateValue);
+            if (lastedDate < chartDate) {
+                putSync(`chart.${genre}.lasted`, dateValue);
+            }
+        }
+        else if (err.notFound){
+            putSync(`chart.${genre}.lasted`, dateValue);
+        }
+    });
 }
 
 function buildChartFeatures(req, res) {
@@ -183,6 +199,54 @@ async function getTrackListForChart(date, genreType) {
             }
             else {
                 console.log('Get track list error', date);
+                resolve(undefined);
+            }
+        });
+    });
+}
+
+async function getLastedChartTracks() {
+    var genreTypeList = [1,2,3];
+    var lastedChartDate = [];
+    for (var genreType of genreTypeList) {
+        var date = await getChartLasted(genreType);
+        if (date == undefined) {
+            continue;
+        }
+        var chart = {
+            genreType: genreType,
+            date: date
+        }
+        lastedChartDate.push(chart);
+    }
+    
+    var distinctTracks = new Object;
+    for (var chart of lastedChartDate) {
+        var dateArray = chart.date.split("/");
+        var date_str = dateArray.join("");
+        var chartTrackObject = await getTrackListForChart(date_str, chart.genreType);
+        if (chartTrackObject == undefined) {
+            continue;
+        }
+        distinctTracks = putDistinctKeyToObject(distinctTracks, chartTrackObject);
+    }
+
+    var trackIds = [];
+
+    for (var trackId of Object.keys(distinctTracks)) {
+        trackIds.push(trackId);
+    }
+
+    return trackIds;
+}
+
+async function getChartLasted(genre) {
+    return new Promise((resolve, reject) => {
+        get(`chart.${genre}.lasted`, (err, value) => {
+            if (!err) {
+                resolve(value);
+            }
+            else {
                 resolve(undefined);
             }
         });

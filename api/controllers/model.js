@@ -15,7 +15,8 @@ var stream = require('fs');
 module.exports = {
     buildModel: buildModel,
     saveArffData: saveArffData,
-    predict: predict
+    predict: predict,
+    putDistinctKeyToObject: putDistinctKeyToObject
 };
 
 
