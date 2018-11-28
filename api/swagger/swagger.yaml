@@ -19,11 +19,6 @@ paths:
       description: Get track's data
       operationId: getTrack
       parameters:
-        - name: token
-          in: query
-          description: User's token
-          required: true
-          type: string
         - name: id
           in: query
           description: Track's id
