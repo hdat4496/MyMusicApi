@@ -198,7 +198,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
-  /buildmodel:
+  /model/build-model:
     x-swagger-router-controller: model
     get:
       description: build classification model
@@ -224,51 +224,39 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/Response"
-  /savearff:
-    x-swagger-router-controller: model
-    get:
-      description: save arff data to database
-      operationId: saveArffData
-      parameters:
-        - name: key
-          in: query
-          description: key
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/Response"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Response"
-  /predict:
-    x-swagger-router-controller: model
-    get:
-      description: predict one track hit or not
-      operationId: predict
-      parameters:
-        - name: trackid
-          in: query
-          description: track id
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/Response"
-        default:
-          description: Error
-          schema:
             $ref: "#/definitions/Response"      
   /chart/buildfeatures:
     x-swagger-router-controller: chart
     get:
       description: build chart features
       operationId: buildChartFeatures
+      parameters:
+        - name: startDate
+          in: query
+          description: start date MM/dd/yyyy
+          type: string
+        - name: endDate
+          in: query
+          description: end date MM/dd/yyyy
+          type: string
+        - name: genreType
+          in: query
+          description: genreType
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"  
+  /chart/get-report:
+    x-swagger-router-controller: chart
+    get:
+      description: get chart analysis report
+      operationId: getChartReport
       parameters:
         - name: startDate
           in: query

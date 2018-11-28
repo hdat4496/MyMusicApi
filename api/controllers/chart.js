@@ -14,7 +14,8 @@ module.exports = {
     getTrackListForChart: getTrackListForChart,
     buildChartFeatures: buildChartFeatures,
     putChartAnalysis: putChartAnalysis,
-    getLastedChartTracks: getLastedChartTracks
+    getLastedChartTracks: getLastedChartTracks,
+    getChartReport: getChartReport
 };
 
 function putChartData(genre, date, trackInfoList) {
@@ -91,6 +92,7 @@ async function getChartTrackAudioFeatures(trackIds) {
     for (var trackId of Object.keys(trackIds)) {
         var trackFeatures = await getTrackAudioFeatures(trackId);
         if (trackFeatures != undefined) {
+            trackFeatures = trackId + ';' + trackFeatures;
             trackFeaturesList.push(trackFeatures);
         }
     }
@@ -114,21 +116,39 @@ function calculateChartFeatures(trackFeaturesList) {
     var loudness = [];
     var danceability = []; 
     var energy = []; 
+    var timeSignatureObject = new Object;
+    var modeObject = new Object;
+    var keyObject = new Object;
     for (var trackFeature of trackFeaturesList) {
         var features = trackFeature.split(";");
-        speechiness.push(parseFloat(features[0]));
-        acousticness.push(parseFloat(features[1]));
-        instrumentalness.push(parseFloat(features[2]));
-        liveness.push(parseFloat(features[3]));
-        valence.push(parseFloat(features[4]));
-        duration_ms.push(parseFloat(features[5]));
-        tempo.push(parseFloat(features[6]));
-        time_signature.push(parseFloat(features[7]));
-        mode.push(parseFloat(features[8]));
-        key.push(parseFloat(features[9]));
-        loudness.push(parseFloat(features[10]));
-        danceability.push(parseFloat(features[11]));
-        energy.push(parseFloat(features[12]));
+        var trackId = features[0];
+        speechiness.push(parseFloat(features[1]));
+        acousticness.push(parseFloat(features[2]));
+        instrumentalness.push(parseFloat(features[3]));
+        liveness.push(parseFloat(features[4]));
+        valence.push(parseFloat(features[5]));
+        duration_ms.push(parseFloat(features[6]));
+        tempo.push(parseFloat(features[7]));
+
+        // time_signature
+        var time_signature_key = features[8];
+        var time_signature_value = timeSignatureObject[time_signature_key];
+        timeSignatureObject[time_signature_key] = (time_signature_value == undefined) ? trackId : time_signature_value + ';' + trackId;
+
+        // mode
+        var mode_key = features[9];
+        var mode_value = modeObject[mode_key];
+        modeObject[mode_key] = (mode_value == undefined) ? trackId : mode_value + ';' + trackId;
+
+        // key
+        var key_key = features[10];
+        var key_value = keyObject[key_key];
+        keyObject[key_key] = (key_value == undefined) ? trackId : key_value + ';' + trackId;
+       
+        loudness.push(parseFloat(features[11]));
+        danceability.push(parseFloat(features[12]));
+        energy.push(parseFloat(features[13]));
+
     }
     chartAnalysis.speechiness = Statistics.average(speechiness).toFixed(4);
     chartAnalysis.acousticness = Statistics.average(acousticness).toFixed(4);
@@ -137,44 +157,8 @@ function calculateChartFeatures(trackFeaturesList) {
     chartAnalysis.valence = Statistics.average(valence).toFixed(4);
     chartAnalysis.duration_ms = Statistics.average(duration_ms).toFixed(4);
     chartAnalysis.tempo = Statistics.average(tempo).toFixed(4);
-
-     //Mode 
-     var timeSignatureObject = new Object;
-     for (var beatType of time_signature) {
-         if (timeSignatureObject[beatType] == undefined) {
-            timeSignatureObject[beatType] = 1;
-         }
-         else {
-             var value = timeSignatureObject[beatType];
-             timeSignatureObject[beatType] = parseInt(value) + 1;
-         }
-     } 
-     chartAnalysis.time_signature = timeSignatureObject;
-
-    //Mode 
-    var modeObject = new Object;
-    for (var modeType of mode) {
-        if (modeObject[modeType] == undefined) {
-            modeObject[modeType] = 1;
-        }
-        else {
-            var value = modeObject[modeType];
-            modeObject[modeType] = parseInt(value) + 1;
-        }
-    } 
+    chartAnalysis.time_signature = timeSignatureObject;
     chartAnalysis.mode = modeObject;
-
-    // key
-    var keyObject = new Object;
-    for (var keyType of key) {
-        if (keyObject[keyType] == undefined) {
-            keyObject[keyType] = 1;
-        }
-        else {
-            var value = keyObject[keyType];
-            keyObject[keyType] = parseInt(value) + 1;
-        }
-    }
     chartAnalysis.key = keyObject;
     chartAnalysis.loudness = Statistics.average(loudness).toFixed(4);
     chartAnalysis.danceability = Statistics.average(danceability).toFixed(4);
@@ -240,7 +224,7 @@ async function getLastedChartTracks() {
     return trackIds;
 }
 
-async function getChartLasted(genre) {
+function getChartLasted(genre) {
     return new Promise((resolve, reject) => {
         get(`chart.${genre}.lasted`, (err, value) => {
             if (!err) {
@@ -252,3 +236,148 @@ async function getChartLasted(genre) {
         });
     });
 }
+function getChartReport(req, res) {
+    var startDate = req.swagger.params.startDate.value;
+    var endDate = req.swagger.params.endDate.value;
+    var genreType = req.swagger.params.genreType.value;
+    getReport(startDate, endDate, genreType)
+    .then(function(analysisObject) {
+        if (analysisObject == undefined) {
+            res.json({ status: 400, value: "get chart track error" });
+        }
+        else {
+            res.json({ status: 200, analysisObject});
+        }
+    })
+    .catch(e=>{
+        res.json({ status: 400, value: e });
+    });
+}
+
+function getReport(startDate, endDate, genreType) {
+    return new Promise(async (resolve, reject) => {
+    var dateList = getChartDateList(startDate, endDate);
+    var speechiness = new Object;
+    var acousticness = new Object;
+    var instrumentalness = new Object;
+    var liveness = new Object;
+    var valence = new Object;
+    var duration_ms = new Object;
+    var tempo = new Object;
+    var time_signature = new Object;
+    var mode = new Object;
+    var key = new Object;
+    var loudness = new Object;
+    var danceability = new Object; 
+    var energy = new Object;
+
+    for (var date of dateList) {
+        var date_str = date.day + date.month + date.year;
+        var chartAnalysis = await getChartAnalysis(date_str, genreType);
+        if (chartAnalysis == undefined) {
+            continue;
+        }
+        var dateKey = date.day + '/' + date.month + '/' + date.year;
+        speechiness[dateKey] = chartAnalysis["speechiness"];
+        acousticness[dateKey] = chartAnalysis["acousticness"];
+        instrumentalness[dateKey] = chartAnalysis["instrumentalness"];
+        liveness[dateKey] = chartAnalysis["liveness"];
+        valence[dateKey] = chartAnalysis["valence"];
+        duration_ms[dateKey] = chartAnalysis["duration_ms"];
+        tempo[dateKey] = chartAnalysis["tempo"];
+        time_signature = addElementToObject(time_signature, chartAnalysis["time_signature"]);
+        mode = addElementToObject(mode, chartAnalysis["mode"]);
+        key = addElementToObject(key, chartAnalysis["key"]);
+        loudness[dateKey] = chartAnalysis["loudness"];
+        danceability[dateKey] = chartAnalysis["danceability"];
+        energy[dateKey] = chartAnalysis["energy"];
+    }
+
+    var analysisObject = new Object;
+    analysisObject.speechiness = speechiness;
+    analysisObject.acousticness = acousticness;
+    analysisObject.instrumentalness = instrumentalness;
+    analysisObject.liveness = liveness;
+    analysisObject.valence = valence;
+    analysisObject.duration_ms = duration_ms;
+    analysisObject.tempo = tempo;
+    analysisObject.time_signature = calculateNumberPerType(time_signature);
+    analysisObject.mode = calculateNumberPerType(mode);
+    analysisObject.key =  calculateNumberPerType(key);
+    analysisObject.loudness = loudness;
+    analysisObject.danceability = danceability;
+    analysisObject.energy = energy;
+    //console.log("Report chart:", analysisObject);
+    resolve(analysisObject);
+});
+}
+
+async function getChartAnalysis(date, genreType) {
+    return new Promise((resolve, reject) => {
+        get(`chart.${date}.${genreType}.analysis`, (err, value) => {
+            if (!err) {
+                var chartAnalysis = new Object;
+                chartAnalysis = JSON.parse(value);
+                resolve(chartAnalysis);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
+}
+function addElementToObject(origin_object, new_object ) {
+    for (var key of Object.keys(new_object)) {
+        var value = origin_object[key];
+        origin_object[key] = (value == undefined) ? new_object[key] : value + ";" + new_object[key];
+    }
+    return origin_object;
+}
+function calculateNumberPerType(origin_object) {
+    var new_object = new Object;
+    for (var key of Object.keys(origin_object)) {
+        var format_key = key;
+        var listTrack = origin_object[key].split(";");
+        listTrack = removeDuplicateUsingSet(listTrack);
+        new_object[format_key] = listTrack.length;
+    }
+    return new_object;
+}
+
+function removeDuplicateUsingSet(arr){
+    var unique_array = Array.from(new Set(arr))
+    return unique_array
+}
+
+// const chartReportInterval = 5;
+// function calculationDateInterval(dateList) {
+//     var length = dateList.length;
+//     if (length <= chartReportInterval) {
+//         return dateList;
+//     }
+//     var result = [];
+//     if (length % chartReportInterval == 0) {
+//         var dateNumberPerMileStone = length / chartReportInterval;
+//         var i =0;
+//         while(i < length) {
+//             result.push(dateList[i]);
+//             i = i + dateNumberPerMileStone;
+//         }
+//         return result;
+//     }
+// } 
+const minorMode = 'minor';
+const majorMode = 'major';
+const beats = ' beats';
+const keyList = ['C',
+'C#',
+'D',
+'D#',
+'E',
+'F',
+'F#',
+'G',
+'G#',
+'A',
+'A#',
+'B']

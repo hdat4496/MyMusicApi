@@ -144,14 +144,14 @@ function getHomeTrack(req, res) {
     getNewTrack()
         .then(function (trackGeneralInfoList) {
             if (trackGeneralInfoList == undefined) {
-                res.json({ status: 400, value: "get home track error" })
+                res.json({ status: 400, value: "get home track error" });
             }
             else {
                 res.json({ status: 200, value: trackGeneralInfoList });
             }
         })
         .catch(e => {
-            res.json({ status: 400, value: e })
+            res.json({ status: 400, value: e });
         });
 
 
