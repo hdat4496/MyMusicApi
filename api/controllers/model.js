@@ -36,9 +36,6 @@ const modelType = ".model";
 const danceType = 1;
 const rockType = 2;
 const rbType = 3
-var danceModelName;
-var rockModelName;
-var rbModelName;
 var classifier = {
     'classifier': 'weka.classifiers.bayes.NaiveBayes',
     'params': ''
@@ -198,12 +195,11 @@ async function predictModel(trackid) {
         console.log("Track analysis is not found");
         return;
     }
-    trackAnalysis.hit ='hit';
+    trackAnalysis.hit ='?';
     var trackData = [];
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
     var result = await predictTrack(modelName, fileNameTest, classifier);
-    console.log("Predicted: ", result)
     return result;
 }
 
@@ -216,7 +212,20 @@ function predictTrack(modelName, fileNameTest, classifier) {
             }
             else {
                 console.log("Predict hit success: " + result.predicted, result.prediction);
-                resolve(result.predicted);
+
+                if (result.predicted == "hit") {
+                    var prediction = new Object;
+                    prediction.hit = result.prediction;
+                    prediction.nonhit = (1 - parseFloat(result.prediction)).toFixed(4);
+                }
+
+                if (result.predicted == "non-hit") {
+                    var prediction = new Object;
+                    prediction.nonhit = result.prediction;
+                    prediction.hit = 1 - parseFloat(result.prediction).toFixed(4);
+                }
+                
+                resolve(prediction);
             }
         });
     });

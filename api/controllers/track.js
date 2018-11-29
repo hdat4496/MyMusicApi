@@ -134,8 +134,8 @@ function getTrackDetail(trackId) {
         //console.log("Audio features", trackFeaturesString);
         var trackFeatures = convertAudioFeatures(trackFeaturesString);
         track.trackFeatures = (trackFeatures == undefined) ? '': trackFeatures;
-        var hit = await predictModel(trackId);
-        track.hit = (hit == undefined) ? '' : hit;
+        var hitResult = await predictModel(trackId);
+        track.hit = (hitResult == undefined) ? '' : hitResult;
         resolve(track);
     });
 }
