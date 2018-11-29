@@ -138,6 +138,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
+  /track/lated:
+    x-swagger-router-controller: track
+    get:
+      description: get lated track
+      operationId: getLatedTrack
+      parameters:
+        - name: token
+          in: query
+          description: token
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
   /artist/search:
     x-swagger-router-controller: track
     get:

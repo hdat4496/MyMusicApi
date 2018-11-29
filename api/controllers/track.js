@@ -16,8 +16,10 @@ var model = 'api/public/arff/abcmodel.model';
 module.exports = {
     getTrack: getTrack_2,
     searchTrack: searchTrack,
-    searchArtist: searchArtist
+    searchArtist: searchArtist,
+    getLatedTrack: getLatedTrack
 };
+
 
 function searchArtist(req, res) {
     var keyword = req.swagger.params.keyword.value;
@@ -217,8 +219,31 @@ function getTrack(req, res) {
                 for (var trackId of trackList) {
                     console.log(trackId);
                 }
-    
+
             }
         });
     }
+}
+
+
+function getLatedTrack(req, res) {
+
+    get(`track.lated`, (err, value) => {
+        
+        if (!err) {
+
+            var idList = value.split(";");
+            idList.map((e) => {
+                get(`track.${e}.info`, (err, value) => {
+                    if (!err) { 
+                        console.log(value);
+                    }
+                });
+                
+            })
+            res.json({ status: 200, message: '404 Not found' });
+        } else {
+            res.json({ status: 404, message: '404 Not found' });
+        }
+    });
 }

@@ -21,43 +21,16 @@ function test(req, res) {
             res.json({ status: 400, message: 'Key is not found' });
         }
     });
-    // var key = req.swagger.params.key.value;
-    // get(`test2`, (err, value) => {
-    //     if (!err) {
-    //          let abc = JSON.parse(value);
-    //          console.log(abc);
-    //         for (var k in abc){
-    //             console.log(k);
-    //             console.log(abc[k])
-    //         }
-    //     abc  = {}
-    //         res.json({ status: 200, message: value });
-    //     }
-    //     else {
-    //         res.json({ status: 400, message: 'Key is not found' });
-    //     }
-    // });
-    // var obj = {};
-    // obj['2V65y3PX4DkRhy1djlxd9p'] = 'DON\'T YOU WORRY CHILD';
-    // obj['24LS4lQShWyixJ0ZrJXfJ5'] = 'SWEET NOTHING';
-    // obj['3uGDAwRPcOu6tHuKUjk02H'] = 'ONE POUND FISH';
-    // obj['61gnmKsVhB4TuSJWZzjI3N'] = 'GOLD DUST';
-    // obj['6i8w8Zdud22ehgJrrzqIVi'] = 'CAN YOU HEAR ME';
-    // putSync(`track.all`, JSON.stringify(obj));
 
-    // var obj = {};
-    // obj['1'] = 'SWEDISH HOUSE MAFIA';
-    // obj['2'] = 'CALVIN HARRIS';
-    // obj['3'] = 'DJ FRESH';
-    // obj['4'] = 'WILEY';
-
-    // putSync(`artist.all`, JSON.stringify(obj));
+    
+    // putSync(`track.lated`, '61UQzeiIluhpzpMdY4ag3q,2V65y3PX4DkRhy1djlxd9p;24LS4lQShWyixJ0ZrJXfJ5;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi;412luShbmlgqqgYFStIB1s;3zU9rdflI65tK4dkkNSp77');
 }
 
 
 function login(req, res) {
-    var username = req.swagger.params.user_info.value.username;
-    var password = crypto.createHash('sha256').update(req.swagger.params.user_info.value.password).digest('base64');
+    console.log()
+    var username = req.swagger.params.user_info.value.user_info.username;
+    var password = crypto.createHash('sha256').update(req.swagger.params.user_info.value.user_info.password).digest('base64');
     get(`user.${username}`, (err, value) => {
         if (!err && value == password) {
             var token = generateToken(username);
@@ -84,10 +57,9 @@ function login(req, res) {
 }
 
 function signUp(req, res) {
-    var username = req.swagger.params.user_info_signup.value.username;
-    var fullname = req.swagger.params.user_info_signup.value.fullname;
-    console.log(username);
-    var password = crypto.createHash('sha256').update(req.swagger.params.user_info_signup.value.password).digest('base64');
+    var username = req.swagger.params.user_info_signup.value.user_info_signup.username;
+    var fullname = req.swagger.params.user_info_signup.value.user_info_signup.fullname;
+    var password = crypto.createHash('sha256').update(req.swagger.params.user_info_signup.value.user_info_signup.password).digest('base64');
     try {
         if (typeof username !== "undefined" && typeof password !== "undefined" && /^[a-zA-Z0-9]*$/.test(username)) {
             get(`user.${username}`, (err, value) => {
