@@ -2,7 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-// const { runData } = require('../helpers/data.js');
+//const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 module.exports = {
     login: login,

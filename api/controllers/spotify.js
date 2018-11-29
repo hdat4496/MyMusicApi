@@ -219,10 +219,13 @@ async function getArtistAPI(artistIds, trackId) {
                     imageUrl =artist.images[0].url;
                     artistImageUrl = imageUrl;
                  }
+                var genreList = artist.genres;
+                var genre = (genreList.length == 0) ? '' : genreList.join(";");
                 var artistInfo = {
                     id: artist.id,
                     name: artist.name,
-                    imageurl: imageUrl
+                    imageurl: imageUrl,
+                    genre: genre
                 }
                 // put artist info
                 putArtistInfo(artistInfo, trackId);
@@ -309,6 +312,9 @@ function putTrackInfo(trackInfo) {
             //console.log('Add number of track', parseInt(value) + 1);
             putSync(`track.number`, parseInt(value) + 1);
         }
+        else if(err.notFound) {
+            putSync(`track.number`, 1);
+        }
     });
 
     get(`track.all`, (err, value) => {
@@ -355,6 +361,9 @@ function putArtistInfo(artistInfo, trackId) {
         if (!err) {
             var trackValue = value + ';' + trackId;
             putSync(`artist.${artistInfo.id}.track`, trackValue);
+            putSync(`artist.${artistInfo.id}.name`, artistInfo.name);
+            putSync(`artist.${artistInfo.id}.imageurl`, artistInfo.imageurl);
+            putSync(`artist.${artistInfo.id}.genre`, artistInfo.genre);
         }
         else {
             // no exist in database: create new artist
@@ -362,7 +371,23 @@ function putArtistInfo(artistInfo, trackId) {
                 putSync(`artist.${artistInfo.id}.name`, artistInfo.name);
                 putSync(`artist.${artistInfo.id}.imageurl`, artistInfo.imageurl);
                 putSync(`artist.${artistInfo.id}.track`, trackId);
+                putSync(`artist.${artistInfo.id}.genre`, artistInfo.genre);
             }
+        }
+    });
+
+    get(`artist.all`, (err, value) => {
+        if (!err) {
+            //console.log('put artist all list', artistInfo.id, artistInfo.name);
+            var artistAllObject = JSON.parse(value);
+            artistAllObject[artistInfo.id] = artistInfo.name;
+            putSync(`artist.all`, JSON.stringify(artistAllObject));
+        }
+        else if(err.notFound) {
+            //console.log('put artist all list', artistInfo.id, artistInfo.name);
+            var artistAllObject = new Object;
+            artistAllObject[artistInfo.id] = artistInfo.name;
+            putSync(`artist.all`, JSON.stringify(artistAllObject));
         }
     });
 }
@@ -850,6 +875,7 @@ function getTrackGeneralInfo(trackId) {
         });
     });
 }
+
 
 // Get track like/listen/lyric
 function getTrackInfoExtra(trackId, infoType) {

@@ -3,7 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset } = require('../controllers/spotify');
-const { getTrackListForChart } = require('../controllers/chart');
+//const { getTrackListForChart } = require('../controllers/chart');
 const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString } = require('../helpers/utils');
 
 //const { runData } = require('../helpers/data.js');
@@ -120,8 +120,9 @@ async function getChartDistinctTrackList(startDate, endDate, genreType) {
     var distinctTracks = new Object;
     for (var date of dateList) {
         var date_str = date.day + date.month + date.year;
+        console.log("Chart tracks", date_str, genreType);
         var chartTracks = await getTrackListForChart(date_str, genreType);
-        //console.log("Chart tracks", date_str, chartTracks);
+        console.log("Chart tracks", date_str, chartTracks);
         if (chartTracks == undefined) {
             continue;
         }
@@ -231,6 +232,31 @@ function getModelName(genreType) {
             }
             else {
                 //console.log('model name not found');
+                resolve(undefined);
+            }
+        });
+    });
+}
+
+async function getTrackListForChart(date, genreType) {
+    console.log("Start Get track list for chart", date, genreType);
+    return new Promise((resolve, reject) => {
+        console.log("Get track list for chart", date, genreType);
+        var chartTracks = new Object;
+        get(`chart.${date}.${genreType}`, async (err, value) => {
+            if (!err) {
+                var trackIds = value.split(";");
+                for (var i = 0; i < trackIds.length; i++) {
+                    var trackId = trackIds[i];
+                    if (trackId == '') {
+                        continue;
+                    }
+                    chartTracks[trackId] = i + 1;
+                }
+                resolve(chartTracks);
+            }
+            else {
+                console.log('Get track list error', date);
                 resolve(undefined);
             }
         });

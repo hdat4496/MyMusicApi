@@ -297,7 +297,26 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/Response"          
+            $ref: "#/definitions/Response"  
+  /savearff:
+    x-swagger-router-controller: model
+    get:
+      description: save arff data to database
+      operationId: saveArffData
+      parameters:
+        - name: key
+          in: query
+          description: key
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"        
 # complex objects have schema definitions
 definitions:
   ErrorResponse:

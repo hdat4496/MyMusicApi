@@ -39,7 +39,7 @@ function runData() {
     // putSync('track.6i8w8Zdud22ehgJrrzqIVi.listen',126);
     
     // putSync('track.number',5);
-    // putSync('track','2V65y3PX4DkRhy1djlxd9p;24LS4lQShWyixJ0ZrJXfJ5;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi');
+    // putSync('track.all','2V65y3PX4DkRhy1djlxd9p;24LS4lQShWyixJ0ZrJXfJ5;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi');
 
     // // Artist
     // putSync('artist.1.name', 'SWEDISH HOUSE MAFIA');
@@ -64,7 +64,8 @@ function runData() {
 
     // putSync('genre.latedid',1);
 
-    // // Chart
+
+    // Chart
     // putSync('chart.06012013.1.date', '06/01/2013');
     // putSync('chart.06012013.1.numbertrack', 5);
     // putSync('chart.06012013.1', '2V65y3PX4DkRhy1djlxd9p;24LS4lQShWyixJ0ZrJXfJ5;61gnmKsVhB4TuSJWZzjI3N;3uGDAwRPcOu6tHuKUjk02H;6i8w8Zdud22ehgJrrzqIVi');
@@ -73,19 +74,20 @@ function runData() {
     // putSync('chart.13012013.1.numbertrack', 5);
     // putSync('chart.13012013.1', '2V65y3PX4DkRhy1djlxd9p;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi;24LS4lQShWyixJ0ZrJXfJ5');
 
-    // Store lasted date chart: value is lasted_date_ge
-    putSync('chart.1.lasted', '13/01/2013');
-
-    // putSync('user.hoanghtk', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
-    // putSync('user.hoanghtk.fullname', 'Kim Hoàng');
-    // putSync('user.hoanghtk.playlist', '1');
-    // putSync('user.hoanghtk.favorite', '2V65y3PX4DkRhy1djlxd9p;3uGDAwRPcOu6tHuKUjk02H');
+    // // Store lasted date chart: value is lasted_date_ge
+    // putSync('chart.1.lasted', '13/01/2013');
 
 
-    // putSync('user.toanhad', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
-    // putSync('user.toanhad.fullname', 'Anh Toàn');
-    // putSync('user.toanhad.playlist', '1;2');
-    // putSync('user.toanhad.favorite', '2V65y3PX4DkRhy1djlxd9p;3uGDAwRPcOu6tHuKUjk02H');
+    putSync('user.hoanghtk', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
+    putSync('user.hoanghtk.fullname', 'Kim Hoàng');
+    putSync('user.hoanghtk.playlist', '');
+    putSync('user.hoanghtk.favorite', '');
+
+
+    putSync('user.toanhad', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
+    putSync('user.toanhad.fullname', 'Anh Toàn');
+    putSync('user.toanhad.playlist', '');
+    putSync('user.toanhad.favorite', '');
     
 }
 

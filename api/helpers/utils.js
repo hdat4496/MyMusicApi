@@ -2,7 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-////const { runData } = require('../helpers/data.js');
+//const { runData } = require('../helpers/data.js');
 
 module.exports = {
     convertDate: convertDate,
@@ -154,7 +154,7 @@ function getAudioAnalysisKey() {
 }
 
 const dance = "dance";
-const rb = "R&B";
+const rb = "RB";
 const rock = "rock";
 const all = "all";
 function getGenreName(genreType) {

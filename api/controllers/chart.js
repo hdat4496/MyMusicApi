@@ -167,8 +167,10 @@ function calculateChartFeatures(trackFeaturesList) {
 }
 
 async function getTrackListForChart(date, genreType) {
-    var chartTracks = new Object;
+    console.log("Start Get track list for chart", date, genreType);
     return new Promise((resolve, reject) => {
+        console.log("Get track list for chart", date, genreType);
+        var chartTracks = new Object;
         get(`chart.${date}.${genreType}`, async (err, value) => {
             if (!err) {
                 var trackIds = value.split(";");
