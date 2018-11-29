@@ -3,9 +3,9 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 //const { runData } = require('../helpers/data.js');
-const { getChartDateList } = require('../helpers/utils');
+const { getChartDateList, convertDate } = require('../helpers/utils');
 const { putTrackData } = require('../controllers/spotify');
-const { putChartData } = require('../controllers/chart');
+const { putChartData, putChartAnalysis } = require('../controllers/chart');
 var Crawler = require("crawler");
 
 module.exports = {
@@ -62,7 +62,10 @@ function crawl(req, res) {
 
 async function putData(genre, date, tracks) {
     var trackInfoList = await putTrackData(tracks);
-    putChartData(genre, date, trackInfoList);
+    await putChartData(genre, date, trackInfoList);
+    var dateFormat = convertDate(date);
+    var dateKey = dateFormat.day + dateFormat.month + dateFormat.year;
+    putChartAnalysis(dateKey, genre);
 }
 
 function normalizeTitle(title) {

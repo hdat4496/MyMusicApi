@@ -3,7 +3,9 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset } = require('../controllers/spotify');
+const { getTrackListForChart } = require('../controllers/chart');
 const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString } = require('../helpers/utils');
+
 //const { runData } = require('../helpers/data.js');
 var weka = require('../helpers/weka-lib.js');
 var Arff = require('arff-utils');
@@ -13,8 +15,11 @@ var stream = require('fs');
 module.exports = {
     buildModel: buildModel,
     saveArffData: saveArffData,
-    predict: predict
+    predict: predict,
+    predictModel: predictModel,
+    putDistinctKeyToObject: putDistinctKeyToObject
 };
+
 
 function buildModel(req, res) {
     var startDate = req.swagger.params.startDate.value;
@@ -145,28 +150,6 @@ function putDistinctKeyToObject(object1, object2) {
     return object1;
 }
 
-async function getTrackListForChart(date, genreType) {
-    var chartTracks = new Object;
-    return new Promise((resolve, reject) => {
-        get(`chart.${date}.${genreType}`, async (err, value) => {
-            if (!err) {
-                var trackIds = value.split(";");
-                for (var i = 0; i < trackIds.length; i++) {
-                    var trackId = trackIds[i];
-                    if (trackId == '') {
-                        continue;
-                    }
-                    chartTracks[trackId] = i + 1;
-                }
-                resolve(chartTracks);
-            }
-            else {
-                console.log('Get track list error', date);
-                resolve(undefined);
-            }
-        });
-    });
-}
 
 function saveArffData() {
     var filenameList = [pathArff + 'dance_data.arff',
@@ -218,16 +201,24 @@ async function predictModel(trackid) {
     var trackData = [];
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
-    console.log(modelName, fileNameTest);
-    weka.predict(modelName, fileNameTest, classifier, function (err, result) {
-        if (err) {
-            console.log("Predict hit error" + err);
-        }
-        else {
-            console.log("Predict hit success: " + result.predicted, result.prediction);
-        }
-    });
+    var result = await predictTrack(modelName, fileNameTest, classifier);
+    console.log("Predicted: ", result)
+    return result;
+}
 
+function predictTrack(modelName, fileNameTest, classifier) {
+    return new Promise((resolve, reject) => {
+        weka.predict(modelName, fileNameTest, classifier, function (err, result) {
+            if (err) {
+                console.log("Predict hit error" + err);
+                resolve(undefined);
+            }
+            else {
+                console.log("Predict hit success: " + result.predicted, result.prediction);
+                resolve(result.predicted);
+            }
+        });
+    });
 }
 
 // get model name

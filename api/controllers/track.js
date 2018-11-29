@@ -2,6 +2,9 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
+const { getLastedChartTracks } = require('../controllers/chart');
+const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo } = require('../controllers/spotify');
+const { predictModel } = require('../controllers/model');
 // const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 var arff = require('node-arff');
@@ -14,10 +17,10 @@ var model = 'api/public/arff/abcmodel.model';
 
 // var weka = require("node-weka")
 module.exports = {
-    getTrack: getTrack_2,
+    getTrack: getTrack,
     searchTrack: searchTrack,
     searchArtist: searchArtist,
-    getLatedTrack: getLatedTrack
+    getHomeTrack: getHomeTrack
 };
 
 
@@ -75,38 +78,14 @@ function searchTrack(req, res) {
                     }
                 }
                 if (ids.length !== 0) {
-                    ids.map((e) => {
-                        get(`track.${e}.info`, (err, value) => {
-                            if (!err) {
-                                var info = value.split(';');
-                                get(`track.${e}.like`, (err, value) => {
-                                    if (!err) {
-                                        var like = value;
-                                        get(`track.${e}.listen`, (err, value) => {
-                                            if (!err) {
-                                                var listen = value;
-                                                var track_obj = {
-                                                    id: e,
-                                                    title: info[0],
-                                                    artist: info[1],
-                                                    artist_imageurl: info[2],
-                                                    genre: info[3],
-                                                    genre_imageurl: info[4],
-                                                    imageurl: info[6],
-                                                    url: info[5],
-                                                    like: like,
-                                                    listen: listen
-                                                }
-                                                track_ls.push(track_obj);
-                                                if (track_ls.length === ids.length) {
-                                                    res.json({ status: 200, track_ls });
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                    ids.map(async (trackId) => {
+                        var track = await getTrackInfoFromDatabase(trackId);
+                        if (track != undefined) {
+                            track_ls.push(track);
+                        }
+                        if (track_ls.length === ids.length) {
+                            res.json({ status: 200, track_ls });
+                        }
                     });
                 }
                 else {
@@ -121,129 +100,140 @@ function searchTrack(req, res) {
     }
 }
 
-function buildModel() {
-    var data = 'api/public/arff/training.arff';
-    weka.classify(data, model, options, function (err, result) {
-        console.log(err);
-        console.log(result);
-    });
-
-}
-function getTrack_2(req, res) {
-    //buildModel();
-    var testData = 'api/public/arff/training.arff';
-    weka.predict(model, testData, options, function (err, result) {
-        console.log(err);
-        console.log(result);
-    });
-
-}
-
 function getTrack(req, res) {
-    var token = req.swagger.params.token.value;
-    var id = req.swagger.params.id.value;
-    // var check = checkToken(token);
-    // if (check.isValid && !check.isExpired) {
-
-    // }    
-    // else {
-    //     res.json({ status: 400, message: 'Token is invalid or expired' });
-    // }
-
-    get(`track.${id}.analysis`, (err, value) => {
-        //in db
-        if (!err) {
-            var analysis_ls = value.split(';').map(Number);
-            get(`track.${id}.info`, (err, value) => {
-                if (!err) {
-                    var info_ls = value.split(';');
-                    get(`track.${id}.lyric`, (err, value) => {
-                        if (!err) {
-                            var lyric = value;
-                            get(`track.${id}.like`, (err, value) => {
-                                if (!err) {
-                                    var num_of_like = value;
-                                    get(`track.${id}.listen`, (err, value) => {
-                                        if (!err) {
-                                            var num_of_listen = value;
-
-                                            arff.load('/home/lap12526-local/MyMusicApi/api/public/arff/training.arff', function (err, data) {
-                                                if (err) {
-                                                    return console.error(err);
-                                                }
-                                                console.log(data)
-                                                var options = {
-                                                    'classifier': 'weka.classifiers.bayes.NaiveBayes',
-                                                    // 'classifier': 'weka.classifiers.functions.SMO',
-                                                    'params': ''
-                                                };
-
-
-                                                // normalize the data (scale all numeric values so that they are between 0 and 1)
-                                                // data.normalize();
-
-                                                // randomly sort the data
-                                                // data.randomize();
-                                            });
-
-                                        }
-                                    });
-                                }
-                                else {
-                                    res.json({ status: 404, message: '404 Not found' });
-                                }
-                            });
-                        }
-                        else {
-                            res.json({ status: 404, message: '404 Not found' });
-                        }
-                    });
-
-                }
-                else {
-                    res.json({ status: 404, message: '404 Not found' });
-                }
-            });
-        }
-        //in api 
-        else {
-            res.json({ status: 404, message: '404 Not found' });
-        }
-    });
-
-    function getTrackList() {
-        get(`track`, (err, value) => {
-            if (!err) {
-                var trackList = value.split(";");
-                console.log("track list");
-                for (var trackId of trackList) {
-                    console.log(trackId);
-                }
-
+    var trackId = req.swagger.params.id.value;
+    getTrackDetail(trackId)
+        .then(function (track) {
+            if (track == undefined) {
+                res.json({ status: 400, value: "get track error" });
             }
-        });
-    }
+            else {
+                console.log("Get track", track);
+                res.json({ status: 200, value: track });
+            }
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        })
+
 }
 
 
-function getLatedTrack(req, res) {
-
-    get(`track.lated`, (err, value) => {
-        
-        if (!err) {
-
-            var idList = value.split(";");
-            idList.map((e) => {
-                get(`track.${e}.info`, (err, value) => {
-                    if (!err) { 
-                        console.log(value);
-                    }
-                });
-                
-            })
-            res.json({ status: 200, message: '404 Not found' });
-        } else {
-            res.json({ status: 404, message: '404 Not found' });
+function getTrackDetail(trackId) {
+    return new Promise(async (resolve, reject) => {
+        var track = new Object;
+        var trackInfo = await getTrackInfo(trackId);
+        if (trackInfo == undefined) {
+            console.log("Get track info error");
+            reject("Get track info error");
+            return;
         }
+        track.trackInfo = trackInfo;
+        //console.log("get track audio features", trackId);
+        var trackFeaturesString = await getTrackAudioFeatures(trackId);
+        //console.log("Audio features", trackFeaturesString);
+        var trackFeatures = convertAudioFeatures(trackFeaturesString);
+        track.trackFeatures = (trackFeatures == undefined) ? '': trackFeatures;
+        var hit = await predictModel(trackId);
+        track.hit = (hit == undefined) ? '' : hit;
+        resolve(track);
     });
 }
+
+function getHomeTrack(req, res) {
+    getNewTrack()
+        .then(function (trackGeneralInfoList) {
+            if (trackGeneralInfoList == undefined) {
+                res.json({ status: 400, value: "get home track error" });
+            }
+            else {
+                res.json({ status: 200, value: trackGeneralInfoList });
+            }
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        });
+
+
+}
+const newTrackNumber = 8;
+function getNewTrack() {
+    return new Promise(async (resolve, reject) => {
+        var trackIds = await getLastedChartTracks();
+        var length = trackIds.length;
+        if (length == 0) {
+            reject("No track");
+        }
+        var newTrackIndexes = [];
+        while (newTrackIndexes.length < newTrackNumber) {
+            var index = getRandomInt(length);
+            if (newTrackIndexes.indexOf(index) == -1) {
+                newTrackIndexes.push(index);
+            }
+        }
+        console.log("New Track indexs: ", newTrackIndexes);
+        var selectedTrackIds = [];
+        for (var index of newTrackIndexes) {
+            selectedTrackIds.push(trackIds[index]);
+        }
+        console.log("New Track ids: ", selectedTrackIds);
+        var trackGeneralInfoList = [];
+        for (var trackId of selectedTrackIds) {
+            var trackInfo = await getTrackGeneralInfo(trackId);
+            if (trackInfo == undefined) {
+                console.log('Get track info error: ', trackId);
+                continue;
+            }
+            trackGeneralInfoList.push(trackInfo);
+        }
+        console.log("New Track info: ", trackGeneralInfoList);
+        resolve(trackGeneralInfoList);
+    });
+}
+
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+function convertAudioFeatures(featuresString) {
+    if (featuresString == undefined) {
+        return;
+    }
+    var features = featuresString.split(";");
+    if (features.length < 13) {
+        return;
+    }
+    var featureObject = new Object;
+    featureObject.speechiness = parseFloat(features[0]);
+    featureObject.acousticness = parseFloat(features[1]);
+    featureObject.instrumentalness = parseFloat(features[2]);
+    featureObject.liveness = parseFloat(features[3]);
+    featureObject.valence = parseFloat(features[4]);
+    featureObject.duration_ms = parseFloat(features[5]);
+    featureObject.tempo = parseFloat(features[6]);
+    featureObject.time_signature = features[7] + beats;
+    featureObject.mode = (features[8] == 0) ? minorMode : majorMode ;
+    featureObject.key =  keyList[parseInt(features[9])];
+    featureObject.loudness = parseFloat(features[10]);
+    featureObject.danceability = parseFloat(features[11]);
+    featureObject.energy = parseFloat(features[12]);
+    console.log("Feature object", featureObject);
+    return featureObject;
+}
+const minorMode = 'minor';
+const majorMode = 'major';
+const beats = ' beats';
+const keyList = ['C',
+'C#',
+'D',
+'D#',
+'E',
+'F',
+'F#',
+'G',
+'G#',
+'A',
+'A#',
+'B']

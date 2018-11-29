@@ -19,15 +19,29 @@ paths:
       description: Get track's data
       operationId: getTrack
       parameters:
-        - name: token
-          in: query
-          description: User's token
-          required: true
-          type: string
         - name: id
           in: query
           description: Track's id
           required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/TrackResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /track/get-home-track:
+    x-swagger-router-controller: track
+    get:
+      description: Get track's data for home page
+      operationId: getHomeTrack
+      parameters:
+        - name: key
+          in: query
+          description: Token
           type: string
       responses:
         "200":
@@ -203,7 +217,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
-  /buildmodel:
+  /model/build-model:
     x-swagger-router-controller: model
     get:
       description: build classification model
@@ -229,17 +243,25 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/Response"
-  /savearff:
-    x-swagger-router-controller: model
+            $ref: "#/definitions/Response"      
+  /chart/buildfeatures:
+    x-swagger-router-controller: chart
     get:
-      description: save arff data to database
-      operationId: saveArffData
+      description: build chart features
+      operationId: buildChartFeatures
       parameters:
-        - name: key
+        - name: startDate
           in: query
-          description: key
+          description: start date MM/dd/yyyy
           type: string
+        - name: endDate
+          in: query
+          description: end date MM/dd/yyyy
+          type: string
+        - name: genreType
+          in: query
+          description: genreType
+          type: integer
       responses:
         "200":
           description: Success
@@ -248,18 +270,25 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/Response"
-  /predict:
-    x-swagger-router-controller: model
+            $ref: "#/definitions/Response"  
+  /chart/get-report:
+    x-swagger-router-controller: chart
     get:
-      description: predict one track hit or not
-      operationId: predict
+      description: get chart analysis report
+      operationId: getChartReport
       parameters:
-        - name: trackid
+        - name: startDate
           in: query
-          description: track id
-          required: true
+          description: start date MM/dd/yyyy
           type: string
+        - name: endDate
+          in: query
+          description: end date MM/dd/yyyy
+          type: string
+        - name: genreType
+          in: query
+          description: genreType
+          type: integer
       responses:
         "200":
           description: Success
