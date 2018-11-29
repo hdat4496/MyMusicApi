@@ -177,7 +177,8 @@ async function searchTrackSpotifyAPI(position, title, artist) {
             track.title = trackInfo.name;
             track.artist = artistInfo[0];
             track.artist_imageurl = artistInfo[1];
-            track.track_url = trackInfo.href;
+            track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
+            track.track_preview_url = trackInfo.preview_url;
             track.track_imageurl = trackImageUrl;
             track.genre = '';
             track.genre_imageurl = '';
@@ -296,7 +297,7 @@ function putTrackInfo(trackInfo) {
         return;
     }
     var info = trackInfo.title + ';' + trackInfo.artist + ';' + trackInfo.artist_imageurl + ';'
-        + trackInfo.genre + ';' + trackInfo.genre_imageurl + ';' + trackInfo.track_url + ';' + trackInfo.track_imageurl;
+        + trackInfo.genre + ';' + trackInfo.genre_imageurl + ';' + trackInfo.track_url + ';' + trackInfo.track_imageurl + ';' + trackInfo.track_preview_url;
     if (info == '') {
         return;
     }
@@ -818,7 +819,8 @@ async function getTrackInfoFromAPI(trackId) {
              track.title = trackInfo.name;
              track.artist = artistInfo[0];
              track.artist_imageurl = artistInfo[1];
-             track.track_url = trackInfo.href;
+             track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
+             track.track_preview_url = trackInfo.preview_url;
              track.track_imageurl = trackImageUrl;
              track.genre = '';
              track.genre_imageurl = '';
@@ -867,6 +869,7 @@ function getTrackGeneralInfo(trackId) {
                 track.genre_imageurl = trackInfo[4];
                 track.track_url = trackInfo[5];
                 track.track_imageurl = trackInfo[6];
+                track.track_preview_url = trackInfo[7];
                 resolve(track);
             }
             else {

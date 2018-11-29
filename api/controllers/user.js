@@ -2,6 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
+const { getTrackInfoFromDatabase } = require('../controllers/spotify');
 //const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 module.exports = {
@@ -27,6 +28,29 @@ function test(req, res) {
             res.json({ status: 400, message: 'Key is not found' });
         }
     });
+    // get(`artist.all`, (err, value) => {
+    //     if (!err) {
+    //         res.json({ status: 200, message: value });
+    //         var name_ls = JSON.parse(value);
+    //         var ids = [];
+    //         for (var k in name_ls) {
+    //             ids.push(k);
+    //         }
+        
+    //         for (var id of ids) {
+    //             get(`artist.${id}.genre`, (err, value) => {
+    //                 if (!err) {
+    //                     console.log(id, value);
+    //                 }
+  
+    //             });
+    //         }
+    //         console.log("number artist: ",ids.length );
+    //     }
+    //     else {
+    //         res.json({ status: 400, message: 'Key is not found' });
+    //     }
+    // });
 
     
     // putSync(`track.lated`, '61UQzeiIluhpzpMdY4ag3q,2V65y3PX4DkRhy1djlxd9p;24LS4lQShWyixJ0ZrJXfJ5;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi;412luShbmlgqqgYFStIB1s;3zU9rdflI65tK4dkkNSp77');
@@ -112,42 +136,14 @@ function getFavoriteSong(req, res) {
             if (!err) {
                 if (value != '') {
                     idList = value.split(";");
-                    idList.map((value) => {
-                        var id = value;
-                        get(`track.${id}.info`, (err, value) => {
-                            if (!err) {
-                                var content = value.split(";");
-                                get(`track.${id}.like`, (err, value) => {
-                                    if (!err) {
-                                        var like = value;
-                                        get(`track.${id}.listen`, (err, value) => {
-                                            var listen = value;
-                                            if (!err) {
-                                                var trackInfo = {
-                                                    id: id,
-                                                    title: content[0],
-                                                    artist: content[1],
-                                                    artist_imageurl: content[2],
-                                                    genre: content[3],
-                                                    genre_imageurl: content[4],
-                                                    imageurl: content[5],
-                                                    url: content[6],
-                                                    like: like,
-                                                    listen: listen,
-                                                }
-                                                resultList.push(trackInfo);
-                                                if (resultList.length === idList.length) {
-                                                    res.json({
-                                                        status: 200,
-                                                        listTrackInfo: resultList
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                    idList.map(async (trackId) => {
+                        var track = await getTrackInfoFromDatabase(trackId);
+                        if (track != undefined) {
+                            resultList.push(track);
+                        }
+                        if (resultList.length === ids.length) {
+                            res.json({ status: 200, resultList });
+                        }
                     });
                 }
                 else {
