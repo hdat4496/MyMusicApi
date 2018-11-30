@@ -311,19 +311,19 @@ function getReport(startDate, endDate, genreType) {
             continue;
         }
         var dateKey = date.day + '/' + date.month + '/' + date.year;
-        speechiness[dateKey] = chartAnalysis["speechiness"];
-        acousticness[dateKey] = chartAnalysis["acousticness"];
-        instrumentalness[dateKey] = chartAnalysis["instrumentalness"];
-        liveness[dateKey] = chartAnalysis["liveness"];
-        valence[dateKey] = chartAnalysis["valence"];
-        duration_ms[dateKey] = chartAnalysis["duration_ms"];
-        tempo[dateKey] = chartAnalysis["tempo"];
+        speechiness[dateKey] = parseFloat(chartAnalysis["speechiness"]);
+        acousticness[dateKey] = parseFloat(chartAnalysis["acousticness"]);
+        instrumentalness[dateKey] = parseFloat(chartAnalysis["instrumentalness"]);
+        liveness[dateKey] = parseFloat(chartAnalysis["liveness"]);
+        valence[dateKey] = parseFloat(chartAnalysis["valence"]);
+        duration_ms[dateKey] = parseFloat(chartAnalysis["duration_ms"]);
+        tempo[dateKey] = parseFloat(chartAnalysis["tempo"]);
         time_signature = addElementToObject(time_signature, chartAnalysis["time_signature"]);
         mode = addElementToObject(mode, chartAnalysis["mode"]);
         key = addElementToObject(key, chartAnalysis["key"]);
-        loudness[dateKey] = chartAnalysis["loudness"];
-        danceability[dateKey] = chartAnalysis["danceability"];
-        energy[dateKey] = chartAnalysis["energy"];
+        loudness[dateKey] = parseFloat(chartAnalysis["loudness"]);
+        danceability[dateKey] = parseFloat(chartAnalysis["danceability"]);
+        energy[dateKey] = parseFloat(chartAnalysis["energy"]);
     }
 
     var analysisObject = new Object;
@@ -358,7 +358,7 @@ function getReportHomePage(startDate, endDate, genreType, featureType) {
             continue;
         }
         var dateKey = date.day + '/' + date.month + '/' + date.year;
-        feature[dateKey] = chartAnalysis[featureName];
+        feature[dateKey] = parseFloat(chartAnalysis[featureName]);
     }
     resolve(feature);
 });
