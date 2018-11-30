@@ -147,7 +147,27 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/ListTrackInfoResponse"
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /track/search-api-title:
+    x-swagger-router-controller: track
+    get:
+      description: Search track from Spotify API follow title of track
+      operationId: searchTrackFromAPIFollowTrackTitle
+      parameters:
+        - name: title
+          in: query
+          description: keyword
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
         default:
           description: Error
           schema:

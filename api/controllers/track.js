@@ -3,7 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
-const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo, getRecommendTrack } = require('../controllers/spotify');
+const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo, getRecommendTrack, searchTrackFromAPI } = require('../controllers/spotify');
 const { predictModel } = require('../controllers/model');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -21,7 +21,8 @@ module.exports = {
     getTrack: getTrack,
     searchTrack: searchTrack,
     searchArtist: searchArtist,
-    getHomeTrack: getHomeTrack
+    getHomeTrack: getHomeTrack,
+    searchTrackFromAPIFollowTrackTitle: searchTrackFromAPIFollowTrackTitle
 };
 
 
@@ -85,20 +86,35 @@ function searchTrack(req, res) {
                             track_ls.push(track);
                         }
                         if (track_ls.length === ids.length) {
-                            res.json({ status: 200, track_ls });
+                            res.json({ status: 200, value: track_ls });
                         }
                     });
                 }
                 else {
-                    res.json({ status: 200, track_ls });
+                    res.json({ status: 200, value: track_ls });
                 }
             }
             else {
-                res.json({ status: 404, message: '404 Not found' });
+                res.json({ status: 404, value: '404 Not found' });
             }
         });
 
     }
+}
+
+function searchTrackFromAPIFollowTrackTitle(req, res) {
+    var title = req.swagger.params.title.value;
+    var key = 'track:' + title;
+    console.log("search track title from api", key);
+    searchTrackFromAPI(key)
+        .then(function (trackList) {
+            console.log("Search track title", trackList);
+            res.json({ status: 200, value: trackList });
+        })
+        .catch(e => {
+            console.log("Search track title", trackList);
+            res.json({ status: 400, value: e });
+        })
 }
 
 function getTrack(req, res) {
@@ -134,7 +150,7 @@ function getTrackDetail(trackId) {
         var trackFeaturesString = await getTrackAudioFeatures(trackId);
         //console.log("Audio features", trackFeaturesString);
         var trackFeatures = convertAudioFeatures(trackFeaturesString);
-        track.trackFeatures = (trackFeatures == undefined) ? '': trackFeatures;
+        track.trackFeatures = (trackFeatures == undefined) ? '' : trackFeatures;
         var hitResult = await predictModel(trackId);
         track.hit = (hitResult == undefined) ? '' : hitResult;
         var recommendTracks = await getRecommendTrack(trackId);
@@ -212,8 +228,8 @@ function convertAudioFeatures(featuresString) {
     featureObject.duration_ms = parseFloat(features[5]);
     featureObject.tempo = parseFloat(features[6]);
     featureObject.time_signature = features[7] + beats;
-    featureObject.mode = (features[8] == 0) ? minorMode : majorMode ;
-    featureObject.key =  keyList[parseInt(features[9])];
+    featureObject.mode = (features[8] == 0) ? minorMode : majorMode;
+    featureObject.key = keyList[parseInt(features[9])];
     featureObject.loudness = parseFloat(features[10]);
     featureObject.danceability = parseFloat(features[11]);
     featureObject.energy = parseFloat(features[12]);
@@ -224,14 +240,14 @@ const minorMode = 'minor';
 const majorMode = 'major';
 const beats = ' beats';
 const keyList = ['C',
-'C#',
-'D',
-'D#',
-'E',
-'F',
-'F#',
-'G',
-'G#',
-'A',
-'A#',
-'B']
+    'C#',
+    'D',
+    'D#',
+    'E',
+    'F',
+    'F#',
+    'G',
+    'G#',
+    'A',
+    'A#',
+    'B']

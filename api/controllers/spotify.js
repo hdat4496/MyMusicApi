@@ -9,7 +9,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 module.exports = {
     putTrackData: putTrackData,
-    searchTrackSpotifyAPI: searchTrackSpotifyAPI,
+    getTrackInforDataFromAPI: getTrackInforDataFromAPI,
     getTrackAudioAnalysis: getTrackAudioAnalysis,
     putTrackAudioAnalysisForDataset: putTrackAudioAnalysisForDataset,
     putTrackAudioFeature: putTrackAudioFeature,
@@ -17,7 +17,8 @@ module.exports = {
     getTrackInfo: getTrackInfo,
     getTrackInfoFromDatabase: getTrackInfoFromDatabase,
     getTrackGeneralInfo: getTrackGeneralInfo,
-    getRecommendTrack: getRecommendTrack
+    getRecommendTrack: getRecommendTrack,
+    searchTrackFromAPI: searchTrackFromAPI
 };
 
 // Set necessary parts of the credentials on the constructor
@@ -89,7 +90,7 @@ async function getTrackInfoWhenCrawlData(tracks) {
     var trackInfoList = [];
 
     for (var track of tracks) {
-        var trackInfo = await searchTrackSpotifyAPI(track.position, track.title, track.artist);
+        var trackInfo = await getTrackInforDataFromAPI(track.position, track.title, track.artist);
         //console.log("Get track info done: ", trackid);
         trackInfoList.push(trackInfo);
     }
@@ -128,7 +129,7 @@ async function checkHasTrackAnalysis(trackId) {
     });
 }
 
-async function searchTrackSpotifyAPI(position, title, artist) {
+async function getTrackInforDataFromAPI(position, title, artist) {
     //console.log('Search track: ', title, artist);
     var track = new Object;
     var trackId;
@@ -157,7 +158,7 @@ async function searchTrackSpotifyAPI(position, title, artist) {
         },
         function (err) {
             console.log('Search fail', err);
-            //searchTrackSpotifyAPI(position, title, artist);
+            //getTrackInforDataFromAPI(position, title, artist);
         }
     )
         .then(async function (artistIds) {
@@ -895,26 +896,47 @@ async function getRecommendTrack(trackId) {
     console.log('Get recommend track:', trackId);
     await spotifyApi.getRecommendations({ limit: recommendTrackNumber, seed_tracks: [trackId] })
         .then(async function (data) {
-            console.log('Get recommend tracks success:', data.body);
-            var tracks = data.body.tracks;
-            for (var trackInfo of tracks) {
-                var artists = trackInfo.artists;
-                var artistNames = [];
-                for (var artist of artists) {
-                    artistNames.push(artist.name);
-                }
-                var trackImageUrl = (trackInfo.album.images.length == 0) ? "" : trackInfo.album.images[0].url;
-                var track = new Object;
-                track.id = trackInfo.id;
-                track.title = trackInfo.name;
-                track.artist = artistNames.join(" ft ");             
-                track.track_imageurl = trackImageUrl;
-                recommendTracks.push(track);
-            }
-
+            //console.log('Get recommend tracks success:', data.body);
+            recommendTracks = convertDataApiToTrackList(data.body.tracks);
         }, async function (err) {
             console.error('Get recommend tracks error', err);
         });
-        console.log(recommendTracks);
+        //console.log(recommendTracks);
     return recommendTracks;
+}
+async function searchTrackFromAPI(key) {
+    //console.log('search track from) API: ', key);
+    var trackList = [];
+    await spotifyApi.searchTracks(key).then(
+        async function (data) {
+            var total = data.body.tracks.total;
+            if (total == 0) {
+                return;
+            }
+            trackList = convertDataApiToTrackList(data.body.tracks.items);
+        },
+        function (err) {
+            console.log('Search track fail', err);
+        }
+    );
+    return trackList;
+}
+
+function convertDataApiToTrackList(tracksData) {
+    var trackList = [];
+    for (var trackInfo of tracksData) {
+        var artists = trackInfo.artists;
+        var artistNames = [];
+        for (var artist of artists) {
+            artistNames.push(artist.name);
+        }
+        var trackImageUrl = (trackInfo.album.images.length == 0) ? "" : trackInfo.album.images[0].url;
+        var track = new Object;
+        track.id = trackInfo.id;
+        track.title = trackInfo.name;
+        track.artist = artistNames.join(" ft ");             
+        track.track_imageurl = trackImageUrl;
+        trackList.push(track);
+    }
+    return trackList;
 }
