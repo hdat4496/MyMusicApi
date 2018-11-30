@@ -3,7 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
-const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo } = require('../controllers/spotify');
+const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo, getRecommendTrack } = require('../controllers/spotify');
 const { predictModel } = require('../controllers/model');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -137,6 +137,8 @@ function getTrackDetail(trackId) {
         track.trackFeatures = (trackFeatures == undefined) ? '': trackFeatures;
         var hitResult = await predictModel(trackId);
         track.hit = (hitResult == undefined) ? '' : hitResult;
+        var recommendTracks = await getRecommendTrack(trackId);
+        track.recommendTracks = (recommendTracks == undefined) ? '' : recommendTracks;
         resolve(track);
     });
 }
