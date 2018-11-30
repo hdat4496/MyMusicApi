@@ -3,7 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 //const { runData } = require('../helpers/data.js');
-const { getChartDateList, convertDate } = require('../helpers/utils');
+const { getChartDateList, convertDate, getGenreTypeList } = require('../helpers/utils');
 const { putTrackData } = require('../controllers/spotify');
 const { putChartData, putChartAnalysis } = require('../controllers/chart');
 var Crawler = require("crawler");
@@ -19,45 +19,45 @@ function crawl(req, res) {
     var genreType = req.swagger.params.genreType.value;
     console.log('Crawl data');
     var urlList = createUrlList(startDate, endDate, genreType);
-    console.log("url list:", urlList.length);
-    var c = new Crawler({
-        maxConnections: 1,
-        // This will be called for each crawled page
-        callback: async function (error, res, done) {
-            if (error) {
-                console.log(error);
-            } else {
-                var $ = res.$;
-                var tracks = [];
-                var date = $('.article-date').first().text().trim();
-                console.log(date);
-                $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
-                    var position = $(ele).find('.position').text().trim();
-                    var title = $(ele).find('.title').text().trim();
-                    var artist = $(ele).find('.artist').text().trim();
+    console.log("url list:", urlList);
+    // var c = new Crawler({
+    //     maxConnections: 1,
+    //     // This will be called for each crawled page
+    //     callback: async function (error, res, done) {
+    //         if (error) {
+    //             console.log(error);
+    //         } else {
+    //             var $ = res.$;
+    //             var tracks = [];
+    //             var date = $('.article-date').first().text().trim();
+    //             console.log(date);
+    //             $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
+    //                 var position = $(ele).find('.position').text().trim();
+    //                 var title = $(ele).find('.title').text().trim();
+    //                 var artist = $(ele).find('.artist').text().trim();
 
-                    title = normalizeTitle(title);
-                    artist = normalizeArtistName(artist);
-                    //console.log(position, title, artist);
-                    if ((position == '') || (title == '') || (artist == '')) {
-                        return;
-                    }
-                    var track = {
-                        position: position,
-                        title: title,
-                        artist: artist
-                    }
-                    tracks.push(track);
-                });
+    //                 title = normalizeTitle(title);
+    //                 artist = normalizeArtistName(artist);
+    //                 //console.log(position, title, artist);
+    //                 if ((position == '') || (title == '') || (artist == '')) {
+    //                     return;
+    //                 }
+    //                 var track = {
+    //                     position: position,
+    //                     title: title,
+    //                     artist: artist
+    //                 }
+    //                 tracks.push(track);
+    //             });
 
-                console.log('Crawled data length: ', tracks.length);
-                var genreType = res.options.genreType;
-                await putData(genreType, date, tracks);
-            }
-            done();
-        }
-    });
-    c.queue(urlList);
+    //             console.log('Crawled data length: ', tracks.length);
+    //             var genreType = res.options.genreType;
+    //             await putData(genreType, date, tracks);
+    //         }
+    //         done();
+    //     }
+    // });
+    // c.queue(urlList);
 }
 
 async function putData(genre, date, tracks) {
@@ -105,15 +105,11 @@ function normalizeArtistName(artist) {
 }
 
 const dancePageId = '/104/';
-const danceType = 1;
 const danceBaseUrl = 'https://www.officialcharts.com/charts/dance-singles-chart/';
 const rockPageId = '/111/';
-const rockType = 2;
 const rockBaseUrl = 'https://www.officialcharts.com/charts/rock-and-metal-singles-chart/';
 const rbPageId = '/114/';
-const rbType = 3;
 const rbBaseUrl = 'https://www.officialcharts.com/charts/r-and-b-singles-chart/';
-const allType = 0;
 
 function createUrlList(startDate, endDate, genreType) {
     var result = [];
@@ -140,16 +136,17 @@ function createUrlList(startDate, endDate, genreType) {
 function getUrlInfo(genreType) {
     var baseUrl;
     var pageId;
+    var genreTypeList = getGenreTypeList();
     switch (genreType) {
-        case danceType:
+        case genreTypeList[1]:
             baseUrl = danceBaseUrl;
             pageId = dancePageId;
             break;
-        case rockType:
+        case genreTypeList[2]:
             baseUrl = rockBaseUrl;
             pageId = rockPageId;
             break;
-        case rbType:
+        case genreTypeList[3]:
             baseUrl = rbBaseUrl;
             pageId = rbPageId;
             break;

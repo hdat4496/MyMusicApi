@@ -10,7 +10,9 @@ module.exports = {
     getAudioAnalysisKey: getAudioAnalysisKey,
     getGenreName: getGenreName,
     convertDateToString: convertDateToString,
-    convertStringToDate: convertStringToDate
+    convertStringToDate: convertStringToDate,
+    getRandomInt: getRandomInt,
+    getGenreTypeList: getGenreTypeList
 };
 
 function convertDate(date) {
@@ -149,21 +151,31 @@ function convertStringToDate(value) {
     return date;
 }
 
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * Math.floor(max) + 1);
+}
+
+
 function getAudioAnalysisKey() {
     return analysis_key;
 }
 
+function getGenreTypeList() {
+    return genreTypeList;
+}
+const genreTypeList = [0,1,2,3];
 const dance = "dance";
-const rb = "RB";
+const rb = "rb";
 const rock = "rock";
 const all = "all";
 function getGenreName(genreType) {
     switch (genreType) {
-        case 1:
+        case genreTypeList[1]:
             return dance;
-        case 2:
+        case genreTypeList[2]:
             return rock;
-        case 3:
+        case genreTypeList[3]:
             return rb;
         default:
             return all;

@@ -33,9 +33,6 @@ const pathArff = 'api/public/arff/';
 const arffType = ".arff";
 const pathModel = 'api/public/model/';
 const modelType = ".model";
-const danceType = 1;
-const rockType = 2;
-const rbType = 3
 var classifier = {
     'classifier': 'weka.classifiers.bayes.NaiveBayes',
     'params': ''

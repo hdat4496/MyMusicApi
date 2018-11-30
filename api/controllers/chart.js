@@ -3,7 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackAudioFeatures} = require('../controllers/spotify')
-const { convertDate, getChartDateList, convertStringToDate } = require('../helpers/utils');
+const { convertDate, getChartDateList, convertStringToDate, getRandomInt, getGenreTypeList, getGenreName } = require('../helpers/utils');
 const { putDistinctKeyToObject } = require('../controllers/model');
 var Statistics = require("simple-statistics");
 //const { runData } = require('../helpers/data.js');
@@ -15,10 +15,14 @@ module.exports = {
     buildChartFeatures: buildChartFeatures,
     putChartAnalysis: putChartAnalysis,
     getLastedChartTracks: getLastedChartTracks,
-    getChartReport: getChartReport
+    getChartReport: getChartReport,
+    getChartReportHomePage: getChartReportHomePage
 };
 
 function putChartData(genre, date, trackInfoList) {
+    if (trackInfoList == undefined || genre == undefined || date == undefined) {
+        return;
+    }
     console.log("Put chart data: ", genre, date);
     var dateFormat = convertDate(date);
     //console.log("Date format", dateFormat);
@@ -248,7 +252,32 @@ function getChartReport(req, res) {
             res.json({ status: 400, value: "get chart track error" });
         }
         else {
-            res.json({ status: 200, analysisObject});
+            res.json({ status: 200, value: analysisObject});
+        }
+    })
+    .catch(e=>{
+        res.json({ status: 400, value: e });
+    });
+}
+const daysIntervalReport = 60;
+function getChartReportHomePage(req, res) {
+    var endDate = new Date();
+    var now = new Date();
+    var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
+    var genreTypeList = getGenreTypeList();
+    var genreType = getRandomInt(1, genreTypeList.length - 1);
+    var featureType = getRandomInt(0, audioFeatureList.length -1);
+    console.log("get chart track for home page", startDate, endDate, genreType, featureType);
+    getReportHomePage(startDate, endDate, genreType, featureType)
+    .then(function(analysisObject) {
+        if (analysisObject == undefined) {
+            res.json({ status: 400, value: "get chart track for home page error" });
+        }
+        else {
+            analysisObject.genreName = getGenreName(genreType);
+            analysisObject.featureName = getFeatureName(featureType);
+            console.log(analysisObject);
+            res.json({ status: 200, value: analysisObject});
         }
     })
     .catch(e=>{
@@ -314,6 +343,29 @@ function getReport(startDate, endDate, genreType) {
 });
 }
 
+function getReportHomePage(startDate, endDate, genreType, featureType) {
+    return new Promise(async (resolve, reject) => {
+    var dateList = getChartDateList(startDate, endDate);
+    var feature = new Object;
+    var featureName = getFeatureName(featureType);
+    
+    for (var date of dateList) {
+        var date_str = date.day + date.month + date.year;
+        var chartAnalysis = await getChartAnalysis(date_str, genreType);
+        if (chartAnalysis == undefined) {
+            continue;
+        }
+        var dateKey = date.day + '/' + date.month + '/' + date.year;
+        feature[dateKey] = chartAnalysis[featureName];
+    }
+    resolve(feature);
+});
+}
+const roundNumber = 4;
+// function formatNumber(value) {
+//     return parseFloat(value.toFixed(roundNumber));
+// }
+
 async function getChartAnalysis(date, genreType) {
     return new Promise((resolve, reject) => {
         get(`chart.${date}.${genreType}.analysis`, (err, value) => {
@@ -351,6 +403,20 @@ function removeDuplicateUsingSet(arr){
     return unique_array
 }
 
+function getFeatureName(featureType) {
+    return audioFeatureList[featureType];
+}
+// used for get random audio feature chart for home page
+const audioFeatureList = ['speechiness',
+'acousticness',
+'instrumentalness',
+'liveness',
+'valence',
+'duration_ms',
+'tempo',
+'loudness',
+'danceability',
+'energy'];
 // const chartReportInterval = 5;
 // function calculationDateInterval(dateList) {
 //     var length = dateList.length;

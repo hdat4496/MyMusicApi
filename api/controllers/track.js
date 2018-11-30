@@ -5,6 +5,7 @@ const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo } = require('../controllers/spotify');
 const { predictModel } = require('../controllers/model');
+const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 var arff = require('node-arff');
@@ -166,7 +167,7 @@ function getNewTrack() {
         }
         var newTrackIndexes = [];
         while (newTrackIndexes.length < newTrackNumber) {
-            var index = getRandomInt(length);
+            var index = getRandomInt(0, length);
             if (newTrackIndexes.indexOf(index) == -1) {
                 newTrackIndexes.push(index);
             }
@@ -189,11 +190,6 @@ function getNewTrack() {
         console.log("New Track info: ", trackGeneralInfoList);
         resolve(trackGeneralInfoList);
     });
-}
-
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
 }
 
 
