@@ -367,6 +367,7 @@ function getReportHomePage(startDate, endDate, genreType, featureType) {
         var dateKey = date.day + '/' + date.month + '/' + date.year;
         feature[dateKey] = parseFloat(chartAnalysis[featureName]);
     }
+    feature = convertChartObjectToList(feature);
     resolve(feature);
 });
 }
@@ -410,6 +411,19 @@ function calculateNumberPerType(origin_object) {
 function removeDuplicateUsingSet(arr){
     var unique_array = Array.from(new Set(arr))
     return unique_array
+}
+
+function convertChartObjectToList(chartAnalysisObject) {
+    var chartAnalysis = new Object;
+    var label = [];
+    var data = [];
+    for (var date of Object.keys(chartAnalysisObject)) {
+        label.push(date);
+        data.push(chartAnalysisObject[date]);
+    }
+    chartAnalysis.label = label;
+    chartAnalysis.data = data;
+    return chartAnalysis;
 }
 
 function getFeatureName(featureType) {
