@@ -246,6 +246,13 @@ function getChartReport(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
     var genreType = req.swagger.params.genreType.value;
+    if (startDate == undefined || endDate == undefined || genreType == undefined) {
+        endDate = new Date();
+        var now = new Date();
+        startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
+        genreType = getGenreTypeList()[1];
+    }
+    //console.log(startDate, endDate, genreType);
     getReport(startDate, endDate, genreType)
     .then(function(analysisObject) {
         if (analysisObject == undefined) {
