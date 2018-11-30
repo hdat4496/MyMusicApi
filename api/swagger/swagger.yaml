@@ -205,7 +205,27 @@ paths:
         "200":
           description: Success
           schema:
-            $ref: "#/definitions/ListArtistResponse"
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /artist/search-api:
+    x-swagger-router-controller: track
+    get:
+      description: Search artist from Spotify API 
+      operationId: searchArtistAPI
+      parameters:
+        - name: name
+          in: query
+          description: name
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
         default:
           description: Error
           schema:

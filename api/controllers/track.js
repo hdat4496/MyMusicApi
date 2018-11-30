@@ -3,7 +3,8 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
-const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo, getRecommendTrack, searchTrackFromAPI } = require('../controllers/spotify');
+const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
+    getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase } = require('../controllers/spotify');
 const { predictModel } = require('../controllers/model');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -22,98 +23,98 @@ module.exports = {
     searchTrack: searchTrack,
     searchArtist: searchArtist,
     getHomeTrack: getHomeTrack,
-    searchTrackFromAPIFollowTrackTitle: searchTrackFromAPIFollowTrackTitle
+    searchTrackFromAPIFollowTrackTitle: searchTrackFromAPIFollowTrackTitle,
+    searchArtistAPI: searchArtistAPI
 };
-
 
 function searchArtist(req, res) {
     var keyword = req.swagger.params.keyword.value;
+    keyword = keyword.trim();
     if (keyword !== '') {
-        get(`artist.all`, (err, value) => {
+        get(`artist.all`, async (err, value) => {
+            var artist_ls = [];
             if (!err) {
                 var name_ls = JSON.parse(value);
-                var artist_ls = [];
-                var names = [];
                 var ids = [];
                 for (var k in name_ls) {
                     if (name_ls[k].toUpperCase().includes(keyword.toUpperCase())) {
                         ids.push(k);
-                        names.push(name_ls[k]);
                     }
                 }
-                if (ids.length !== 0) {
-                    ids.map((e, i) => {
-                        get(`artist.${e}.imageurl`, (err, value) => {
-                            if (!err) {
-                                var artist_obj = {
-                                    id: e,
-                                    name: names[i],
-                                    imageurl: value,
-                                }
-                                artist_ls.push(artist_obj);
-                                if (artist_ls.length === ids.length) {
-                                    res.json({ status: 200, artist_ls });
-                                }
-                            }
-                        });
-                    });
-                } else {
-                    res.json({ status: 200, artist_ls });
+                for (var artistId of ids) {
+                    var artist = await getArtistFromDatabase(artistId);
+                    if (artist != undefined) {
+                        artist_ls.push(artist);
+                    }
                 }
             }
+            res.json({ status: 200, value: artist_ls });
         });
     }
+    else {
+        res.json({ status: 404, value: 'Key search is empty' });
+    }
+}
 
+function searchArtistAPI(req, res) {
+    var name = req.swagger.params.name.value;
+    name = name.trim();
+    if (name == '') {
+        res.json({ status: 404, value: "Key search is empty" });
+        return;
+    }
+    console.log("search artist from API", name);
+    searchArtistFromAPI(name)
+        .then(function (artistList) {
+            res.json({ status: 200, value: artistList });
+        })
+        .catch(e => {
+            console.log("search artist from API error", e);
+            res.json({ status: 404, value: e });
+        })
 }
 
 function searchTrack(req, res) {
     var keyword = req.swagger.params.keyword.value;
+    keyword = keyword.trim();
     if (keyword !== '') {
-        get(`track.all`, (err, value) => {
+        get(`track.all`, async (err, value) => {
+            var track_ls = [];
             if (!err) {
                 var title_ls = JSON.parse(value);
-                var track_ls = []
-                var ids = []
+                var ids = [];
                 for (var k in title_ls) {
                     if (title_ls[k].toUpperCase().includes(keyword.toUpperCase())) {
                         ids.push(k);
                     }
                 }
-                if (ids.length !== 0) {
-                    ids.map(async (trackId) => {
-                        var track = await getTrackInfoFromDatabase(trackId);
-                        if (track != undefined) {
-                            track_ls.push(track);
-                        }
-                        if (track_ls.length === ids.length) {
-                            res.json({ status: 200, value: track_ls });
-                        }
-                    });
-                }
-                else {
-                    res.json({ status: 200, value: track_ls });
+                for (var trackId of ids) {
+                    var track = await getTrackInfoFromDatabase(trackId);
+                    if (track != undefined) {
+                        track_ls.push(track);
+                    }
                 }
             }
-            else {
-                res.json({ status: 404, value: '404 Not found' });
-            }
+            res.json({ status: 200, value: track_ls });
         });
-
+    }
+    else {
+        res.json({ status: 404, value: 'Key search is empty' });
     }
 }
 
 function searchTrackFromAPIFollowTrackTitle(req, res) {
     var title = req.swagger.params.title.value;
+    title = title.trim();
     var key = 'track:' + title;
     console.log("search track title from api", key);
     searchTrackFromAPI(key)
         .then(function (trackList) {
-            console.log("Search track title", trackList);
+            //console.log("Search track title from api", trackList);
             res.json({ status: 200, value: trackList });
         })
         .catch(e => {
-            console.log("Search track title", trackList);
-            res.json({ status: 400, value: e });
+            res.json({ status: 404, value: e });
         })
 }
 

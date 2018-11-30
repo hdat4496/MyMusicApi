@@ -18,7 +18,9 @@ module.exports = {
     getTrackInfoFromDatabase: getTrackInfoFromDatabase,
     getTrackGeneralInfo: getTrackGeneralInfo,
     getRecommendTrack: getRecommendTrack,
-    searchTrackFromAPI: searchTrackFromAPI
+    searchTrackFromAPI: searchTrackFromAPI,
+    searchArtistFromAPI: searchArtistFromAPI,
+    getArtistFromDatabase : getArtistFromDatabase
 };
 
 // Set necessary parts of the credentials on the constructor
@@ -901,22 +903,22 @@ async function getRecommendTrack(trackId) {
         }, async function (err) {
             console.error('Get recommend tracks error', err);
         });
-        //console.log(recommendTracks);
+    //console.log(recommendTracks);
     return recommendTracks;
 }
 async function searchTrackFromAPI(key) {
-    //console.log('search track from) API: ', key);
+    //console.log('search track from API: ', key);
     var trackList = [];
     await spotifyApi.searchTracks(key).then(
         async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
-                return;
+                return trackList;
             }
             trackList = convertDataApiToTrackList(data.body.tracks.items);
         },
         function (err) {
-            console.log('Search track fail', err);
+            console.log('Search track from api fail', key, err);
         }
     );
     return trackList;
@@ -934,9 +936,65 @@ function convertDataApiToTrackList(tracksData) {
         var track = new Object;
         track.id = trackInfo.id;
         track.title = trackInfo.name;
-        track.artist = artistNames.join(" ft ");             
+        track.artist = artistNames.join(" ft ");
         track.track_imageurl = trackImageUrl;
         trackList.push(track);
     }
     return trackList;
+}
+
+async function searchArtistFromAPI(name) {
+    //console.log('search artist from API: ', name);
+    var artistList = [];
+    await spotifyApi.searchArtists(name).then(
+        async function (data) {
+            //console.log(data.body.artists);
+            var total = data.body.artists.total;
+            if (total == 0) {
+                return artistList;
+            }
+            var artistsData = data.body.artists.items;
+            for (var artistInfo of artistsData) {
+                var imageUrl = (artistInfo.images.length == 0) ? "" : artistInfo.images[0].url;;
+                var genreList = artistInfo.genres;
+                var genre = (genreList.length == 0) ? '' : genreList.join(";");
+                var artist = new Object;
+                artist.id = artistInfo.id;
+                artist.name = artistInfo.name;
+                artist.imageurl = imageUrl;
+                artist.genre = genre;
+                artistList.push(artist);
+            }
+        },
+        function (err) {
+            console.log('Search artist from api fail', err);
+        }
+    );
+    return artistList;
+}
+
+async function getArtistFromDatabase(artistId) {
+    var artist = new Object;
+    var name = await getArtistInfo(artistId, "name");
+    if (name == undefined) {
+        return;
+    }
+    artist.name = name;
+    var imageurl = await getArtistInfo(artistId, "imageurl");
+    artist.imageurl = (imageurl == undefined) ? "" : imageurl;
+    var genre = await getArtistInfo(artistId, "genre");
+    artist.genre = (genre == undefined) ? "" : genre;
+    return artist;
+}
+function getArtistInfo(artistId, info) {
+    return new Promise((resolve, reject) => {
+        get(`artist.${artistId}.${info}`, (err, value) => {
+            if (!err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
 }
