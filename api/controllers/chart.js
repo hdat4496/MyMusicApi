@@ -274,10 +274,12 @@ function getChartReportHomePage(req, res) {
             res.json({ status: 400, value: "get chart track for home page error" });
         }
         else {
-            analysisObject.genreName = getGenreName(genreType);
-            analysisObject.featureName = getFeatureName(featureType);
-            console.log(analysisObject);
-            res.json({ status: 200, value: analysisObject});
+            var result = new Object;
+            result.genreName = getGenreName(genreType);
+            result.featureName = getFeatureName(featureType);
+            result.data = analysisObject;
+            console.log(result);
+            res.json({ status: 200, value: result});
         }
     })
     .catch(e=>{
