@@ -105,7 +105,7 @@ function getTrack(req, res) {
     getTrackDetail(trackId)
         .then(function (track) {
             if (track == undefined) {
-                res.json({ status: 400, value: "get track error" });
+                res.json({ status: 404, value: "get track error" });
             }
             else {
                 console.log("Get track", track);

@@ -212,17 +212,17 @@ function predictTrack(modelName, fileNameTest, classifier) {
             }
             else {
                 console.log("Predict hit success: " + result.predicted, result.prediction);
-
+                result.prediction = parseFloat(result.prediction);
                 if (result.predicted == "hit") {
                     var prediction = new Object;
                     prediction.hit = result.prediction;
-                    prediction.nonhit = (1 - parseFloat(result.prediction)).toFixed(4);
+                    prediction.nonhit = parseFloat((1 -result.prediction).toFixed(4));
                 }
 
                 if (result.predicted == "non-hit") {
                     var prediction = new Object;
                     prediction.nonhit = result.prediction;
-                    prediction.hit = 1 - parseFloat(result.prediction).toFixed(4);
+                    prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
                 }
                 
                 resolve(prediction);
