@@ -2,7 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-const { getTrackAudioFeatures} = require('../controllers/spotify')
+const { getTrackAudioFeatures } = require('../controllers/spotify')
 const { convertDate, getChartDateList, convertStringToDate, getRandomInt, getGenreTypeList, getGenreName } = require('../helpers/utils');
 const { putDistinctKeyToObject } = require('../controllers/model');
 var Statistics = require("simple-statistics");
@@ -41,7 +41,7 @@ function putChartData(genre, date, trackInfoList) {
             trackIdChart[position - 1] = '';
         }
     }
-    
+
     var trackIdsValue = trackIdChart.join(";")
     //console.log('Chart track ids:', trackIdsValue);
     putSync(`chart.${dateKey}.${genre}`, trackIdsValue);
@@ -54,7 +54,7 @@ function putChartData(genre, date, trackInfoList) {
                 putSync(`chart.${genre}.lasted`, dateValue);
             }
         }
-        else if (err.notFound){
+        else if (err.notFound) {
             putSync(`chart.${genre}.lasted`, dateValue);
         }
     });
@@ -63,7 +63,7 @@ function putChartData(genre, date, trackInfoList) {
 function buildChartFeatures(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
-    var genreType = req.swagger.params.genreType.value; 
+    var genreType = req.swagger.params.genreType.value;
 
     var dateList = getChartDateList(startDate, endDate);
     for (var date of dateList) {
@@ -83,7 +83,7 @@ async function putChartAnalysis(date_str, genreType) {
         return;
     }
     //console.log("Track feature list: ",trackFeaturesList );
-    var chartAnalysis =  calculateChartFeatures(trackFeaturesList);
+    var chartAnalysis = calculateChartFeatures(trackFeaturesList);
     //console.log("Chart analysis:",date_str, chartAnalysis);
     if (chartAnalysis == undefined) {
         return;
@@ -102,7 +102,7 @@ async function getChartTrackAudioFeatures(trackIds) {
     }
     return trackFeaturesList;
 }
- 
+
 
 function calculateChartFeatures(trackFeaturesList) {
     var chartAnalysis = new Object;
@@ -114,12 +114,12 @@ function calculateChartFeatures(trackFeaturesList) {
     var valence = [];
     var duration_ms = [];
     var tempo = [];
-    var time_signature = []; 
+    var time_signature = [];
     var mode = [];
     var key = [];
     var loudness = [];
-    var danceability = []; 
-    var energy = []; 
+    var danceability = [];
+    var energy = [];
     var timeSignatureObject = new Object;
     var modeObject = new Object;
     var keyObject = new Object;
@@ -148,7 +148,7 @@ function calculateChartFeatures(trackFeaturesList) {
         var key_key = features[10];
         var key_value = keyObject[key_key];
         keyObject[key_key] = (key_value == undefined) ? trackId : key_value + ';' + trackId;
-       
+
         loudness.push(parseFloat(features[11]));
         danceability.push(parseFloat(features[12]));
         energy.push(parseFloat(features[13]));
@@ -196,7 +196,7 @@ async function getTrackListForChart(date, genreType) {
 }
 
 async function getLastedChartTracks() {
-    var genreTypeList = [1,2,3];
+    var genreTypeList = [1, 2, 3];
     var lastedChartDate = [];
     for (var genreType of genreTypeList) {
         var date = await getChartLasted(genreType);
@@ -209,7 +209,7 @@ async function getLastedChartTracks() {
         }
         lastedChartDate.push(chart);
     }
-    
+
     var distinctTracks = new Object;
     for (var chart of lastedChartDate) {
         var dateArray = chart.date.split("/");
@@ -254,17 +254,17 @@ function getChartReport(req, res) {
     }
     //console.log(startDate, endDate, genreType);
     getReport(startDate, endDate, genreType)
-    .then(function(analysisObject) {
-        if (analysisObject == undefined) {
-            res.json({ status: 400, value: "get chart track error" });
-        }
-        else {
-            res.json({ status: 200, value: analysisObject});
-        }
-    })
-    .catch(e=>{
-        res.json({ status: 400, value: e });
-    });
+        .then(function (analysisObject) {
+            if (analysisObject == undefined) {
+                res.json({ status: 400, value: "get chart track error" });
+            }
+            else {
+                res.json({ status: 200, value: analysisObject });
+            }
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        });
 }
 const daysIntervalReport = 60;
 function getChartReportHomePage(req, res) {
@@ -273,103 +273,115 @@ function getChartReportHomePage(req, res) {
     var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
     var genreTypeList = getGenreTypeList();
     var genreType = getRandomInt(1, genreTypeList.length - 1);
-    var featureType = getRandomInt(0, audioFeatureList.length -1);
+    var featureType = getRandomInt(0, audioFeatureList.length - 1);
     console.log("get chart track for home page", startDate, endDate, genreType, featureType);
     getReportHomePage(startDate, endDate, genreType, featureType)
-    .then(function(analysisObject) {
-        if (analysisObject == undefined) {
-            res.json({ status: 400, value: "get chart track for home page error" });
-        }
-        else {
-            var result = new Object;
-            result.genreName = getGenreName(genreType);
-            result.featureName = getFeatureName(featureType);
-            result.data = analysisObject;
-            console.log(result);
-            res.json({ status: 200, value: result});
-        }
-    })
-    .catch(e=>{
-        res.json({ status: 400, value: e });
-    });
+        .then(function (analysisObject) {
+            if (analysisObject == undefined) {
+                res.json({ status: 400, value: "get chart track for home page error" });
+            }
+            else {
+                var result = new Object;
+                result.genreName = getGenreName(genreType);
+                result.featureName = getFeatureName(featureType);
+                result.data = analysisObject;
+                console.log(result);
+                res.json({ status: 200, value: result });
+            }
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        });
 }
 
 function getReport(startDate, endDate, genreType) {
     return new Promise(async (resolve, reject) => {
-    var dateList = getChartDateList(startDate, endDate);
-    var speechiness = new Object;
-    var acousticness = new Object;
-    var instrumentalness = new Object;
-    var liveness = new Object;
-    var valence = new Object;
-    var duration_ms = new Object;
-    var tempo = new Object;
-    var time_signature = new Object;
-    var mode = new Object;
-    var key = new Object;
-    var loudness = new Object;
-    var danceability = new Object; 
-    var energy = new Object;
+        var dateList = getChartDateList(startDate, endDate);
+        var speechiness = new Object;
+        var acousticness = new Object;
+        var instrumentalness = new Object;
+        var liveness = new Object;
+        var valence = new Object;
+        var duration_ms = new Object;
+        var tempo = new Object;
+        var time_signature = new Object;
+        var mode = new Object;
+        var key = new Object;
+        var loudness = new Object;
+        var danceability = new Object;
+        var energy = new Object;
 
-    for (var date of dateList) {
-        var date_str = date.day + date.month + date.year;
-        var chartAnalysis = await getChartAnalysis(date_str, genreType);
-        if (chartAnalysis == undefined) {
-            continue;
+        for (var date of dateList) {
+            var date_str = date.day + date.month + date.year;
+            var chartAnalysis = await getChartAnalysis(date_str, genreType);
+            if (chartAnalysis == undefined) {
+                continue;
+            }
+            var dateKey = date.day + '/' + date.month + '/' + date.year;
+            speechiness[dateKey] = parseFloat(chartAnalysis["speechiness"]);
+            acousticness[dateKey] = parseFloat(chartAnalysis["acousticness"]);
+            instrumentalness[dateKey] = parseFloat(chartAnalysis["instrumentalness"]);
+            liveness[dateKey] = parseFloat(chartAnalysis["liveness"]);
+            valence[dateKey] = parseFloat(chartAnalysis["valence"]);
+            duration_ms[dateKey] = parseFloat(chartAnalysis["duration_ms"]);
+            tempo[dateKey] = parseFloat(chartAnalysis["tempo"]);
+            time_signature = addElementToObject(time_signature, chartAnalysis["time_signature"]);
+            mode = addElementToObject(mode, chartAnalysis["mode"]);
+            key = addElementToObject(key, chartAnalysis["key"]);
+            loudness[dateKey] = parseFloat(chartAnalysis["loudness"]);
+            danceability[dateKey] = parseFloat(chartAnalysis["danceability"]);
+            energy[dateKey] = parseFloat(chartAnalysis["energy"]);
         }
-        var dateKey = date.day + '/' + date.month + '/' + date.year;
-        speechiness[dateKey] = parseFloat(chartAnalysis["speechiness"]);
-        acousticness[dateKey] = parseFloat(chartAnalysis["acousticness"]);
-        instrumentalness[dateKey] = parseFloat(chartAnalysis["instrumentalness"]);
-        liveness[dateKey] = parseFloat(chartAnalysis["liveness"]);
-        valence[dateKey] = parseFloat(chartAnalysis["valence"]);
-        duration_ms[dateKey] = parseFloat(chartAnalysis["duration_ms"]);
-        tempo[dateKey] = parseFloat(chartAnalysis["tempo"]);
-        time_signature = addElementToObject(time_signature, chartAnalysis["time_signature"]);
-        mode = addElementToObject(mode, chartAnalysis["mode"]);
-        key = addElementToObject(key, chartAnalysis["key"]);
-        loudness[dateKey] = parseFloat(chartAnalysis["loudness"]);
-        danceability[dateKey] = parseFloat(chartAnalysis["danceability"]);
-        energy[dateKey] = parseFloat(chartAnalysis["energy"]);
-    }
 
-    var analysisObject = new Object;
-    analysisObject.speechiness = speechiness;
-    analysisObject.acousticness = acousticness;
-    analysisObject.instrumentalness = instrumentalness;
-    analysisObject.liveness = liveness;
-    analysisObject.valence = valence;
-    analysisObject.duration_ms = duration_ms;
-    analysisObject.tempo = tempo;
-    analysisObject.time_signature = calculateNumberPerType(time_signature);
-    analysisObject.mode = calculateNumberPerType(mode);
-    analysisObject.key =  calculateNumberPerType(key);
-    analysisObject.loudness = loudness;
-    analysisObject.danceability = danceability;
-    analysisObject.energy = energy;
-    //console.log("Report chart:", analysisObject);
-    resolve(analysisObject);
-});
+        var analysisObject = new Object;
+        acousticness = convertChartObjectToList(acousticness);
+        danceability = convertChartObjectToList(danceability);
+        energy = convertChartObjectToList(energy);
+        analysisObject.rhythm = {
+            label: acousticness.label,
+            data_acousticness : acousticness.data,
+            data_danceability : danceability.data,
+            data_energy : energy.data
+        }
+        speechiness = convertChartObjectToList(speechiness);
+        instrumentalness = convertChartObjectToList(instrumentalness);
+        analysisObject.vocality = {
+            label: speechiness.label,
+            data_speechiness : speechiness.data,
+            data_instrumentalness : instrumentalness.data,
+        }
+        //analysisObject.liveness = liveness;
+        analysisObject.valence = convertChartObjectToList(valence);
+        analysisObject.duration_ms = convertChartObjectToList(duration_ms);
+        analysisObject.tempo = convertChartObjectToList(tempo);
+        analysisObject.time_signature = convertChartObjectToList(calculateNumberPerType(time_signature, specialAudioFeatureList[0]));
+        analysisObject.mode = convertChartObjectToList(calculateNumberPerType(mode, specialAudioFeatureList[1]));
+        analysisObject.key = convertChartObjectToList(calculateNumberPerType(key, specialAudioFeatureList[2]));
+        analysisObject.loudness = convertChartObjectToList(loudness);
+        
+        //console.log("Report chart:", analysisObject);
+        resolve(analysisObject);
+    });
 }
 
 function getReportHomePage(startDate, endDate, genreType, featureType) {
     return new Promise(async (resolve, reject) => {
-    var dateList = getChartDateList(startDate, endDate);
-    var feature = new Object;
-    var featureName = getFeatureName(featureType);
-    
-    for (var date of dateList) {
-        var date_str = date.day + date.month + date.year;
-        var chartAnalysis = await getChartAnalysis(date_str, genreType);
-        if (chartAnalysis == undefined) {
-            continue;
+        var dateList = getChartDateList(startDate, endDate);
+        var feature = new Object;
+        var featureName = getFeatureName(featureType);
+
+        for (var date of dateList) {
+            var date_str = date.day + date.month + date.year;
+            var chartAnalysis = await getChartAnalysis(date_str, genreType);
+            if (chartAnalysis == undefined) {
+                continue;
+            }
+            var dateKey = date.day + '/' + date.month + '/' + date.year;
+            feature[dateKey] = parseFloat(chartAnalysis[featureName]);
         }
-        var dateKey = date.day + '/' + date.month + '/' + date.year;
-        feature[dateKey] = parseFloat(chartAnalysis[featureName]);
-    }
-    feature = convertChartObjectToList(feature);
-    resolve(feature);
-});
+        feature = convertChartObjectToList(feature);
+        resolve(feature);
+    });
 }
 const roundNumber = 4;
 // function formatNumber(value) {
@@ -390,17 +402,17 @@ async function getChartAnalysis(date, genreType) {
         });
     });
 }
-function addElementToObject(origin_object, new_object ) {
+function addElementToObject(origin_object, new_object) {
     for (var key of Object.keys(new_object)) {
         var value = origin_object[key];
         origin_object[key] = (value == undefined) ? new_object[key] : value + ";" + new_object[key];
     }
     return origin_object;
 }
-function calculateNumberPerType(origin_object) {
+function calculateNumberPerType(origin_object, featureType) {
     var new_object = new Object;
     for (var key of Object.keys(origin_object)) {
-        var format_key = key;
+        var format_key = convertKeyFeatureForReport(key, featureType);
         var listTrack = origin_object[key].split(";");
         listTrack = removeDuplicateUsingSet(listTrack);
         new_object[format_key] = listTrack.length;
@@ -408,7 +420,20 @@ function calculateNumberPerType(origin_object) {
     return new_object;
 }
 
-function removeDuplicateUsingSet(arr){
+function convertKeyFeatureForReport(key, featureType) {
+    switch (featureType) {
+        case specialAudioFeatureList[0]:
+            return key + beats;
+        case specialAudioFeatureList[1]:
+            return (key == 0) ? minorMode : majorMode;
+        case specialAudioFeatureList[2]:
+            return keyList[key];
+        default: 
+            return key;
+    }
+}
+
+function removeDuplicateUsingSet(arr) {
     var unique_array = Array.from(new Set(arr))
     return unique_array
 }
@@ -429,17 +454,23 @@ function convertChartObjectToList(chartAnalysisObject) {
 function getFeatureName(featureType) {
     return audioFeatureList[featureType];
 }
+const specialAudioFeatureList = [
+    'time_signature',
+    'mode',
+    'key'
+]
+
 // used for get random audio feature chart for home page
 const audioFeatureList = ['speechiness',
-'acousticness',
-'instrumentalness',
-'liveness',
-'valence',
-'duration_ms',
-'tempo',
-'loudness',
-'danceability',
-'energy'];
+    'acousticness',
+    'instrumentalness',
+    'liveness',
+    'valence',
+    'duration_ms',
+    'tempo',
+    'loudness',
+    'danceability',
+    'energy'];
 // const chartReportInterval = 5;
 // function calculationDateInterval(dateList) {
 //     var length = dateList.length;
@@ -461,14 +492,14 @@ const minorMode = 'minor';
 const majorMode = 'major';
 const beats = ' beats';
 const keyList = ['C',
-'C#',
-'D',
-'D#',
-'E',
-'F',
-'F#',
-'G',
-'G#',
-'A',
-'A#',
-'B']
+    'C#',
+    'D',
+    'D#',
+    'E',
+    'F',
+    'F#',
+    'G',
+    'G#',
+    'A',
+    'A#',
+    'B']
