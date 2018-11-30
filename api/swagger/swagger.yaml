@@ -239,15 +239,18 @@ paths:
         - name: startDate
           in: query
           description: start date MM/dd/yyyy
+          required: true
           type: string
         - name: endDate
           in: query
           description: end date MM/dd/yyyy
           type: string
+          required: true
         - name: genreType
           in: query
           description: genreType
           type: integer
+          required: false
       responses:
         "200":
           description: Success

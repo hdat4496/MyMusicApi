@@ -164,7 +164,7 @@ function getAudioAnalysisKey() {
 function getGenreTypeList() {
     return genreTypeList;
 }
-const genreTypeList = [0,1,2,3];
+const genreTypeList = [4,1,2,3];
 const dance = "dance";
 const rb = "rb";
 const rock = "rock";

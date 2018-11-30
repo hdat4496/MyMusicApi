@@ -979,6 +979,7 @@ async function getArtistFromDatabase(artistId) {
     if (name == undefined) {
         return;
     }
+    artist.id = artistId;
     artist.name = name;
     var imageurl = await getArtistInfo(artistId, "imageurl");
     artist.imageurl = (imageurl == undefined) ? "" : imageurl;

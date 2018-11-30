@@ -250,7 +250,7 @@ function getChartReport(req, res) {
         endDate = new Date();
         var now = new Date();
         startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
-        genreType = getGenreTypeList()[1];
+        genreType = getGenreTypeList()[0];
     }
     //console.log(startDate, endDate, genreType);
     getReport(startDate, endDate, genreType)
@@ -272,7 +272,7 @@ function getChartReportHomePage(req, res) {
     var now = new Date();
     var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
     var genreTypeList = getGenreTypeList();
-    var genreType = getRandomInt(1, genreTypeList.length - 1);
+    var genreType = genreTypeList[getRandomInt(0, genreTypeList.length - 1)];
     var featureType = getRandomInt(0, audioFeatureList.length - 1);
     console.log("get chart track for home page", startDate, endDate, genreType, featureType);
     getReportHomePage(startDate, endDate, genreType, featureType)
@@ -339,16 +339,16 @@ function getReport(startDate, endDate, genreType) {
         energy = convertChartObjectToList(energy);
         analysisObject.rhythm = {
             label: acousticness.label,
-            data_acousticness : acousticness.data,
-            data_danceability : danceability.data,
-            data_energy : energy.data
+            data_acousticness: acousticness.data,
+            data_danceability: danceability.data,
+            data_energy: energy.data
         }
         speechiness = convertChartObjectToList(speechiness);
         instrumentalness = convertChartObjectToList(instrumentalness);
         analysisObject.vocality = {
             label: speechiness.label,
-            data_speechiness : speechiness.data,
-            data_instrumentalness : instrumentalness.data,
+            data_speechiness: speechiness.data,
+            data_instrumentalness: instrumentalness.data,
         }
         //analysisObject.liveness = liveness;
         analysisObject.valence = convertChartObjectToList(valence);
@@ -358,7 +358,7 @@ function getReport(startDate, endDate, genreType) {
         analysisObject.mode = convertChartObjectToList(calculateNumberPerType(mode, specialAudioFeatureList[1]));
         analysisObject.key = convertChartObjectToList(calculateNumberPerType(key, specialAudioFeatureList[2]));
         analysisObject.loudness = convertChartObjectToList(loudness);
-        
+
         //console.log("Report chart:", analysisObject);
         resolve(analysisObject);
     });
@@ -428,7 +428,7 @@ function convertKeyFeatureForReport(key, featureType) {
             return (key == 0) ? minorMode : majorMode;
         case specialAudioFeatureList[2]:
             return keyList[key];
-        default: 
+        default:
             return key;
     }
 }
