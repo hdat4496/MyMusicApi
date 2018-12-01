@@ -325,6 +325,10 @@ paths:
           in: query
           description: genreType
           type: integer
+        - name: userSelect
+          in: query
+          description: whether getting report by interact of user
+          type: boolean
       responses:
         "200":
           description: Success

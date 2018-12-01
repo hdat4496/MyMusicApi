@@ -246,12 +246,12 @@ function getChartReport(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
     var genreType = req.swagger.params.genreType.value;
-    if (startDate == undefined || endDate == undefined) {
-        endDate = new Date();
-        var now = new Date();
-        startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
-    }
-    else {
+    var userSelect = req.swagger.params.userSelect.value;
+    if (userSelect == true) {
+        if (startDate == undefined || endDate == undefined || genreType == undefined){
+            res.json({ status: 333, value: "Lack of parameters when get chart report" });
+            return;
+        }
         startDate = new Date(startDate);
         endDate = new Date(endDate);
         if (startDate > endDate) {
@@ -259,7 +259,10 @@ function getChartReport(req, res) {
             return;
         }
     }
-    if (genreType == undefined) {
+    else{
+        endDate = new Date();
+        var now = new Date();
+        startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
         genreType = getGenreTypeList()[0];
     }
     //console.log(startDate, endDate, genreType);
@@ -268,7 +271,7 @@ function getChartReport(req, res) {
             res.json({ status: 200, value: analysisObject });
         })
         .catch(e => {
-            res.json({ status: 400, value: e });
+            res.json({ status: 404, value: e });
         });
 }
 const daysIntervalReport = 60;
