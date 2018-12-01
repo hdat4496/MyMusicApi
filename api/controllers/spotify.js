@@ -269,7 +269,7 @@ async function getAudioAnalysisAPI(trackId) {
             //getAudioAnalysisAPI(trackId);
             console.error('Get audio analysis error', err);
             if (err.statusCode == 504) {
-                await getAudioAnalysisAPI(trackId);
+                analysis = await getAudioAnalysisAPI(trackId);
             }
         });
     return analysis;
