@@ -246,21 +246,26 @@ function getChartReport(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
     var genreType = req.swagger.params.genreType.value;
-    if (startDate == undefined || endDate == undefined || genreType == undefined) {
+    if (startDate == undefined || endDate == undefined) {
         endDate = new Date();
         var now = new Date();
         startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
+    }
+    else {
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+        if (startDate > endDate) {
+            res.json({ status: 400, value: "Start date after end date" });
+            return;
+        }
+    }
+    if (genreType == undefined) {
         genreType = getGenreTypeList()[0];
     }
     //console.log(startDate, endDate, genreType);
     getReport(startDate, endDate, genreType)
         .then(function (analysisObject) {
-            if (analysisObject == undefined) {
-                res.json({ status: 400, value: "get chart track error" });
-            }
-            else {
-                res.json({ status: 200, value: analysisObject });
-            }
+            res.json({ status: 200, value: analysisObject });
         })
         .catch(e => {
             res.json({ status: 400, value: e });
@@ -297,6 +302,10 @@ function getChartReportHomePage(req, res) {
 function getReport(startDate, endDate, genreType) {
     return new Promise(async (resolve, reject) => {
         var dateList = getChartDateList(startDate, endDate);
+        if (dateList.length == 0) {
+            reject("No date chart data in this period");
+        }
+        console.log("get report date", dateList.length);
         var speechiness = new Object;
         var acousticness = new Object;
         var instrumentalness = new Object;
@@ -310,13 +319,14 @@ function getReport(startDate, endDate, genreType) {
         var loudness = new Object;
         var danceability = new Object;
         var energy = new Object;
-
+        var hasData = false;
         for (var date of dateList) {
             var date_str = date.day + date.month + date.year;
             var chartAnalysis = await getChartAnalysis(date_str, genreType);
             if (chartAnalysis == undefined) {
                 continue;
             }
+            hasData = true;
             var dateKey = date.day + '/' + date.month + '/' + date.year;
             speechiness[dateKey] = parseFloat(chartAnalysis["speechiness"]);
             acousticness[dateKey] = parseFloat(chartAnalysis["acousticness"]);
@@ -332,7 +342,9 @@ function getReport(startDate, endDate, genreType) {
             danceability[dateKey] = parseFloat(chartAnalysis["danceability"]);
             energy[dateKey] = parseFloat(chartAnalysis["energy"]);
         }
-
+        if (hasData == false) {
+            reject("No chart data found in this period ");
+        }
         var analysisObject = new Object;
         acousticness = convertChartObjectToList(acousticness);
         danceability = convertChartObjectToList(danceability);
@@ -369,7 +381,7 @@ function getReportHomePage(startDate, endDate, genreType, featureType) {
         var dateList = getChartDateList(startDate, endDate);
         var feature = new Object;
         var featureName = getFeatureName(featureType);
-
+        
         for (var date of dateList) {
             var date_str = date.day + date.month + date.year;
             var chartAnalysis = await getChartAnalysis(date_str, genreType);
