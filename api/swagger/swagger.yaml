@@ -306,7 +306,26 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/Response"      
+            $ref: "#/definitions/Response"  
+  /chart/get-default-report:
+    x-swagger-router-controller: chart
+    get:
+      description: get chart analysis report in default mode
+      operationId: getChartReportDefault
+      parameters:
+        - name: key
+          in: query
+          description: key
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"    
   /chart/get-report:
     x-swagger-router-controller: chart
     get:
@@ -316,14 +335,17 @@ paths:
         - name: startDate
           in: query
           description: start date yyyy-MM-dd
+          required: true
           type: string
         - name: endDate
           in: query
           description: end date yyyy-MM-dd
+          required: true
           type: string
         - name: genreType
           in: query
           description: genreType
+          required: true
           type: integer
       responses:
         "200":

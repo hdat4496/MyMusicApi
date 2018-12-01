@@ -15,6 +15,7 @@ module.exports = {
     buildChartFeatures: buildChartFeatures,
     putChartAnalysis: putChartAnalysis,
     getLastedChartTracks: getLastedChartTracks,
+    getChartReportDefault: getChartReportDefault,
     getChartReport: getChartReport,
     getChartReportHomePage: getChartReportHomePage
 };
@@ -242,23 +243,30 @@ function getChartLasted(genre) {
         });
     });
 }
+function getChartReportDefault(req, res) {
+        var endDate = new Date();
+        var now = new Date();
+        var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
+        var genreType = getGenreTypeList()[0];
+    //console.log(startDate, endDate, genreType);
+    getReport(startDate, endDate, genreType)
+        .then(function (analysisObject) {
+            res.json({ status: 200, value: analysisObject });
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        });
+}
 function getChartReport(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
     var genreType = req.swagger.params.genreType.value;
-    if (startDate == undefined || endDate == undefined) {
-        endDate = new Date();
-        var now = new Date();
-        startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
-    }
-    else {
         startDate = new Date(startDate);
         endDate = new Date(endDate);
         if (startDate > endDate) {
             res.json({ status: 400, value: "Start date after end date" });
             return;
         }
-    }
     if (genreType == undefined) {
         genreType = getGenreTypeList()[0];
     }
@@ -381,7 +389,7 @@ function getReportHomePage(startDate, endDate, genreType, featureType) {
         var dateList = getChartDateList(startDate, endDate);
         var feature = new Object;
         var featureName = getFeatureName(featureType);
-        
+
         for (var date of dateList) {
             var date_str = date.day + date.month + date.year;
             var chartAnalysis = await getChartAnalysis(date_str, genreType);
