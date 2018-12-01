@@ -249,13 +249,13 @@ function getChartReport(req, res) {
     var userSelect = req.swagger.params.userSelect.value;
     if (userSelect == true) {
         if (startDate == undefined || endDate == undefined || genreType == undefined){
-            res.json({ status: 333, value: "Lack of parameters when get chart report" });
+            res.json({ status: 400, value: "You should select all start date, end date and genre!" });
             return;
         }
         startDate = new Date(startDate);
         endDate = new Date(endDate);
         if (startDate > endDate) {
-            res.json({ status: 400, value: "Start date after end date" });
+            res.json({ status: 400, value: "Start date must be before end date!" });
             return;
         }
     }
@@ -306,7 +306,7 @@ function getReport(startDate, endDate, genreType) {
     return new Promise(async (resolve, reject) => {
         var dateList = getChartDateList(startDate, endDate);
         if (dateList.length == 0) {
-            reject("No date chart data in this period");
+            reject("Chart data is not found in this period!");
         }
         console.log("get report date", dateList.length);
         var speechiness = new Object;
@@ -346,7 +346,7 @@ function getReport(startDate, endDate, genreType) {
             energy[dateKey] = parseFloat(chartAnalysis["energy"]);
         }
         if (hasData == false) {
-            reject("No chart data found in this period ");
+            reject("Chart data is not found in this period!");
         }
         var analysisObject = new Object;
         acousticness = convertChartObjectToList(acousticness);
