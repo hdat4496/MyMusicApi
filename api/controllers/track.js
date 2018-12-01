@@ -4,7 +4,7 @@ const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
-    getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase } = require('../controllers/spotify');
+    getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo } = require('../controllers/spotify');
 const { predictModel } = require('../controllers/model');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -23,8 +23,9 @@ module.exports = {
     searchTrack: searchTrack,
     searchArtist: searchArtist,
     getHomeTrack: getHomeTrack,
-    searchTrackFromAPIFollowTrackTitle: searchTrackFromAPIFollowTrackTitle,
-    searchArtistAPI: searchArtistAPI
+    searchTrackAPI: searchTrackAPI,
+    searchArtistAPI: searchArtistAPI,
+    getArtist: getArtist
 };
 
 function searchArtist(req, res) {
@@ -103,7 +104,7 @@ function searchTrack(req, res) {
     }
 }
 
-function searchTrackFromAPIFollowTrackTitle(req, res) {
+function searchTrackAPI(req, res) {
     var title = req.swagger.params.title.value;
     title = title.trim();
     var key = 'track:' + title;
@@ -211,6 +212,22 @@ function getNewTrack() {
     });
 }
 
+function getArtist(req, res) {
+    var artistId = req.swagger.params.id.value;
+    getArtistInfo(artistId)
+        .then(function (artist) {
+            if (artist == undefined) {
+                res.json({ status: 404, value: "get artist error" });
+            }
+            else {
+                console.log("Get artist", artist);
+                res.json({ status: 200, value: artist });
+            }
+        })
+        .catch(e => {
+            res.json({ status: 404, value: e });
+        })
+}
 
 function convertAudioFeatures(featuresString) {
     if (featuresString == undefined) {

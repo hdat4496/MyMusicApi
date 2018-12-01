@@ -156,7 +156,7 @@ paths:
     x-swagger-router-controller: track
     get:
       description: Search track from Spotify API follow title of track
-      operationId: searchTrackFromAPIFollowTrackTitle
+      operationId: searchTrackAPI
       parameters:
         - name: title
           in: query
@@ -181,6 +181,26 @@ paths:
         - name: token
           in: query
           description: token
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
+  /artist/get-artist:
+    x-swagger-router-controller: track
+    get:
+      description: get artist info
+      operationId: getArtist
+      parameters:
+        - name: id
+          in: query
+          description: artist id
+          required: true
           type: string
       responses:
         "200":
