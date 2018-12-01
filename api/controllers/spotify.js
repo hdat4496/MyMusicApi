@@ -212,7 +212,7 @@ async function fetchArtist(artistIds, trackId) {
             var artistNames = [];
             for (var artist of artists) {
                 if (artist.images.length != 0) {
-                    artistImageUrl = imageUrl;
+                    artistImageUrl = artist.images[0].url;
                 }
                 var artistInfo = convertDataApiToArtist(artist);
                 // put artist info
@@ -812,7 +812,7 @@ async function getTrackInfoFromAPI(trackId) {
             putTrackInfo(track);
         })
         .catch(e => {
-            //console.log('Exception search track: ', e);
+            console.log('Exception search track: ', e);
         });
     return track;
 }
