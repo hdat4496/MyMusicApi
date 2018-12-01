@@ -111,7 +111,7 @@ function signUp(req, res) {
                         });
                     }
                     else {
-                        res.json({ status: 400, message: 'Registration fail' });
+                        res.json({ status: 400, message: 'User name already exists' });
                     }
                 } else {
                     res.json({ status: 400, message: 'User name already exists' });
