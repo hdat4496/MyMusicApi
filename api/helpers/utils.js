@@ -68,9 +68,8 @@ function convertDateToString(originDate) {
 
     return day_str + month_str + year_str;
 }
-
 const daysInterval = 7;
-const dayChangeMilestone = new Date("07/05/2015");
+const dayChangeMilestone = new Date("2015-07-05");
 function getChartDateList(startDate, endDate) {
     startDate = new Date(startDate);
     endDate = new Date(endDate);
@@ -95,7 +94,7 @@ function getChartDateList(startDate, endDate) {
         if (month < 10) {
             month_str = "0" + month_str;
         }
-        // before 07/05/2015, chart is released on Sunday. After that, chart is released on Friday
+        // before 2015-07-05, chart is released on Sunday. After that, chart is released on Friday
         if (realStartDate.getTime() == dayChangeMilestone.getTime()) {
             realStartDate = new Date(realStartDate.setTime(realStartDate.getTime() + 5 * 86400000));
         }
@@ -121,7 +120,7 @@ function findStartDate(startDate) {
     var startDate = new Date(startDate);
     var dayOfWeek = startDate.getDay();
     var dayReleased;
-    // before 07/05/2015, chart is released on Sunday. After that, chart is released on Friday
+    // before 2015-07-05, chart is released on Sunday. After that, chart is released on Friday
     if (startDate <= dayChangeMilestone) {
         dayReleased = SundayIndex;
     }

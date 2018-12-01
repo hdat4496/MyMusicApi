@@ -258,12 +258,12 @@ paths:
       parameters:
         - name: startDate
           in: query
-          description: start date MM/dd/yyyy
+          description: start date yyyy-MM-dd
           required: true
           type: string
         - name: endDate
           in: query
-          description: end date MM/dd/yyyy
+          description: end date yyyy-MM-dd
           type: string
           required: true
         - name: genreType
@@ -288,11 +288,11 @@ paths:
       parameters:
         - name: startDate
           in: query
-          description: start date MM/dd/yyyy
+          description: start date yyyy-MM-dd
           type: string
         - name: endDate
           in: query
-          description: end date MM/dd/yyyy
+          description: end date yyyy-MM-dd
           type: string
         - name: genreType
           in: query
@@ -315,11 +315,11 @@ paths:
       parameters:
         - name: startDate
           in: query
-          description: start date MM/dd/yyyy
+          description: start date yyyy-MM-dd
           type: string
         - name: endDate
           in: query
-          description: end date MM/dd/yyyy
+          description: end date yyyy-MM-dd
           type: string
         - name: genreType
           in: query
