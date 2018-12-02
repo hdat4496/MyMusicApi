@@ -739,7 +739,7 @@ async function getTrackInfo(trackId) {
         .then(async function () {
             console.log("Get track infor from API");
             trackInfo = await getTrackInfoFromAPI(trackId);
-            console.log("Track", trackInfo);
+            //console.log("Track", trackInfo);
             if (trackInfo[id] != undefined) {
                 trackInfo[like] = 0;
                 trackInfo[listen] = 0;
@@ -755,6 +755,10 @@ async function getTrackInfo(trackId) {
         .catch(async function () {
             trackInfo = await getTrackInfoFromDatabase(trackId);
         });
+    if (trackInfo != undefined) {
+        updateTrackListen(trackId);
+        trackInfo[listen] = parseInt(trackInfo[listen]) +1 ;
+    }
     return trackInfo;
 }
 // Get track info from API
@@ -868,7 +872,7 @@ function getTrackGeneralInfo(trackId) {
 function getTrackInfoExtra(trackId, infoType) {
     return new Promise((resolve, reject) => {
         get(`track.${trackId}.${infoType}`, (err, value) => {
-            if (err) {
+            if (!err) {
                 resolve(value);
             }
             else {
@@ -881,7 +885,7 @@ const recommendTrackNumber = 5;
 // get recommend track from Spotify API
 async function getRecommendTrack(trackId) {
     var recommendTracks = [];
-    console.log('Get recommend track:', trackId);
+    //console.log('Get recommend track:', trackId);
     await spotifyApi.getRecommendations({ limit: recommendTrackNumber, seed_tracks: [trackId] })
         .then(async function (data) {
             //console.log('Get recommend tracks success:', data.body);
@@ -1086,4 +1090,11 @@ async function getTrackOfArtistFromAPI(artistId) {
     );
     return trackList;
 
+}
+
+async function updateTrackListen(trackId) {
+    var currentlisten = await getTrackInfoExtra(trackId, listen);
+    var value = parseInt(currentlisten) + 1;
+    console.log("update listen:", value);
+    putSync(`track.${trackId}.listen`, parseInt(value));
 }

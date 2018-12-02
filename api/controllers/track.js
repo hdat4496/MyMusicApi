@@ -133,7 +133,7 @@ function getTrack(req, res) {
     var trackId = req.swagger.params.id.value;
     getTrackDetail(trackId)
         .then(function (track) {
-            console.log("Get track", track);
+            //console.log("Get track", track);
             res.json({ status: 200, value: track });
         })
         .catch(e => {

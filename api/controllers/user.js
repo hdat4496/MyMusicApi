@@ -127,25 +127,21 @@ function getFavoriteSong(req, res) {
     if (check.isValid && !check.isExpired) {
         var idList = [];
         var resultList = [];
-        get(`user.${check.user}.favorite`, (err, value) => {
+        get(`user.${check.user}.favorite`, async(err, value) => {
             if (!err) {
                 if (value != '') {
                     idList = value.split(";");
-                    idList.map(async (trackId) => {
+                    for (var trackId of idList) {
                         var track = await getTrackInfoFromDatabase(trackId);
                         if (track != undefined) {
                             resultList.push(track);
                         }
-                        if (resultList.length === ids.length) {
-                            res.json({ status: 200, resultList });
-                        }
-                    });
+                    }
+                    res.json({ status: 200, resultList });
+                    
                 }
                 else {
-                    res.json({
-                        status: 200,
-                        listTrackInfo: resultList
-                    });
+                    res.json({ status: 200, resultList });
                 }
             } else {
                 res.json({ status: 404, message: 'Favorite songs not found' });
