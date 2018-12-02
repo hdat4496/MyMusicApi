@@ -47,6 +47,9 @@ function searchArtist(req, res) {
                     if (artist != undefined) {
                         artist_ls.push(artist);
                     }
+                    if (artist_ls.length == 10) {
+                        break;
+                    }
                 }
             }
             res.json({ status: 200, value: artist_ls });

@@ -952,7 +952,7 @@ function convertDataApiToTrackList(tracksData) {
 async function searchArtistFromAPI(name) {
     //console.log('search artist from API: ', name);
     var artistList = [];
-    await spotifyApi.searchArtists(name).then(
+    await spotifyApi.searchArtists(name,{limit:10}).then(
         async function (data) {
             //console.log(data.body.artists);
             var total = data.body.artists.total;
