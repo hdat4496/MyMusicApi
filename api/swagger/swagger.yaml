@@ -158,6 +158,36 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
+  /user/put-favorite:
+    x-swagger-router-controller: user
+    get:
+      description: Update favorite song
+      operationId: putFavoriteSong
+      parameters:
+        - name: token
+          in: query
+          description: Token
+          required: true
+          type: string
+        - name: trackid
+          in: query
+          description: track id
+          required: true
+          type: string
+        - name: like
+          in: query
+          description: like or unlike
+          required: true
+          type: boolean
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
   /track/search:
     x-swagger-router-controller: track
     get:

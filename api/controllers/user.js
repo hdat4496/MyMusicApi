@@ -10,19 +10,14 @@ module.exports = {
     signup: signUp,
     test: test,
     getFavoriteSong: getFavoriteSong,
-    checkFavoriteSong: checkFavoriteSong
+    checkFavoriteSong: checkFavoriteSong,
+    putFavoriteSong: putFavoriteSong
 
 };
 function test(req, res) {
     var key = req.swagger.params.key.value;
     get(`${key}`, (err, value) => {
         if (!err) {
-            // let abc = JSON.parse(value);
-            // console.log(abc);
-            // for (var k in abc){
-            //     console.log(k);
-            //     console.log(abc[k])
-            // }
             res.json({ status: 200, message: value });
         }
         else {
@@ -37,13 +32,13 @@ function test(req, res) {
     //         for (var k in name_ls) {
     //             ids.push(k);
     //         }
-        
+
     //         for (var id of ids) {
     //             get(`artist.${id}.genre`, (err, value) => {
     //                 if (!err) {
     //                     console.log(id, value);
     //                 }
-  
+
     //             });
     //         }
     //         console.log("number artist: ",ids.length );
@@ -53,7 +48,7 @@ function test(req, res) {
     //     }
     // });
 
-    
+
     // putSync(`track.lated`, '61UQzeiIluhpzpMdY4ag3q,2V65y3PX4DkRhy1djlxd9p;24LS4lQShWyixJ0ZrJXfJ5;3uGDAwRPcOu6tHuKUjk02H;61gnmKsVhB4TuSJWZzjI3N;6i8w8Zdud22ehgJrrzqIVi;412luShbmlgqqgYFStIB1s;3zU9rdflI65tK4dkkNSp77');
 }
 
@@ -194,36 +189,47 @@ function checkFavoriteSong(req, res) {
     }
 }
 
-// function putFavoriteSong(req, res) {
-//     var token = req.swagger.params.token.value;
-//     var trackId = req.swagger.params.trackid.value;
-//     var like = req.swagger.params.like.value;
-//     var check = checkToken(token);
-//     if (check.isValid && !check.isExpired) {
-//         var idList = [];
-//         get(`user.${check.user}.favorite`, (err, value) => {
-//             if (!err) {
-//                 if (like == true) {
-//                     var trackList = (value != '') ? value + ";" + trackId : trackId;
-//                     putSync(`user.${check.user}.favorite`,trackList);
-//                     res.json({ status: 200, value: "Update like success" });
-//                 }
-//                 if (like == false) {
-//                     idList = value.split(";");
-//                     var index = idList.indexOf(trackId);
-//                     if (index != -1) {
+function putFavoriteSong(req, res) {
+    var token = req.swagger.params.token.value;
+    var trackId = req.swagger.params.trackid.value;
+    var like = req.swagger.params.like.value;
+    var check = checkToken(token);
+    if (check.isValid && !check.isExpired) {
+        var idList = [];
+        get(`user.${check.user}.favorite`, (err, value) => {
+            if (!err) {
+                if (like) {
+                    var trackList = (value != '') ? `${value};${trackId}` : trackId;
+                    putSync(`user.${check.user}.favorite`, trackList);
+                    get(`track.${trackId}.like`, (err, value) => {
+                        if (!err) {
+                            putSync(`track.${trackId}.like`, parseInt(value)+1);
+                            res.json({ status: 200, value: "Update like success" });
+                         }
+                    });
+                }
+                else {
+                    idList = value.split(";");
+                    var index = idList.indexOf(trackId);
+                    if (index != -1) {
+                        idList.splice(index);                       
+                    }
+                    var trackList = idList.join(";");
 
-//                     }
-//                     var trackList = (value != '') ? value + ";" + trackId : trackId;
-//                     putSync(`user.${check.user}.favorite`,trackList);
-//                     res.json({ status: 200, value: "Update unlike success" });
-//                 }
-//             } else {
-//                 res.json({ status: 200, value: false });
-//             }
-//         });
-//     }
-//     else {
-//         res.json({ status: 400, message: 'Token is invalid or expired' });
-//     }
-// }
+                    putSync(`user.${check.user}.favorite`, trackList);
+                    get(`track.${trackId}.like`, (err, value) => {
+                        if (!err) {
+                            putSync(`track.${trackId}.like`, parseInt(value)-1);
+                            res.json({ status: 200, value: "Update like success" });
+                         }
+                    });
+                }
+            } else {
+                res.json({ status: 200, value: false });
+            }
+        });
+    }
+    else {
+        res.json({ status: 400, message: 'Token is invalid or expired' });
+    }
+}
