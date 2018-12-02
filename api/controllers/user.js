@@ -10,6 +10,7 @@ module.exports = {
     signup: signUp,
     test: test,
     getFavoriteSong: getFavoriteSong,
+    checkFavoriteSong: checkFavoriteSong
 
 };
 function test(req, res) {
@@ -58,7 +59,6 @@ function test(req, res) {
 
 
 function login(req, res) {
-    console.log()
     var username = req.swagger.params.user_info.value.user_info.username;
     var password = crypto.createHash('sha256').update(req.swagger.params.user_info.value.user_info.password).digest('base64');
     get(`user.${username}`, (err, value) => {
@@ -161,3 +161,69 @@ function getFavoriteSong(req, res) {
         res.json({ status: 400, message: 'Token is invalid or expired' });
     }
 }
+
+function checkFavoriteSong(req, res) {
+    var token = req.swagger.params.token.value;
+    var trackId = req.swagger.params.trackid.value;
+    var check = checkToken(token);
+    if (check.isValid && !check.isExpired) {
+        var idList = [];
+        get(`user.${check.user}.favorite`, (err, value) => {
+            if (!err) {
+                console.log(check.user, value);
+                if (value != '') {
+                    idList = value.split(";");
+                    var hasFavorite = idList.indexOf(trackId);
+                    if (hasFavorite == -1) {
+                        res.json({ status: 200, value: false });
+                    }
+                    else {
+                        res.json({ status: 200, value: true });
+                    }
+                }
+                else {
+                    res.json({ status: 200, value: false });
+                }
+            } else {
+                res.json({ status: 200, value: false });
+            }
+        });
+    }
+    else {
+        res.json({ status: 400, message: 'Token is invalid or expired' });
+    }
+}
+
+// function putFavoriteSong(req, res) {
+//     var token = req.swagger.params.token.value;
+//     var trackId = req.swagger.params.trackid.value;
+//     var like = req.swagger.params.like.value;
+//     var check = checkToken(token);
+//     if (check.isValid && !check.isExpired) {
+//         var idList = [];
+//         get(`user.${check.user}.favorite`, (err, value) => {
+//             if (!err) {
+//                 if (like == true) {
+//                     var trackList = (value != '') ? value + ";" + trackId : trackId;
+//                     putSync(`user.${check.user}.favorite`,trackList);
+//                     res.json({ status: 200, value: "Update like success" });
+//                 }
+//                 if (like == false) {
+//                     idList = value.split(";");
+//                     var index = idList.indexOf(trackId);
+//                     if (index != -1) {
+
+//                     }
+//                     var trackList = (value != '') ? value + ";" + trackId : trackId;
+//                     putSync(`user.${check.user}.favorite`,trackList);
+//                     res.json({ status: 200, value: "Update unlike success" });
+//                 }
+//             } else {
+//                 res.json({ status: 200, value: false });
+//             }
+//         });
+//     }
+//     else {
+//         res.json({ status: 400, message: 'Token is invalid or expired' });
+//     }
+// }

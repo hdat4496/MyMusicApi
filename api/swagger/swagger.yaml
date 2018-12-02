@@ -132,6 +132,31 @@ paths:
         default:
           description: Error
           schema:
+            $ref: "#/definitions/Response"         
+  /user/check-favorite:
+    x-swagger-router-controller: user
+    get:
+      description: Check if user like track
+      operationId: checkFavoriteSong
+      parameters:
+        - name: token
+          in: query
+          description: Token
+          required: true
+          type: string
+        - name: trackid
+          in: query
+          description: track id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
             $ref: "#/definitions/Response"
   /track/search:
     x-swagger-router-controller: track
