@@ -131,7 +131,7 @@ async function checkHasTrackAnalysis(trackId) {
         });
     });
 }
-
+const genreType = 1;
 async function getTrackInforDataFromAPI(position, title, artist) {
     //console.log('Search track: ', title, artist);
     var track = new Object;
@@ -996,11 +996,14 @@ async function getArtistInfo(artistId) {
         console.log("Get artist info from api", artistId);
         artistInfo = await getArtistFromAPI(artistId);
     }
-    if (artistInfo != undefined) {
-        artist.info = artistInfo;
-        artistTracks = await getTrackOfArtist(artistId);
-        artist.tracks = (artistTracks == undefined) ? [] : artistTracks;
+
+    if (artistInfo == undefined) {
+        return;
     }
+    artist.info = artistInfo;
+    artistTracks = await getTrackOfArtist(artistId);
+    artist.tracks = (artistTracks == undefined) ? [] : artistTracks;
+    
     return artist;
 }
 
