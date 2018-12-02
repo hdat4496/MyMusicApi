@@ -94,6 +94,9 @@ function searchTrack(req, res) {
                     if (track != undefined) {
                         track_ls.push(track);
                     }
+                    if (track_ls.length == 10) {
+                        break;
+                    }
                 }
             }
             res.json({ status: 200, value: track_ls });
@@ -107,9 +110,13 @@ function searchTrack(req, res) {
 function searchTrackAPI(req, res) {
     var title = req.swagger.params.title.value;
     title = title.trim();
-    var key = 'track:' + title;
+    var key = 'track:' + title +' limit:10';
+    // var key = {
+    //     track: title,
+    //     limit: 10
+    // }
     console.log("search track title from api", key);
-    searchTrackFromAPI(key)
+    searchTrackFromAPI(title)
         .then(function (trackList) {
             //console.log("Search track title from api", trackList);
             res.json({ status: 200, value: trackList });
@@ -123,13 +130,8 @@ function getTrack(req, res) {
     var trackId = req.swagger.params.id.value;
     getTrackDetail(trackId)
         .then(function (track) {
-            if (track == undefined) {
-                res.json({ status: 404, value: "get track error" });
-            }
-            else {
-                console.log("Get track", track);
-                res.json({ status: 200, value: track });
-            }
+            console.log("Get track", track);
+            res.json({ status: 200, value: track });
         })
         .catch(e => {
             res.json({ status: 400, value: e });

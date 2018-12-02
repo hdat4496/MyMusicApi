@@ -902,6 +902,9 @@ async function searchTrackFromAPI(key) {
                 return trackList;
             }
             trackList = convertDataApiToTrackList(data.body.tracks.items);
+            if (trackList.length > 10) {
+                trackList = trackList.slice(0,10);
+            }  
         },
         function (err) {
             console.log('Search track from api fail', key, err);
@@ -923,7 +926,24 @@ function convertDataApiToTrackList(tracksData) {
         track.id = trackInfo.id;
         track.title = trackInfo.name;
         track.artist = artistNames.join(" ft ");
+        track.artist_imageurl = "";
+        track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
+        track.track_preview_url = trackInfo.preview_url;
         track.track_imageurl = trackImageUrl;
+        track.genre = '';
+        track.genre_imageurl = '';
+
+        // var trackImageUrl = (trackInfo.album.images.length == 0) ? "" : trackInfo.album.images[0].url
+        // track.id = trackInfo.id;
+        // track.title = trackInfo.name;
+        // track.artist = artistInfo[0];
+        // track.artist_imageurl = artistInfo[1];
+        // track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
+        // track.track_preview_url = trackInfo.preview_url;
+        // track.track_imageurl = trackImageUrl;
+        // track.genre = '';
+        // track.genre_imageurl = '';
+
         trackList.push(track);
     }
     return trackList;
