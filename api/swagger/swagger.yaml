@@ -430,6 +430,25 @@ paths:
         default:
           description: Error
           schema:
+            $ref: "#/definitions/Response"   
+  /model/build-genre-model:
+    x-swagger-router-controller: model
+    get:
+      description: build genre classification model
+      operationId: buildGenreModel
+      parameters:
+        - name: key
+          in: query
+          description: key
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
             $ref: "#/definitions/Response"        
 # complex objects have schema definitions
 definitions:

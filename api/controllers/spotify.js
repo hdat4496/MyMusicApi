@@ -40,23 +40,18 @@ spotifyApi.clientCredentialsGrant().then(
     }
 );
 
-// async function authenticateSpotify() {
-//     // Set necessary parts of the credentials on the constructor
-//     spotifyApi = new SpotifyWebApi({
-//         clientId: '9858429e40ac4516838c142ae439f27b',
-//         clientSecret: '0f0eadd372d94b19ab7c98f5d910fe4c'
-//     });
-//     // Get an access token and 'save' it using a setter
-//     await spotifyApi.clientCredentialsGrant().then(
-//         function (data) {
-//             console.log('The access token is ' + data.body['access_token']);
-//             spotifyApi.setAccessToken(data.body['access_token']);
-//         },
-//         function (err) {
-//             console.log('Something went wrong!', err);
-//         }
-//     );
-// }
+async function authenticateSpotify() {
+    // Get an access token and 'save' it using a setter
+    await spotifyApi.clientCredentialsGrant().then(
+        function (data) {
+            console.log('The access token is ' + data.body['access_token']);
+            spotifyApi.setAccessToken(data.body['access_token']);
+        },
+        function (err) {
+            console.log('Something went wrong!', err);
+        }
+    );
+}
 
 async function putTrackData(tracks) {
     var trackInfoList = await getTrackInfoWhenCrawlData(tracks);
@@ -131,7 +126,7 @@ async function checkHasTrackAnalysis(trackId) {
         });
     });
 }
-const genreType = 1;
+const genreType = 2;
 async function getTrackInforDataFromAPI(position, title, artist) {
     //console.log('Search track: ', title, artist);
     var track = new Object;
@@ -159,9 +154,11 @@ async function getTrackInforDataFromAPI(position, title, artist) {
             }
             return artistIds;
         },
-        function (err) {
+        async function (err) {
             console.log('Search fail', err);
-            //getTrackInforDataFromAPI(position, title, artist);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         }
     )
         .then(async function (artistIds) {
@@ -179,8 +176,9 @@ async function getTrackInforDataFromAPI(position, title, artist) {
             track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
             track.track_preview_url = trackInfo.preview_url;
             track.track_imageurl = trackImageUrl;
-            track.genre = '';
+            track.genre = genreType;
             track.genre_imageurl = '';
+
             //console.log("Put track info ", track.id);
             putTrackInfo(track);
         })
@@ -221,8 +219,11 @@ async function fetchArtist(artistIds, trackId) {
             }
             artistResult.push(artistNames.join(" ft "));
             artistResult.push((artistImageUrl == undefined) ? "" : artistImageUrl);
-        }, function (err) {
+        }, async function (err) {
             console.error('Get artist error:', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         });
     return artistResult;
 }
@@ -251,8 +252,11 @@ function getAudioFeaturesAPI(trackIds) {
             for (var trackFeature of result) {
                 putTrackAudioFeature(trackFeature);
             }
-        }, function (err) {
+        }, async function (err) {
             console.error('Get audio feature list of track error:', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         });
 }
 
@@ -673,8 +677,11 @@ async function getTrackAudioFeaturesFromAPI(trackId) {
             audioFeaturesValue = audioFeatures.speechiness + ';' + audioFeatures.acousticness + ';' + audioFeatures.instrumentalness + ';'
                 + audioFeatures.liveness + ';' + audioFeatures.valence + ';' + audioFeatures.duration_ms + ';' + audioFeatures.tempo + ';' + audioFeatures.time_signature + ';'
                 + audioFeatures.mode + ';' + audioFeatures.key + ';' + audioFeatures.loudness + ';' + audioFeatures.danceability + ';' + audioFeatures.energy;
-        }, function (err) {
+        }, async function (err) {
             console.error('Get audio feature one track error', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         });
     return audioFeaturesValue;
 }
@@ -782,8 +789,11 @@ async function getTrackInfoFromAPI(trackId) {
             }
             return artistIds;
         },
-        function (err) {
+        async function (err) {
             console.log('Get track fail', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         }
     )
         .then(async function (artistIds) {
@@ -892,6 +902,9 @@ async function getRecommendTrack(trackId) {
             recommendTracks = convertDataApiToTrackList(data.body.tracks);
         }, async function (err) {
             console.error('Get recommend tracks error', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         });
     //console.log(recommendTracks);
     return recommendTracks;
@@ -910,8 +923,11 @@ async function searchTrackFromAPI(key) {
                 trackList = trackList.slice(0,10);
             }  
         },
-        function (err) {
+        async function (err) {
             console.log('Search track from api fail', key, err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         }
     );
     return trackList;
@@ -969,15 +985,19 @@ async function searchArtistFromAPI(name) {
                 artistList.push(artist);
             }
         },
-        function (err) {
+        async function (err) {
             console.log('Search artist from api fail', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         }
     );
     return artistList;
 }
 
-function convertDataApiToArtist(artistInfo) {
-    var imageUrl = (artistInfo.images.length == 0) ? "" : artistInfo.images[0].url;;
+function convertDataApiToArtist(artistInfo) 
+{
+    var imageUrl = (artistInfo.images.length == 0) ? "" : artistInfo.images[0].url;
     var genreList = artistInfo.genres;
     var genre = (genreList.length == 0) ? '' : genreList.join(";");
     var artist = new Object;
@@ -1015,8 +1035,11 @@ async function getArtistFromAPI(artistId) {
             var artistsData = data.body;
             artist = convertDataApiToArtist(artistsData);
         },
-        function (err) {
+        async function (err) {
             console.log('Search artist from api fail', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         }
     );
     return artist;
@@ -1087,8 +1110,11 @@ async function getTrackOfArtistFromAPI(artistId) {
             var trackData = data.body.tracks;
             trackList = convertDataApiToTrackList(trackData);
         },
-        function (err) {
+        async function (err) {
             console.log('Get top track artist from api fail', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+            }
         }
     );
     return trackList;

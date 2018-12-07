@@ -28,7 +28,7 @@ function convertDate(date) {
     var day = stringArray[0];
     var month = stringArray[1].toLowerCase();
     var year = stringArray[2];
-    var monthArray = ['january', 'february', 'farch', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+    var monthArray = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
     for (var i = 0; i < monthArray.length; i++) {
         if (month === monthArray[i]) {
             month = i + 1;

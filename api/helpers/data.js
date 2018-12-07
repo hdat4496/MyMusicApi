@@ -84,10 +84,10 @@ function runData() {
     putSync('user.hoanghtk.favorite', '');
 
 
-    putSync('user.toanhad', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
-    putSync('user.toanhad.fullname', 'Anh Toàn');
-    putSync('user.toanhad.playlist', '');
-    putSync('user.toanhad.favorite', '');
+    putSync('user.toanhda', 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=');
+    putSync('user.toanhda.fullname', 'Anh Toàn');
+    putSync('user.toanhda.playlist', '');
+    putSync('user.toanhda.favorite', '');
     
 }
 

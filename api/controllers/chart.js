@@ -274,7 +274,7 @@ function getChartReport(req, res) {
             res.json({ status: 404, value: e });
         });
 }
-const daysIntervalReport = 60;
+const daysIntervalReport = 365;
 function getChartReportHomePage(req, res) {
     var endDate = new Date();
     var now = new Date();

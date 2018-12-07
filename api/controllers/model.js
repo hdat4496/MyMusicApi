@@ -2,7 +2,7 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset } = require('../controllers/spotify');
+const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset, getTrackAudioFeatures, getTrackGeneralInfo } = require('../controllers/spotify');
 //const { getTrackListForChart } = require('../controllers/chart');
 const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString } = require('../helpers/utils');
 
@@ -17,7 +17,8 @@ module.exports = {
     saveArffData: saveArffData,
     predict: predict,
     predictModel: predictModel,
-    putDistinctKeyToObject: putDistinctKeyToObject
+    putDistinctKeyToObject: putDistinctKeyToObject,
+    buildGenreModel: buildGenreModel
 };
 
 
@@ -33,7 +34,17 @@ const pathArff = 'api/public/arff/';
 const arffType = ".arff";
 const pathModel = 'api/public/model/';
 const modelType = ".model";
-var classifier = {
+var BayesClassifier = {
+    'classifier': 'weka.classifiers.bayes.NaiveBayes',
+    'params': ''
+};
+
+var LogisticClassifier = {
+    'classifier': 'weka.classifiers.functions.Logistic',
+    'params': ''
+};
+
+var BayesClassifier = {
     'classifier': 'weka.classifiers.bayes.NaiveBayes',
     'params': ''
 };
@@ -46,7 +57,7 @@ async function createModel(startDate, endDate, genreType) {
     createArff(data, filenameData);
     var modelName = pathModel + filename + modelType;
     console.log("model name" + modelName);
-    weka.classify(filenameData, modelName, classifier, function (err, result) {
+    weka.classify(filenameData, modelName, BayesClassifier, function (err, result) {
         if (err) {
             console.log("Build model error" + err);
         }
@@ -63,7 +74,8 @@ function createArff(data, filename) {
     for (var attributeName of attributeList) {
         arff.addNumericAttribute(attributeName);
     }
-    arff.addNominalAttribute("hit", ["hit", "non-hit"]);
+    //arff.addNominalAttribute("hit", ["hit", "non-hit", "potential"]);
+    arff.addNumericAttribute("position");
     for (var row of data) {
         arff.addData(row);
     }
@@ -77,7 +89,7 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
         console.log("Get chart distinct track list error");
     }
     console.log("Chart distinct track list:", Object.keys(trackListObject).length);
-    trackListObject = labelTrackList(trackListObject);
+    //trackListObject = labelTrackList(trackListObject);
     console.log("Labeled track list:", Object.keys(trackListObject).length);
     var data = [];
     for (var trackId of Object.keys(trackListObject)) {
@@ -86,6 +98,11 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
         if (track == undefined) {
             continue;
         }
+        // track = await getTrackAudioFeatures(trackId);
+        // if (track == undefined) {
+        //     continue;
+        // }
+        // track = convertAudioFeatures(track);
         track.hit = trackListObject[trackId];
         data.push(track);
     }
@@ -93,14 +110,19 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
     return data;
 }
 
+
+
 const hitIndex = 10;
-const nonhitIndex = 30;
+const nonhitIndex = 20;
 function labelTrackList(trackList) {
     var newTrackList = new Object;
     for (var trackId of Object.keys(trackList)) {
         var position = trackList[trackId];
         if (position <= hitIndex) {
             newTrackList[trackId] = 'hit';
+        }
+        if (hitIndex < position  && position < nonhitIndex) {
+            newTrackList[trackId] = 'potential';
         }
         if (nonhitIndex <= position) {
             newTrackList[trackId] = 'non-hit';
@@ -196,7 +218,28 @@ async function predictModel(trackid) {
     var trackData = [];
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
-    var result = await predictTrack(modelName, fileNameTest, classifier);
+    var result = await predictTrack(modelName, fileNameTest, BayesClassifier);
+    return result;
+}
+var fileNameGenreTest = 'api/public/arff/genre_test.arff';
+async function predictGenre(trackid) {
+    //  var genreType = await getGenreType(trackid);
+    var modelName = await getModelName("genre");
+    if (modelName == undefined ) {
+        console.log("Genre model is not found");
+        return;
+    }
+    var trackFeatures;
+    trackFeatures = await getTrackAudioFeatures(trackId);
+        if (trackFeatures == undefined) {
+            continue;
+        }
+        trackFeatures = convertAudioFeatures(track);
+    trackFeatures.genre ='?';
+    var trackData = [];
+    trackData.push(trackFeatures);
+    await createArffGenreClassification(trackData, fileNameGenreTest);
+    var result = await predictTrack(modelName, fileNameGenreTest, LogisticClassifier);
     return result;
 }
 
@@ -268,3 +311,127 @@ async function getTrackListForChart(date, genreType) {
         });
     });
 }
+
+function buildGenreModel() {
+    createModelClassifyGenre();
+}
+
+async function createModelClassifyGenre() {
+    var data = await getDataForBuildModelClassifyGenre();
+    var filename = 'genre_classification';
+    var filenameData = pathArff + filename + arffType;
+    console.log("file name data" + filenameData);
+    createArffGenreClassification(data, filenameData);
+    var modelName = pathModel + filename + modelType;
+    console.log("model name:  " + modelName);
+
+    weka.classify(filenameData, modelName, LogisticClassifier, function (err, result) {
+        if (err) {
+            console.log("Build genre model error" + err);
+        }
+        else {
+            console.log("Build genre model success" + result);
+            putSync(`model.genre`, modelName);
+        }
+    });
+}
+
+async function getDataForBuildModelClassifyGenre() {
+    var trackList = await getAllTrack();
+    if (trackList == undefined) {
+        console.log("Get all track error");
+    }
+    console.log("Chart all track list:", trackList.length);
+    var data = [];
+    for (var trackId of trackList) {
+        var track;
+        var info = await getTrackGeneralInfo(trackId);
+        if (info == undefined) {
+            continue;
+        }
+        if (info.genre != 1 && info.genre != 2 && info.genre != 3) {
+            continue;
+        }
+        track = await getTrackAudioFeatures(trackId);
+        if (track == undefined) {
+            continue;
+        }
+        track = convertAudioFeatures(track);
+        track.genre = info.genre;
+        data.push(track);
+    }
+    console.log("Data list:", data.length);
+    return data;
+}
+
+function getAllTrack() {
+    return new Promise((resolve, reject) => {
+        get(`track.all`, (err, value) => {
+            if (!err) {
+                var object = JSON.parse(value);
+                var ids = [];
+                for (var k in object) {
+                    ids.push(k);
+                }
+                resolve(ids);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
+}
+
+function createArffGenreClassification(data, filename) {
+    var arff = new Arff.ArffWriter(filename, Arff.MODE_OBJECT);
+    for (var attributeName of audioFeatureList) {
+        arff.addNumericAttribute(attributeName);
+    }
+    arff.addNominalAttribute("genre", [1, 2,3]);
+    for (var row of data) {
+        arff.addData(row);
+    }
+    arff.writeToFile(filename);
+    console.log("Write arff file: ", filename);
+}
+
+function convertAudioFeatures(featuresString) {
+    if (featuresString == undefined) {
+        return;
+    }
+    var features = featuresString.split(";");
+    if (features.length < 13) {
+        return;
+    }
+    var featureObject = new Object;
+    featureObject.speechiness = parseFloat(features[0]);
+    featureObject.acousticness = parseFloat(features[1]);
+    featureObject.instrumentalness = parseFloat(features[2]);
+    featureObject.liveness = parseFloat(features[3]);
+    featureObject.valence = parseFloat(features[4]);
+    featureObject.duration_ms = parseFloat(features[5]);
+    featureObject.tempo = parseFloat(features[6]);
+    featureObject.time_signature = features[7];
+    featureObject.mode = features[8];
+    featureObject.key = features[9];
+    featureObject.loudness = parseFloat(features[10]);
+    featureObject.danceability = parseFloat(features[11]);
+    featureObject.energy = parseFloat(features[12]);
+    //console.log("Feature object", featureObject);
+    return featureObject;
+}
+// used for get random audio feature chart for home page
+const audioFeatureList = ['speechiness',
+    'acousticness',
+    'instrumentalness',
+    'liveness',
+    'valence',
+    'duration_ms',
+    'tempo',
+    'time_signature',
+    'mode',
+    'key',
+    'loudness',
+    'danceability',
+    'energy'];
+
