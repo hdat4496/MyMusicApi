@@ -171,7 +171,7 @@ function calculateChartFeatures(trackFeaturesList) {
 }
 
 async function getTrackListForChart(date, genreType) {
-    console.log("Start Get track list for chart", date, genreType);
+    //console.log("Start Get track list for chart", date, genreType);
     return new Promise((resolve, reject) => {
         console.log("Get track list for chart", date, genreType);
         var chartTracks = new Object;
@@ -293,7 +293,7 @@ function getChartReportHomePage(req, res) {
                 result.genreName = getGenreName(genreType);
                 result.featureName = getFeatureName(featureType);
                 result.data = analysisObject;
-                console.log(result);
+                //console.log(result);
                 res.json({ status: 200, value: result });
             }
         })

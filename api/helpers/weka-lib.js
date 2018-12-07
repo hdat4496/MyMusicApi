@@ -238,8 +238,6 @@
    * @param cb Callback function
    */
   exports.classify = function (data, model, options, cb) {
-    console.log('sdhfs');
-
     async.waterfall([
       function (callback) {
         child = exec('java -classpath api/public/weka.jar ' + options.classifier + ' '

@@ -74,13 +74,13 @@ function createArff(data, filename) {
     for (var attributeName of attributeList) {
         arff.addNumericAttribute(attributeName);
     }
-    //arff.addNominalAttribute("hit", ["hit", "non-hit", "potential"]);
-    arff.addNumericAttribute("position");
+    arff.addNominalAttribute("hit", ["hit", "non-hit"]);
+    //arff.addNumericAttribute("position");
     for (var row of data) {
         arff.addData(row);
     }
     arff.writeToFile(filename);
-    console.log("Write arff file: ", filename);
+    //console.log("Write arff file: ", filename);
 }
 
 async function getDataForBuildModel(startDate, endDate, genreType) {
@@ -88,9 +88,9 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
     if (trackListObject == undefined) {
         console.log("Get chart distinct track list error");
     }
-    console.log("Chart distinct track list:", Object.keys(trackListObject).length);
-    //trackListObject = labelTrackList(trackListObject);
-    console.log("Labeled track list:", Object.keys(trackListObject).length);
+    //console.log("Chart distinct track list:", Object.keys(trackListObject).length);
+    trackListObject = labelTrackList(trackListObject);
+    //console.log("Labeled track list:", Object.keys(trackListObject).length);
     var data = [];
     for (var trackId of Object.keys(trackListObject)) {
         var track = new Object;
@@ -113,7 +113,7 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
 
 
 const hitIndex = 10;
-const nonhitIndex = 20;
+const nonhitIndex = 30;
 function labelTrackList(trackList) {
     var newTrackList = new Object;
     for (var trackId of Object.keys(trackList)) {
@@ -121,9 +121,9 @@ function labelTrackList(trackList) {
         if (position <= hitIndex) {
             newTrackList[trackId] = 'hit';
         }
-        if (hitIndex < position  && position < nonhitIndex) {
-            newTrackList[trackId] = 'potential';
-        }
+        // if (hitIndex < position  && position < nonhitIndex) {
+        //     newTrackList[trackId] = 'potential';
+        // }
         if (nonhitIndex <= position) {
             newTrackList[trackId] = 'non-hit';
         }
@@ -136,9 +136,9 @@ async function getChartDistinctTrackList(startDate, endDate, genreType) {
     var distinctTracks = new Object;
     for (var date of dateList) {
         var date_str = date.day + date.month + date.year;
-        console.log("Chart tracks", date_str, genreType);
+        //console.log("Chart tracks", date_str, genreType);
         var chartTracks = await getTrackListForChart(date_str, genreType);
-        console.log("Chart tracks", date_str, chartTracks);
+        //console.log("Chart tracks", date_str, chartTracks);
         if (chartTracks == undefined) {
             continue;
         }
@@ -150,7 +150,7 @@ async function getChartDistinctTrackList(startDate, endDate, genreType) {
 
 // Add distinct key from object2 to object1
 function putDistinctKeyToObject(object1, object2) {
-    console.log('put dinstinct key');
+    //console.log('put dinstinct key');
     for (var key of Object.keys(object2)) {
         // Object has no key
         if (object1[key] == undefined) {
@@ -288,7 +288,7 @@ function getModelName(genreType) {
 }
 
 async function getTrackListForChart(date, genreType) {
-    console.log("Start Get track list for chart", date, genreType);
+    //console.log("Start Get track list for chart", date, genreType);
     return new Promise((resolve, reject) => {
         console.log("Get track list for chart", date, genreType);
         var chartTracks = new Object;

@@ -67,7 +67,7 @@ function searchArtistAPI(req, res) {
         res.json({ status: 404, value: "Key search is empty" });
         return;
     }
-    console.log("search artist from API", name);
+    //console.log("search artist from API", name);
     searchArtistFromAPI(name)
         .then(function (artistList) {
             res.json({ status: 200, value: artistList });
@@ -114,11 +114,7 @@ function searchTrackAPI(req, res) {
     var title = req.swagger.params.title.value;
     title = title.trim();
     var key = 'track:' + title +' limit:10';
-    // var key = {
-    //     track: title,
-    //     limit: 10
-    // }
-    console.log("search track title from api", key);
+    //console.log("search track title from api", key);
     searchTrackFromAPI(title)
         .then(function (trackList) {
             //console.log("Search track title from api", trackList);
@@ -197,12 +193,12 @@ function getNewTrack() {
                 newTrackIndexes.push(index);
             }
         }
-        console.log("New Track indexs: ", newTrackIndexes);
+        //("New Track indexs: ", newTrackIndexes);
         var selectedTrackIds = [];
         for (var index of newTrackIndexes) {
             selectedTrackIds.push(trackIds[index]);
         }
-        console.log("New Track ids: ", selectedTrackIds);
+        //console.log("New Track ids: ", selectedTrackIds);
         var trackGeneralInfoList = [];
         for (var trackId of selectedTrackIds) {
             var trackInfo = await getTrackGeneralInfo(trackId);
@@ -212,7 +208,7 @@ function getNewTrack() {
             }
             trackGeneralInfoList.push(trackInfo);
         }
-        console.log("New Track info: ", trackGeneralInfoList);
+        //console.log("New Track info: ", trackGeneralInfoList);
         resolve(trackGeneralInfoList);
     });
 }
@@ -256,7 +252,7 @@ function convertAudioFeatures(featuresString) {
     featureObject.loudness = parseFloat(features[10]);
     featureObject.danceability = parseFloat(features[11]);
     featureObject.energy = parseFloat(features[12]);
-    console.log("Feature object", featureObject);
+    //console.log("Feature object", featureObject);
     return featureObject;
 }
 const minorMode = 'minor';
