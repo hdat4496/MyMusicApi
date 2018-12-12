@@ -248,7 +248,7 @@ function getChartReport(req, res) {
     var genreType = req.swagger.params.genreType.value;
     var userSelect = req.swagger.params.userSelect.value;
     if (userSelect == true) {
-        if (startDate == undefined || endDate == undefined || genreType == undefined){
+        if (startDate == undefined || endDate == undefined || genreType == undefined) {
             res.json({ status: 400, value: "You should select all start date, end date and genre!" });
             return;
         }
@@ -259,7 +259,7 @@ function getChartReport(req, res) {
             return;
         }
     }
-    else{
+    else {
         endDate = new Date();
         var now = new Date();
         startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
@@ -283,12 +283,12 @@ function getChartReportHomePage(req, res) {
     var genreTypeList = getGenreTypeList();
     var genreType = genreTypeList[getRandomInt(0, genreTypeList.length - 1)];
     var featureTypeList = [];
-        while (featureTypeList.length < featureTypeNumber) {
-            var featureType = getRandomInt(0, audioFeatureList.length - 1);
-            if (featureTypeList.indexOf(featureType) == -1) {
-                featureTypeList.push(featureType);
-            }
+    while (featureTypeList.length < featureTypeNumber) {
+        var featureType = getRandomInt(0, audioFeatureList.length - 1);
+        if (featureTypeList.indexOf(featureType) == -1) {
+            featureTypeList.push(featureType);
         }
+    }
     console.log("get chart track for home page", startDate, endDate, genreType, featureTypeList);
     getReportHomePage(startDate, endDate, genreType, featureTypeList)
         .then(function (chartAnalysisList) {
@@ -415,7 +415,7 @@ function getReportHomePage(startDate, endDate, genreType, featureTypeList) {
             result[featureName] = convertChartObjectToList(result[featureName]);
             result[featureName]['featureName'] = featureName;
         }
-        
+
         resolve(result);
     });
 }

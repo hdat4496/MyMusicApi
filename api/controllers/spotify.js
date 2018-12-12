@@ -996,7 +996,7 @@ function convertDataApiToArtist(artistInfo)
 {
     var imageUrl = (artistInfo.images.length == 0) ? "" : artistInfo.images[0].url;
     var genreList = artistInfo.genres;
-    var genre = (genreList.length == 0) ? '' : genreList.join(";");
+    var genre = (genreList.length == 0) ? '' : genreList.join(" ,");
     var artist = new Object;
     artist.id = artistInfo.id;
     artist.name = artistInfo.name;
@@ -1054,7 +1054,13 @@ function getArtistFromDatabase(artistId) {
         var imageurl = await getArtistInfoByKey(artistId, "imageurl");
         artist.imageurl = (imageurl == undefined) ? "" : imageurl;
         var genre = await getArtistInfoByKey(artistId, "genre");
-        artist.genre = (genre == undefined) ? "" : genre;
+        if (genre == undefined || genre == '') {
+            artist.genre = ""
+        } else {
+            var genreList = genre.split(";");
+            artist.genre = genreList.join(" ,");
+        }
+       
         resolve(artist);
     });
 }
