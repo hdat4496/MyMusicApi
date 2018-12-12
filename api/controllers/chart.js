@@ -275,24 +275,31 @@ function getChartReport(req, res) {
         });
 }
 const daysIntervalReport = 365;
+const featureTypeNumber = 2;
 function getChartReportHomePage(req, res) {
     var endDate = new Date();
     var now = new Date();
     var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
     var genreTypeList = getGenreTypeList();
     var genreType = genreTypeList[getRandomInt(0, genreTypeList.length - 1)];
-    var featureType = getRandomInt(0, audioFeatureList.length - 1);
-    console.log("get chart track for home page", startDate, endDate, genreType, featureType);
-    getReportHomePage(startDate, endDate, genreType, featureType)
-        .then(function (analysisObject) {
-            if (analysisObject == undefined) {
+    var featureTypeList = [];
+        while (featureTypeList.length < featureTypeNumber) {
+            var featureType = getRandomInt(0, audioFeatureList.length - 1);
+            if (featureTypeList.indexOf(featureType) == -1) {
+                featureTypeList.push(featureType);
+            }
+        }
+    console.log("get chart track for home page", startDate, endDate, genreType, featureTypeList);
+    getReportHomePage(startDate, endDate, genreType, featureTypeList)
+        .then(function (chartAnalysisList) {
+            if (chartAnalysisList.length == 0) {
                 res.json({ status: 400, value: "get chart track for home page error" });
             }
             else {
                 var result = new Object;
                 result.genreName = getGenreName(genreType);
-                result.featureName = getFeatureName(featureType);
-                result.data = analysisObject;
+                //result.featureName = getFeatureName(featureType);
+                result.data = chartAnalysisList;
                 //console.log(result);
                 res.json({ status: 200, value: result });
             }
@@ -379,23 +386,37 @@ function getReport(startDate, endDate, genreType) {
     });
 }
 
-function getReportHomePage(startDate, endDate, genreType, featureType) {
+function getReportHomePage(startDate, endDate, genreType, featureTypeList) {
     return new Promise(async (resolve, reject) => {
         var dateList = getChartDateList(startDate, endDate);
-        var feature = new Object;
-        var featureName = getFeatureName(featureType);
-        
+        var result = new Object
+        var featureList = getFeatureNames(featureTypeList)
+        for (var featureName of featureList) {
+            result[featureName] = new Object;
+        }
+        var hasData = false;
         for (var date of dateList) {
             var date_str = date.day + date.month + date.year;
             var chartAnalysis = await getChartAnalysis(date_str, genreType);
             if (chartAnalysis == undefined) {
                 continue;
             }
+            hasData = true;
             var dateKey = date.day + '/' + date.month + '/' + date.year;
-            feature[dateKey] = parseFloat(chartAnalysis[featureName]);
+            for (var featureName of featureList) {
+                result[featureName][dateKey] = parseFloat(chartAnalysis[featureName]);
+            }
         }
-        feature = convertChartObjectToList(feature);
-        resolve(feature);
+
+        if (!hasData) {
+            resolve([])
+        }
+        for (var featureName of Object.keys(result)) {
+            result[featureName] = convertChartObjectToList(result[featureName]);
+            result[featureName]['featureName'] = featureName;
+        }
+        
+        resolve(result);
     });
 }
 const roundNumber = 4;
@@ -466,8 +487,12 @@ function convertChartObjectToList(chartAnalysisObject) {
     return chartAnalysis;
 }
 
-function getFeatureName(featureType) {
-    return audioFeatureList[featureType];
+function getFeatureNames(featureTypeList) {
+    var result = []
+    for (var featureType of featureTypeList) {
+        result.push(audioFeatureList[featureType])
+    }
+    return result;
 }
 const specialAudioFeatureList = [
     'time_signature',

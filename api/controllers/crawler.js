@@ -45,7 +45,8 @@ function crawl(req, res) {
                     var track = {
                         position: position,
                         title: title,
-                        artist: artist
+                        artist: artist,
+                        genre: genreType
                     }
                     tracks.push(track);
                 });
@@ -75,7 +76,7 @@ function normalizeTitle(title) {
         title = title.replace(title_re, " ");
     }
 
-    title = title.replace("'", "\\'")
+    title = title.replace("'", "")
 
     return title;
 }
