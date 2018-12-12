@@ -52,17 +52,19 @@ async function authenticateSpotify() {
         }
     );
 }
-
 async function putTrackData(tracks) {
     var trackInfoList = await getTrackInfoWhenCrawlData(tracks);
     var newTrackIds = [];
-    console.log("Number of track info: ", trackInfoList.length);
+    var searchTrackSuccess = [];
     for (var trackInfo of trackInfoList) {
         if (trackInfo.trackId != undefined && trackInfo.exist == false) {
             newTrackIds.push(trackInfo.trackId);
         }
+        if (trackInfo.trackId != undefined) {
+            searchTrackSuccess.push(trackInfo.trackId);
+        }
     }
-
+    console.log("Number of track info after search: ", searchTrackSuccess.length);
     console.log("Number of new track: ", newTrackIds.length);
 
     if (newTrackIds.length == 0) {
@@ -77,7 +79,7 @@ async function putTrackData(tracks) {
             getAudioAnalysisAPI(trackId);
         }
         else {
-            console.log("Track has analysis in database");
+            //console.log("Track has analysis in database");
         }
     }
 
@@ -88,7 +90,7 @@ async function getTrackInfoWhenCrawlData(tracks) {
     var trackInfoList = [];
 
     for (var track of tracks) {
-        var trackInfo = await getTrackInforDataFromAPI(track.position, track.title, track.artist);
+        var trackInfo = await getTrackInforDataFromAPI(track.position, track.title, track.artist, tracks.genre);
         //console.log("Get track info done: ", trackid);
         trackInfoList.push(trackInfo);
     }
@@ -126,26 +128,25 @@ async function checkHasTrackAnalysis(trackId) {
         });
     });
 }
-const genreType = 2;
-async function getTrackInforDataFromAPI(position, title, artist) {
-    //console.log('Search track: ', title, artist);
+
+async function getTrackInforDataFromAPI(position, title, artistName, genre) {
+    //console.log('Search track: ', title, artistName);
     var track = new Object;
     var trackId;
     var trackInfo;
     var albumId;
     var exist;
-    await spotifyApi.searchTracks('track:' + title + ' artist:' + artist).then(
+    await spotifyApi.searchTracks('track:' + title + ' artist:' + artistName,{market: 'VN'}).then(
         async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
-                //console.log(title, ';', artist, '---------------NOT FOUND----------');
+                console.log('track:' + title + ' artist:' + artistName, '---------------NOT FOUND----------');
                 return;
             }
             trackInfo = data.body.tracks.items[0];
             trackId = trackInfo.id;
             // check if track exist in database
             exist = await checkTrackExist(trackInfo.id);
-
             albumId = trackInfo.album.id;
             var artists = trackInfo.artists;
             var artistIds = [];
@@ -176,7 +177,7 @@ async function getTrackInforDataFromAPI(position, title, artist) {
             track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
             track.track_preview_url = trackInfo.preview_url;
             track.track_imageurl = trackImageUrl;
-            track.genre = genreType;
+            track.genre = genre;
             track.genre_imageurl = '';
 
             //console.log("Put track info ", track.id);
@@ -191,10 +192,6 @@ async function getTrackInforDataFromAPI(position, title, artist) {
         exist: exist
     }
     return trackInfoResult;
-}
-
-function getGenre(albumId) {
-
 }
 
 async function fetchArtist(artistIds, trackId) {
@@ -694,16 +691,16 @@ async function getTrackAudioAnalysis(trackId) {
 
     //console.log('Analysis from database :', dataFromDatabase);
     if (dataFromDatabase != undefined) {
-        console.log('Return track analysis from database :', trackId);
+        //console.log('Return track analysis from database :', trackId);
         return dataFromDatabase;
     }
     var dataFromAPI = await getAudioAnalysisAPI(trackId);
     if (dataFromAPI == undefined) {
-        console.log("Get track analysis from api error");
+        //console.log("Get track analysis from api error");
         return;
     }
     dataFromAPI = convertAnalysis(dataFromAPI.split(";"), trackId);
-    console.log('Return track analysis from api :', trackId);
+   // console.log('Return track analysis from api :', trackId);
     return dataFromAPI;
 }
 
@@ -744,7 +741,7 @@ async function getTrackInfo(trackId) {
     console.log('Get track detail for :', trackId);
     await checkTrackExist(trackId)
         .then(async function () {
-            console.log("Get track infor from API");
+            //console.log("Get track infor from API");
             trackInfo = await getTrackInfoFromAPI(trackId);
             //console.log("Track", trackInfo);
             if (trackInfo[id] != undefined) {
@@ -1013,7 +1010,7 @@ async function getArtistInfo(artistId) {
     var artistTracks = [];
     var artistInfo = await getArtistFromDatabase(artistId);
     if (artistInfo == undefined) {
-        console.log("Get artist info from api", artistId);
+        //console.log("Get artist info from api", artistId);
         artistInfo = await getArtistFromAPI(artistId);
     }
 
@@ -1078,7 +1075,7 @@ async function getTrackOfArtist(artistId) {
     //var artistTracks = [];
     var artistTracks = await getTrackOfArtistFromDatabase(artistId);
     if (artistTracks != undefined) {
-        console.log("Get track of artist info from database", artistTracks);
+        //console.log("Get track of artist info from database", artistTracks);
         return artistTracks;
     }
     artistTracks = await getTrackOfArtistFromAPI(artistId);
@@ -1098,7 +1095,7 @@ async function getTrackOfArtistFromDatabase(artistId) {
             trackList.push(track);
         }
     }
-    console.log("track artist db", trackList.length);
+
     return trackList;
 }
 
@@ -1124,6 +1121,6 @@ async function getTrackOfArtistFromAPI(artistId) {
 async function updateTrackListen(trackId) {
     var currentlisten = await getTrackInfoExtra(trackId, listen);
     var value = parseInt(currentlisten) + 1;
-    console.log("update listen:", value);
+    //console.log("update listen:", value);
     putSync(`track.${trackId}.listen`, parseInt(value));
 }
