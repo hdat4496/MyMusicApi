@@ -29,7 +29,8 @@ module.exports = {
     searchArtistAPI: searchArtistAPI,
     getArtist: getArtist,
     fetchNewReleaseTrack: fetchNewReleaseTrack,
-    getTrackGenre: getTrackGenre
+    getTrackGenre: getTrackGenre,
+    getComingHitTrack: getComingHitTrack
 };
 
 function searchArtist(req, res) {
@@ -299,6 +300,46 @@ function convertAudioFeatures(featuresString) {
     //console.log("Feature object", featureObject);
     return featureObject;
 }
+
+function getComingHitTrack(req, res) {
+    getComingHitTrackFromDatabase()
+    .then(function (trackGeneralInfoList) {
+        if (trackGeneralInfoList == undefined) {
+            res.json({ status: 400, value: "get coming hit track error" });
+        }
+        else {
+            res.json({ status: 200, value: trackGeneralInfoList });
+        }
+    })
+    .catch(e => {
+        res.json({ status: 400, value: e });
+    });
+
+}
+
+function getComingHitTrackFromDatabase() {
+    return new Promise(async (resolve, reject) => {
+        get(`track.hit.predict`, async (err, value) => {
+            if (err || value =='') {
+                resolve(undefined)
+            }
+            else {
+                var trackIds = value.split(";");
+                var tracks = []
+                for (var trackId of trackIds) {
+                    var trackInfo = await getTrackGeneralInfo(trackId);
+                    if (trackInfo == undefined) {
+                         console.log('Get track info error: ', trackId);
+                            continue;
+                    }
+                    tracks.push(trackInfo);
+                }
+                resolve(tracks.length == 0 ? undefined: tracks)
+            }
+        })
+    })
+}
+
 async function getNewReleaseTrack() {
     var albumIds = await getNewReleaseAlbum()
     if (albumIds.length == 0 ){
