@@ -43,7 +43,7 @@ paths:
       description: Get track's data for home page
       operationId: getHomeTrack
       parameters:
-        - name: key
+        - name: token
           in: query
           description: Token
           type: string

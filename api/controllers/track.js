@@ -7,7 +7,7 @@ const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackG
     getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo,
     getNewReleaseAlbum, getAlbumTrack } = require('../controllers/spotify');
 const { predictModel, predictGenre } = require('../controllers/model');
-const { updateUserFavoriteGenre } = require('../controllers/user');
+const { updateUserFavoriteGenre, getUserGenreFavorite } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
@@ -204,7 +204,8 @@ function getTrackGenreFromDatabase(trackId) {
 }
 
 function getHomeTrack(req, res) {
-    getHitTrack()
+    var token = req.swagger.params.token.value;
+    getHitTrack(token)
         .then(function (trackGeneralInfoList) {
             if (trackGeneralInfoList == undefined) {
                 res.json({ status: 400, value: "get hit track error" });
@@ -216,13 +217,18 @@ function getHomeTrack(req, res) {
         .catch(e => {
             res.json({ status: 400, value: e });
         });
-
-
 }
 const newTrackNumber = 8;
-function getHitTrack() {
+function getHitTrack(token) {
     return new Promise(async (resolve, reject) => {
-        var trackIds = await getLastedChartTracks();
+        var genreTypeList = [1,2,3]
+        if (token != undefined && token != '') {
+            var genre = await getUserGenreFavorite(token);
+            if (genre != undefined) {
+                genreTypeList = [genre]
+            }
+        }
+        var trackIds = await getLastedChartTracks(genreTypeList);
         var length = trackIds.length;
         if (length == 0) {
             reject("No track");

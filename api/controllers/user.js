@@ -3,6 +3,8 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackInfoFromDatabase } = require('../controllers/spotify');
+const { getRandomInt } = require('../helpers/utils');
+
 //const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
 module.exports = {
@@ -12,7 +14,8 @@ module.exports = {
     getFavoriteSong: getFavoriteSong,
     checkFavoriteSong: checkFavoriteSong,
     putFavoriteSong: putFavoriteSong,
-    updateUserFavoriteGenre: updateUserFavoriteGenre
+    updateUserFavoriteGenre: updateUserFavoriteGenre,
+    getUserGenreFavorite: getUserGenreFavorite
 
 };
 function test(req, res) {
@@ -256,6 +259,27 @@ async function updateUserFavoriteGenre(token, genreType) {
     }
 }
 
+async function getUserGenreFavorite(token) {
+    var check = checkToken(token);
+    if (!check.isValid || check.isExpired) {
+        console.log("Token is invalid")
+       return
+    }
+
+    var genreList = await getUserGenre(check.user)
+    if (genreList == undefined || genreList == '') {
+        return
+    }
+    genreList = genreList.split(";")
+    var genreType = 1;
+    var max = genreList[0];
+    for (var i=1;i<genreList.length;i++) {
+        if(genreList[i] > max) {
+            genreType = i+1;
+        }
+    }
+    return genreType
+}
 
 function getUserGenre(username) {
     //console.log('get track genre ', trackId);
