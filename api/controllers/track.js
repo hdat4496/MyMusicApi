@@ -4,7 +4,8 @@ const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
-    getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo } = require('../controllers/spotify');
+    getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo,
+    getNewReleaseAlbum, getAlbumTrack } = require('../controllers/spotify');
 const { predictModel, predictGenre } = require('../controllers/model');
 const { updateUserFavoriteGenre } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
@@ -26,7 +27,9 @@ module.exports = {
     getHomeTrack: getHomeTrack,
     searchTrackAPI: searchTrackAPI,
     searchArtistAPI: searchArtistAPI,
-    getArtist: getArtist
+    getArtist: getArtist,
+    fetchNewReleaseTrack: fetchNewReleaseTrack,
+    getTrackGenre: getTrackGenre
 };
 
 function searchArtist(req, res) {
@@ -200,10 +203,10 @@ function getTrackGenreFromDatabase(trackId) {
 }
 
 function getHomeTrack(req, res) {
-    getNewTrack()
+    getHitTrack()
         .then(function (trackGeneralInfoList) {
             if (trackGeneralInfoList == undefined) {
-                res.json({ status: 400, value: "get home track error" });
+                res.json({ status: 400, value: "get hit track error" });
             }
             else {
                 res.json({ status: 200, value: trackGeneralInfoList });
@@ -216,7 +219,7 @@ function getHomeTrack(req, res) {
 
 }
 const newTrackNumber = 8;
-function getNewTrack() {
+function getHitTrack() {
     return new Promise(async (resolve, reject) => {
         var trackIds = await getLastedChartTracks();
         var length = trackIds.length;
@@ -248,6 +251,10 @@ function getNewTrack() {
         //console.log("New Track info: ", trackGeneralInfoList);
         resolve(trackGeneralInfoList);
     });
+}
+
+function fetchNewReleaseTrack() {
+    getNewReleaseTrack()
 }
 
 function getArtist(req, res) {
@@ -291,6 +298,41 @@ function convertAudioFeatures(featuresString) {
     featureObject.energy = parseFloat(features[12]);
     //console.log("Feature object", featureObject);
     return featureObject;
+}
+async function getNewReleaseTrack() {
+    var albumIds = await getNewReleaseAlbum()
+    if (albumIds.length == 0 ){
+        console.log("New release album is empty")
+        return
+    }
+    var splitAlbumIds = [], size = 20;
+    while (albumIds.length > 0) {
+        splitAlbumIds.push(albumIds.splice(0, size));
+    }
+    var trackIds = []
+    for (var albumIds of splitAlbumIds) {
+        trackIds = trackIds.concat(await getAlbumTrack(albumIds))
+    }
+    console.log('Total new tracks ' ,trackIds.length );
+    if (trackIds.length == 0 ){
+        console.log("New release track is empty")
+        return
+    }
+    var comingHitTracks = []
+    for (var trackId of trackIds) {
+        await getTrackInfo(trackId)
+        await getTrackGenre(trackId)
+        var hitResult = await predictModel(trackId);
+        if (hitResult.hit > 0.5) {
+            comingHitTracks.push(trackId);
+        }
+    }
+    if (comingHitTracks.length == 0 ){
+        console.log("Coming hit track is empty")
+        return
+    }
+    console.log('Total hit tracks ',comingHitTracks );
+    putSync(`track.hit.predict`, comingHitTracks.join(";"));
 }
 const minorMode = 'minor';
 const majorMode = 'major';

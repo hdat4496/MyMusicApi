@@ -3,6 +3,7 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getAudioAnalysisKey } = require('../helpers/utils');
+
 //const { runData } = require('../helpers/data.js');
 var Statistics = require("simple-statistics");
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -21,7 +22,10 @@ module.exports = {
     searchTrackFromAPI: searchTrackFromAPI,
     searchArtistFromAPI: searchArtistFromAPI,
     getArtistFromDatabase: getArtistFromDatabase,
-    getArtistInfo: getArtistInfo
+    getArtistInfo: getArtistInfo,
+    getAlbumTrack: getAlbumTrack,
+    getNewReleaseAlbum: getNewReleaseAlbum
+
 };
 
 // Set necessary parts of the credentials on the constructor
@@ -770,15 +774,12 @@ async function getTrackInfoFromAPI(trackId) {
     //console.log('Get track info from API: ', trackId);
     var track = new Object;
     var trackInfo;
-    var albumId;
     await spotifyApi.getTrack(trackId).then(
         async function (data) {
             trackInfo = data.body;
             if (trackInfo == '') {
                 return;
             }
-
-            albumId = trackInfo.album.id;
             var artists = trackInfo.artists;
             var artistIds = [];
             for (var artist of artists) {
@@ -1129,4 +1130,55 @@ async function updateTrackListen(trackId) {
     var value = parseInt(currentlisten) + 1;
     //console.log("update listen:", value);
     putSync(`track.${trackId}.listen`, parseInt(value));
+}
+const releaseTrackNumber = 50;
+// get new release album from Spotify API
+async function getNewReleaseAlbum() {
+    var newAlbumIds = [];
+    //console.log('Get new album');
+    await spotifyApi.getNewReleases({ country: 'VN', limit: 50 })
+        .then(async function (data) {
+            var albums =  data.body.albums.items;
+            var totalTracks = 0;
+            for (var album of albums) {
+                if (album.total_tracks > 3) {
+                    continue;
+                }
+                totalTracks = totalTracks + parseInt(album.total_tracks)
+                newAlbumIds.push(album.id)
+                if (totalTracks >= releaseTrackNumber) {
+                    break;
+                }
+            }
+            console.log('Get new albums success:', newAlbumIds.length);
+            console.log('Total new tracks', totalTracks);
+        }, async function (err) {
+            console.error('Get new album error', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+                getNewReleaseAlbum()
+            }
+        });
+    return newAlbumIds;
+}
+
+// get tracks of album
+async function getAlbumTrack(albumIds) {
+    var tracks = [];
+    await spotifyApi.getAlbums(albumIds)
+        .then(async function (data) {
+            var albums =  data.body.albums;
+            for (var album of albums) {
+                for (var track of album.tracks.items) {
+                    tracks.push(track.id)
+                }  
+            }
+        }, async function (err) {
+            console.error('Get track of album error', err);
+            if (err.statusCode == 401) {
+                await authenticateSpotify();
+                getAlbumTrack(albumId)
+            }
+        });
+    return tracks;
 }

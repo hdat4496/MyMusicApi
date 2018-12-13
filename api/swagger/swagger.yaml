@@ -211,6 +211,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response"
+  /track/fetch-new-released-track:
+    x-swagger-router-controller: track
+    get:
+      description: store new released track
+      operationId: fetchNewReleaseTrack
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"
   /track/search-api-title:
     x-swagger-router-controller: track
     get:
