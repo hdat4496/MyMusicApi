@@ -5,7 +5,8 @@ const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
     getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo } = require('../controllers/spotify');
-const { predictModel } = require('../controllers/model');
+const { predictModel, predictGenre } = require('../controllers/model');
+const { updateUserFavoriteGenre } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
 const crypto = require('crypto');
@@ -128,15 +129,23 @@ function searchTrackAPI(req, res) {
 function getTrack(req, res) {
     var trackId = req.swagger.params.id.value;
     getTrackDetail(trackId)
-        .then(function (track) {
+        .then(async function (track) {
             //console.log("Get track", track);
             res.json({ status: 200, value: track });
+            var token = req.swagger.params.token.value;
+            if (token != undefined) {
+                console.log("Get track with token")
+                var genre = await getTrackGenre(trackId);
+                console.log("Update user favorite genre", trackId, genre)
+                updateUserFavoriteGenre(token, genre);
+            }
         })
         .catch(e => {
             res.json({ status: 400, value: e });
         })
-
 }
+
+
 
 
 function getTrackDetail(trackId) {
@@ -159,6 +168,34 @@ function getTrackDetail(trackId) {
         var recommendTracks = await getRecommendTrack(trackId);
         track.recommendTracks = (recommendTracks == undefined) ? '' : recommendTracks;
         resolve(track);
+    });
+}
+
+async function getTrackGenre(trackId) {
+    var genre = await getTrackGenreFromDatabase(trackId);
+    if (genre != undefined && genre != '') {
+        return genre
+    }
+    genre = await predictGenre(trackId);
+    console.log("Genre ", trackId, genre);
+    if (genre == undefined) {
+        return
+    }
+    putSync(`track.${trackId}.genre`, genre);
+    return genre
+}
+
+function getTrackGenreFromDatabase(trackId) {
+    //console.log('get track genre ', trackId);
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.genre`, (err, value) => {
+            if (!err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined)
+            }
+        });
     });
 }
 

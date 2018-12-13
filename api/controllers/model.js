@@ -4,7 +4,7 @@ const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset, getTrackAudioFeatures, getTrackGeneralInfo } = require('../controllers/spotify');
 //const { getTrackListForChart } = require('../controllers/chart');
-const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString } = require('../helpers/utils');
+const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString, shuffle } = require('../helpers/utils');
 
 //const { runData } = require('../helpers/data.js');
 var weka = require('../helpers/weka-lib.js');
@@ -18,7 +18,8 @@ module.exports = {
     predict: predict,
     predictModel: predictModel,
     putDistinctKeyToObject: putDistinctKeyToObject,
-    buildGenreModel: buildGenreModel
+    buildGenreModel: buildGenreModel,
+    predictGenre: predictGenre
 };
 
 
@@ -51,10 +52,21 @@ var BayesClassifier = {
 
 async function createModel(startDate, endDate, genreType) {
     var data = await getDataForBuildModel(startDate, endDate, genreType);
+    //data = shuffle(data);
+    var lengthTrainningSet = parseInt(data.length * 0.8);
+    var trainSet = data.splice(0, lengthTrainningSet - 1);
+    var testSet =  data;
+
     var filename = getGenreName(genreType) + "_" + convertDateToString(startDate) + "_" + convertDateToString(endDate);
     var filenameData = pathArff + filename + arffType;
-    console.log("file name data" + filenameData);
-    createArff(data, filenameData);
+    console.log("file name data: " + filenameData);
+    createArff(trainSet, filenameData);
+
+    var filenameTest = filename + '_test';
+    var filenameDataTest = pathArff + filenameTest + arffType;
+    console.log("file name data test: " +testSet.length +" "+ filenameDataTest);
+    createArff(testSet, filenameDataTest);
+
     var modelName = pathModel + filename + modelType;
     console.log("model name" + modelName);
     weka.classify(filenameData, modelName, BayesClassifier, function (err, result) {
@@ -74,6 +86,7 @@ function createArff(data, filename) {
     for (var attributeName of attributeList) {
         arff.addNumericAttribute(attributeName);
     }
+    //arff.addStringAttribute('id');
     arff.addNominalAttribute("hit", ["hit", "non-hit"]);
     //arff.addNumericAttribute("position");
     for (var row of data) {
@@ -98,11 +111,15 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
         if (track == undefined) {
             continue;
         }
+        //track.id = trackId;
         // track = await getTrackAudioFeatures(trackId);
         // if (track == undefined) {
         //     continue;
         // }
         // track = convertAudioFeatures(track);
+        // if (trackListObject[trackId] > 40) {
+        //     continue;
+        // }
         track.hit = trackListObject[trackId];
         data.push(track);
     }
@@ -130,6 +147,7 @@ function labelTrackList(trackList) {
     }
     return newTrackList;
 }
+
 
 async function getChartDistinctTrackList(startDate, endDate, genreType) {
     var dateList = getChartDateList(startDate, endDate);
@@ -219,7 +237,19 @@ async function predictModel(trackid) {
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
     var result = await predictTrack(modelName, fileNameTest, BayesClassifier);
-    return result;
+    result.prediction = parseFloat(result.prediction);
+    if (result.predicted == "hit") {
+        var prediction = new Object;
+        prediction.hit = result.prediction;
+        prediction.nonhit = parseFloat((1 -result.prediction).toFixed(4));
+    }
+
+    if (result.predicted == "non-hit") {
+        var prediction = new Object;
+        prediction.nonhit = result.prediction;
+        prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
+    }
+    return prediction;
 }
 var fileNameGenreTest = 'api/public/arff/genre_test.arff';
 async function predictGenre(trackid) {
@@ -230,42 +260,29 @@ async function predictGenre(trackid) {
         return;
     }
     var trackFeatures;
-    trackFeatures = await getTrackAudioFeatures(trackId);
+    trackFeatures = await getTrackAudioFeatures(trackid);
         if (trackFeatures == undefined) {
-            continue;
+            return;
         }
-        trackFeatures = convertAudioFeatures(track);
+        trackFeatures = convertAudioFeatures(trackFeatures);
     trackFeatures.genre ='?';
     var trackData = [];
     trackData.push(trackFeatures);
     await createArffGenreClassification(trackData, fileNameGenreTest);
     var result = await predictTrack(modelName, fileNameGenreTest, LogisticClassifier);
-    return result;
+    return result.predicted;
 }
 
 function predictTrack(modelName, fileNameTest, classifier) {
     return new Promise((resolve, reject) => {
         weka.predict(modelName, fileNameTest, classifier, function (err, result) {
             if (err) {
-                console.log("Predict hit error" + err);
+                console.log("Predict error" + err);
                 resolve(undefined);
             }
             else {
-                console.log("Predict hit success: " + result.predicted, result.prediction);
-                result.prediction = parseFloat(result.prediction);
-                if (result.predicted == "hit") {
-                    var prediction = new Object;
-                    prediction.hit = result.prediction;
-                    prediction.nonhit = parseFloat((1 -result.prediction).toFixed(4));
-                }
-
-                if (result.predicted == "non-hit") {
-                    var prediction = new Object;
-                    prediction.nonhit = result.prediction;
-                    prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
-                }
-                
-                resolve(prediction);
+                console.log("Predict success: " + result.predicted, result.prediction);  
+                resolve(result);
             }
         });
     });

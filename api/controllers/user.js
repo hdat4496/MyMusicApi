@@ -11,7 +11,8 @@ module.exports = {
     test: test,
     getFavoriteSong: getFavoriteSong,
     checkFavoriteSong: checkFavoriteSong,
-    putFavoriteSong: putFavoriteSong
+    putFavoriteSong: putFavoriteSong,
+    updateUserFavoriteGenre: updateUserFavoriteGenre
 
 };
 function test(req, res) {
@@ -228,4 +229,44 @@ function putFavoriteSong(req, res) {
     else {
         res.json({ status: 400, message: 'Token is invalid or expired' });
     }
+}
+
+async function updateUserFavoriteGenre(token, genreType) {
+    if (genreType == undefined) {
+        return
+    }
+    var check = checkToken(token);
+    if (!check.isValid || check.isExpired) {
+        console.log("Token is invalid")
+       return
+    }
+    var userGenre = await getUserGenre(check.user);
+    if (userGenre == undefined || userGenre == '') {
+        console.log("put new user genre", check.user, genreType)
+        var genreNumber = [0,0,0]
+        genreNumber[genreType-1] = 1;
+        var value = genreNumber.join(";")
+        putSync(`user.${check.user}.genre`, value);
+    } else {
+        console.log("update user genre", userGenre, check.user, genreType)
+        var genreNumber = userGenre.split(";")
+        genreNumber[genreType-1] = parseInt(genreNumber[genreType-1]) + 1;
+        var value = genreNumber.join(";")
+        putSync(`user.${check.user}.genre`, value);
+    }
+}
+
+
+function getUserGenre(username) {
+    //console.log('get track genre ', trackId);
+    return new Promise((resolve, reject) => {
+        get(`user.${username}.genre`, (err, value) => {
+            if (!err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined)
+            }
+        });
+    });
 }
