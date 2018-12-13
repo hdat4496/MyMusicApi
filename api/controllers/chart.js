@@ -195,8 +195,7 @@ async function getTrackListForChart(date, genreType) {
     });
 }
 
-async function getLastedChartTracks() {
-    var genreTypeList = [1, 2, 3];
+async function getLastedChartTracks(genreTypeList) {
     var lastedChartDate = [];
     for (var genreType of genreTypeList) {
         var date = await getChartLasted(genreType);
