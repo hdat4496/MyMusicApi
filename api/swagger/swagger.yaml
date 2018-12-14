@@ -441,9 +441,9 @@ paths:
       description: get chart analysis report for home page
       operationId: getChartReportHomePage
       parameters:
-        - name: key
+        - name: token
           in: query
-          description: key
+          description: token
           type: string
       responses:
         "200":

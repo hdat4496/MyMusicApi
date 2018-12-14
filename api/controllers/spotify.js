@@ -1121,7 +1121,7 @@ const releaseTrackNumber = 50;
 async function getNewReleaseAlbum() {
     var newAlbumIds = [];
     //console.log('Get new album');
-    await spotifyApi.getNewReleases({ country: 'VN', limit: 50 })
+    await spotifyApi.getNewReleases({ country: 'US', limit: 50 })
         .then(async function (data) {
             var albums =  data.body.albums.items;
             var totalTracks = 0;

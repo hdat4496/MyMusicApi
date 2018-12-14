@@ -273,7 +273,7 @@ async function getUserGenreFavorite(token) {
     genreList = genreList.split(";")
     var genreType = 0;
     var max = 0;
-    for (var i=1;i<genreList.length;i++) {
+    for (var i=0;i<genreList.length;i++) {
         if(genreList[i] > max) {
             genreType = i+1;
         }

@@ -5,6 +5,7 @@ const { generateToken, checkToken } = require('../helpers/token');
 const { getTrackAudioFeatures } = require('../controllers/spotify')
 const { convertDate, getChartDateList, convertStringToDate, getRandomInt, getGenreTypeList, getGenreName } = require('../helpers/utils');
 const { putDistinctKeyToObject } = require('../controllers/model');
+const { getUserGenreFavorite } = require('../controllers/user');
 var Statistics = require("simple-statistics");
 //const { runData } = require('../helpers/data.js');
 
@@ -276,36 +277,57 @@ function getChartReport(req, res) {
 const daysIntervalReport = 365;
 const featureTypeNumber = 2;
 function getChartReportHomePage(req, res) {
-    var endDate = new Date();
-    var now = new Date();
-    var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
-    var genreTypeList = getGenreTypeList();
-    var genreType = genreTypeList[getRandomInt(0, genreTypeList.length - 1)];
-    var featureTypeList = [];
-    while (featureTypeList.length < featureTypeNumber) {
-        var featureType = getRandomInt(0, audioFeatureList.length - 1);
-        if (featureTypeList.indexOf(featureType) == -1) {
-            featureTypeList.push(featureType);
+    var token = req.swagger.params.token.value;
+    getChartReportHomePageImp(token)
+    .then(function (result) {
+            res.json({ status: 200, value: result });
+    })
+    .catch(e => {
+        res.json({ status: 400, value: e });
+    });
+}
+function getChartReportHomePageImp(token) {
+    return new Promise(async (resolve, reject) => {
+        var genreTypeList = getGenreTypeList();
+        var genreType = genreTypeList[getRandomInt(0, genreTypeList.length - 1)];
+        if (token != undefined && token != '') {
+            var genre = await getUserGenreFavorite(token);
+            if (genre != undefined) {
+                console.log("Get home chart follow user's favorite genre:", genre)
+                genreType = genre
+            }
         }
-    }
-    console.log("get chart track for home page", startDate, endDate, genreType, featureTypeList);
-    getReportHomePage(startDate, endDate, genreType, featureTypeList)
-        .then(function (chartAnalysisList) {
-            if (chartAnalysisList.length == 0) {
-                res.json({ status: 400, value: "get chart track for home page error" });
+        var endDate = new Date();
+        var now = new Date();
+        var startDate = new Date(now.setTime(now.getTime() - daysIntervalReport * 86400000));
+        var featureTypeList = [];
+        while (featureTypeList.length < featureTypeNumber) {
+            var featureType = getRandomInt(0, audioFeatureList.length - 1);
+            if (featureTypeList.indexOf(featureType) == -1) {
+                featureTypeList.push(featureType);
             }
-            else {
-                var result = new Object;
-                result.genreName = getGenreName(genreType);
-                //result.featureName = getFeatureName(featureType);
-                result.data = chartAnalysisList;
-                //console.log(result);
-                res.json({ status: 200, value: result });
-            }
-        })
-        .catch(e => {
-            res.json({ status: 400, value: e });
-        });
+        }
+        console.log("get chart track for home page", startDate, endDate, genreType, featureTypeList);
+        getReportHomePage(startDate, endDate, genreType, featureTypeList)
+            .then(function (chartAnalysisList) {
+                if (chartAnalysisList.length == 0) {
+                    reject("get chart track for home page error");
+                }
+                else {
+                    var result = new Object;
+                    result.genreName = getGenreName(genreType);
+                    //result.featureName = getFeatureName(featureType);
+                    result.data = chartAnalysisList;
+                    //console.log(result);
+                    resolve(result)
+                }
+            })
+            .catch(e => {
+                reject(e)
+            });
+
+    })
+
 }
 
 function getReport(startDate, endDate, genreType) {

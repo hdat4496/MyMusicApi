@@ -189,7 +189,7 @@ function getHomeTrack(req, res) {
             res.json({ status: 400, value: e });
         });
 }
-const newTrackNumber = 8;
+const hitTrackNumber = 8;
 function getHitTrack(token) {
     return new Promise(async (resolve, reject) => {
         var genreTypeList = [1,2,3]
@@ -205,7 +205,7 @@ function getHitTrack(token) {
             reject("No track");
         }
         var newTrackIndexes = [];
-        while (newTrackIndexes.length < newTrackNumber) {
+        while (newTrackIndexes.length < hitTrackNumber) {
             var index = getRandomInt(0, length);
             if (newTrackIndexes.indexOf(index) == -1) {
                 newTrackIndexes.push(index);
@@ -293,7 +293,7 @@ function getComingHitTrack(req, res) {
     });
 
 }
-
+const newTrackNumber = 10
 function getComingHitTrackFromDatabase() {
     return new Promise(async (resolve, reject) => {
         get(`track.hit.predict`, async (err, value) => {
@@ -303,10 +303,20 @@ function getComingHitTrackFromDatabase() {
             else {
                 var trackIds = value.split(";");
                 var tracks = []
-                for (var trackId of trackIds) {
-                    var trackInfo = await getTrackGeneralInfo(trackId);
+
+                var newTrackIndexes = [];
+                var limit = trackIds.length < newTrackNumber ? trackIds.length : newTrackNumber
+                while (newTrackIndexes.length < limit) {
+                    var index = getRandomInt(0, trackIds.length-1);
+                    if (newTrackIndexes.indexOf(index) == -1) {
+                        newTrackIndexes.push(index);
+                    }
+                }
+                
+                for (var index of newTrackIndexes) {
+                    var trackInfo = await getTrackGeneralInfo(trackIds[index]);
                     if (trackInfo == undefined) {
-                         console.log('Get track info error: ', trackId);
+                         console.log('Get track info error: ', trackIds[index]);
                             continue;
                     }
                     tracks.push(trackInfo);
