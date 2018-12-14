@@ -30,6 +30,7 @@ function crawl(req, res) {
                 var $ = res.$;
                 var tracks = [];
                 var date = $('.article-date').first().text().trim();
+                var genre = res.options.genreType;
                 console.log(date);
                 $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
                     var position = $(ele).find('.position').text().trim();
@@ -46,14 +47,13 @@ function crawl(req, res) {
                         position: position,
                         title: title,
                         artist: artist,
-                        genre: genreType
+                        genre: genre
                     }
                     tracks.push(track);
                 });
 
                 console.log('Crawled data length: ', tracks.length);
-                var genreType = res.options.genreType;
-                await putData(genreType, date, tracks);
+                await putData(genre, date, tracks);
             }
             done();
         }
@@ -76,8 +76,10 @@ function normalizeTitle(title) {
         title = title.replace(title_re, " ");
     }
 
-    title = title.replace("'", "")
-
+    while (title.includes("'")) {
+        title = title.replace("'", "");
+    }
+   
     return title;
 }
 
@@ -86,12 +88,12 @@ function normalizeArtistName(artist) {
         artist = artist.replace(" FT ", " OR ");
     }
 
-    while (artist.includes(" / ")) {
-        artist = artist.replace(" / ", " OR ");
+    while (artist.includes(" VS ")) {
+        artist = artist.replace(" VS ", " OR ");
     }
 
-    while (artist.includes("/")) {
-        artist = artist.replace("/", " OR ");
+    while (artist.includes(" / ")) {
+        artist = artist.replace(" / ", " OR ");
     }
 
     while (artist.includes(" & ")) {

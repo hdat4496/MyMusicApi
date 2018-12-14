@@ -1,0 +1,19 @@
+@RELATION api/public/arff/genre_test.arff 
+
+@ATTRIBUTE speechiness numeric 
+@ATTRIBUTE acousticness numeric 
+@ATTRIBUTE instrumentalness numeric 
+@ATTRIBUTE liveness numeric 
+@ATTRIBUTE valence numeric 
+@ATTRIBUTE duration_ms numeric 
+@ATTRIBUTE tempo numeric 
+@ATTRIBUTE time_signature {0,1,2,3,4,5} 
+@ATTRIBUTE mode {0,1} 
+@ATTRIBUTE key {0,1,2,3,4,5,6,7,8,9,10,11} 
+@ATTRIBUTE loudness numeric 
+@ATTRIBUTE danceability numeric 
+@ATTRIBUTE energy numeric 
+@ATTRIBUTE genre {1,2,3} 
+
+@DATA 
+0.0571, 0.0966, 0, 0.096, 0.55, 243853, 129.986, 4, 1, 7, -4.686, 0.611, 0.835, ? 

@@ -286,12 +286,14 @@
               return;
             }
 
-            //console.log(stdout);
-
             var result = {};
 
             var splitted = _.clean(stdout.split('\n')[5]).split(' ');
-
+            console.log("Split",splitted);
+            if(splitted.length ==0) {
+              callback();
+              return
+            }
             result.predicted = splitted[2].split(':')[1];
             result.prediction = splitted[splitted.length - 1];
 

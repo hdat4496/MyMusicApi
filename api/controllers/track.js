@@ -6,7 +6,7 @@ const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
     getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo,
     getNewReleaseAlbum, getAlbumTrack } = require('../controllers/spotify');
-const { predictModel, predictGenre } = require('../controllers/model');
+const { predictModel, getTrackGenre} = require('../controllers/model');
 const { updateUserFavoriteGenre, getUserGenreFavorite } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -29,7 +29,6 @@ module.exports = {
     searchArtistAPI: searchArtistAPI,
     getArtist: getArtist,
     fetchNewReleaseTrack: fetchNewReleaseTrack,
-    getTrackGenre: getTrackGenre,
     getComingHitTrack: getComingHitTrack
 };
 
@@ -172,34 +171,6 @@ function getTrackDetail(trackId) {
         var recommendTracks = await getRecommendTrack(trackId);
         track.recommendTracks = (recommendTracks == undefined) ? '' : recommendTracks;
         resolve(track);
-    });
-}
-
-async function getTrackGenre(trackId) {
-    var genre = await getTrackGenreFromDatabase(trackId);
-    if (genre != undefined && genre != '') {
-        return genre
-    }
-    genre = await predictGenre(trackId);
-    console.log("Genre ", trackId, genre);
-    if (genre == undefined) {
-        return
-    }
-    putSync(`track.${trackId}.genre`, genre);
-    return genre
-}
-
-function getTrackGenreFromDatabase(trackId) {
-    //console.log('get track genre ', trackId);
-    return new Promise((resolve, reject) => {
-        get(`track.${trackId}.genre`, (err, value) => {
-            if (!err) {
-                resolve(value);
-            }
-            else {
-                resolve(undefined)
-            }
-        });
     });
 }
 
@@ -368,8 +339,10 @@ async function getNewReleaseTrack() {
     var comingHitTracks = []
     for (var trackId of trackIds) {
         await getTrackInfo(trackId)
-        await getTrackGenre(trackId)
         var hitResult = await predictModel(trackId);
+        if (hitResult == undefined) {
+            continue
+        }
         if (hitResult.hit > 0.5) {
             comingHitTracks.push(trackId);
         }

@@ -3,7 +3,6 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 const { getAudioAnalysisKey } = require('../helpers/utils');
-
 //const { runData } = require('../helpers/data.js');
 var Statistics = require("simple-statistics");
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -24,7 +23,8 @@ module.exports = {
     getArtistFromDatabase: getArtistFromDatabase,
     getArtistInfo: getArtistInfo,
     getAlbumTrack: getAlbumTrack,
-    getNewReleaseAlbum: getNewReleaseAlbum
+    getNewReleaseAlbum: getNewReleaseAlbum,
+    getTrackInfoExtra:getTrackInfoExtra
 
 };
 
@@ -92,9 +92,8 @@ async function putTrackData(tracks) {
 
 async function getTrackInfoWhenCrawlData(tracks) {
     var trackInfoList = [];
-
     for (var track of tracks) {
-        var trackInfo = await getTrackInforDataFromAPI(track.position, track.title, track.artist, tracks.genre);
+        var trackInfo = await getTrackInforDataFromAPI(track.position, track.title, track.artist, track.genre);
         //console.log("Get track info done: ", trackid);
         trackInfoList.push(trackInfo);
     }
@@ -138,20 +137,18 @@ async function getTrackInforDataFromAPI(position, title, artistName, genre) {
     var track = new Object;
     var trackId;
     var trackInfo;
-    var albumId;
     var exist;
-    await spotifyApi.searchTracks('track:' + title + ' artist:' + artistName,{market: 'VN'}).then(
+    await spotifyApi.searchTracks('track:' + title + ' artist:' + artistName).then(
         async function (data) {
             var total = data.body.tracks.total;
             if (total == 0) {
-                console.log('track:' + title + ' artist:' + artistName, '---------------NOT FOUND----------');
+                //console.log('track:' + title + ' artist:' + artistName, '---------------NOT FOUND----------');
                 return;
             }
             trackInfo = data.body.tracks.items[0];
             trackId = trackInfo.id;
             // check if track exist in database
             exist = await checkTrackExist(trackInfo.id);
-            albumId = trackInfo.album.id;
             var artists = trackInfo.artists;
             var artistIds = [];
             for (var artist of artists) {
@@ -181,9 +178,6 @@ async function getTrackInforDataFromAPI(position, title, artistName, genre) {
             track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
             track.track_preview_url = trackInfo.preview_url;
             track.track_imageurl = trackImageUrl;
-            track.genre = genre;
-            track.genre_imageurl = '';
-
             //console.log("Put track info ", track.id);
             putTrackInfo(track);
         })
@@ -195,7 +189,15 @@ async function getTrackInforDataFromAPI(position, title, artistName, genre) {
         trackId: trackId,
         exist: exist
     }
+    if (trackId == undefined || exist != false) {
+        return trackInfoResult;
+    }
+    //console.log("put genre:", trackId, " " ,genre)
+    if (genre == 1 || genre == 2 || genre == 3) {
+        putSync(`track.${trackId}.genre`, parseInt(genre));
+    }
     return trackInfoResult;
+
 }
 
 async function fetchArtist(artistIds, trackId) {
@@ -267,12 +269,13 @@ async function getAudioAnalysisAPI(trackId) {
     console.log('Get audio analysis:', trackId);
     await spotifyApi.getAudioAnalysisForTrack(trackId)
         .then(async function (data) {
+            //putSync(`track.${trackid}.analysis`, value);
             //console.log('Get audio analysis success');
             var audioAnalysis = await calculateAudioAnalysis(data.body);
             analysis = await putTrackAudioAnalysis(trackId, audioAnalysis);
         }, async function (err) {
             //getAudioAnalysisAPI(trackId);
-            console.error('Get audio analysis error', err);
+            //console.error('Get audio analysis error', err);
             if (err.statusCode == 504) {
                 analysis = await getAudioAnalysisAPI(trackId);
             }
@@ -286,7 +289,7 @@ function putTrackInfo(trackInfo) {
         return;
     }
     var info = trackInfo.title + ';' + trackInfo.artist + ';' + trackInfo.artist_imageurl + ';'
-        + trackInfo.genre + ';' + trackInfo.genre_imageurl + ';' + trackInfo.track_url + ';' + trackInfo.track_imageurl + ';' + trackInfo.track_preview_url;
+    + trackInfo.track_url + ';' + trackInfo.track_imageurl + ';' + trackInfo.track_preview_url;
     if (info == '') {
         return;
     }
@@ -756,7 +759,7 @@ async function getTrackInfo(trackId) {
                 getAudioFeaturesAPI(list);
                 var hasAnalysisInDatabase = await checkHasTrackAnalysis(trackId);
                 if (hasAnalysisInDatabase == false) {
-                    getAudioAnalysisAPI(trackId);
+                    await getAudioAnalysisAPI(trackId);
                 }
             }
         })
@@ -818,8 +821,6 @@ async function getTrackInfoFromAPI(trackId) {
             track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
             track.track_preview_url = trackInfo.preview_url;
             track.track_imageurl = trackImageUrl;
-            track.genre = '';
-            track.genre_imageurl = '';
             //console.log("Put track info ", track.id);
             putTrackInfo(track);
         })
@@ -861,11 +862,9 @@ function getTrackGeneralInfo(trackId) {
                 track.title = trackInfo[0];
                 track.artist = trackInfo[1];
                 track.artist_imageurl = trackInfo[2];
-                track.genre = trackInfo[3];
-                track.genre_imageurl = trackInfo[4];
-                track.track_url = trackInfo[5];
-                track.track_imageurl = trackInfo[6];
-                track.track_preview_url = trackInfo[7];
+                track.track_url = trackInfo[3];
+                track.track_imageurl = trackInfo[4];
+                track.track_preview_url = trackInfo[5];
                 resolve(track);
             }
             else {
@@ -948,20 +947,6 @@ function convertDataApiToTrackList(tracksData) {
         track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
         track.track_preview_url = trackInfo.preview_url;
         track.track_imageurl = trackImageUrl;
-        track.genre = '';
-        track.genre_imageurl = '';
-
-        // var trackImageUrl = (trackInfo.album.images.length == 0) ? "" : trackInfo.album.images[0].url
-        // track.id = trackInfo.id;
-        // track.title = trackInfo.name;
-        // track.artist = artistInfo[0];
-        // track.artist_imageurl = artistInfo[1];
-        // track.track_url = (trackInfo.external_urls.spotify == undefined) ? '' : trackInfo.external_urls.spotify;
-        // track.track_preview_url = trackInfo.preview_url;
-        // track.track_imageurl = trackImageUrl;
-        // track.genre = '';
-        // track.genre_imageurl = '';
-
         trackList.push(track);
     }
     return trackList;

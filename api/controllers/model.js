@@ -2,8 +2,8 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset, getTrackAudioFeatures, getTrackGeneralInfo } = require('../controllers/spotify');
-//const { getTrackListForChart } = require('../controllers/chart');
+const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset, getTrackAudioFeatures, 
+    getTrackInfoExtra} = require('../controllers/spotify');
 const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString, shuffle } = require('../helpers/utils');
 
 //const { runData } = require('../helpers/data.js');
@@ -19,7 +19,8 @@ module.exports = {
     predictModel: predictModel,
     putDistinctKeyToObject: putDistinctKeyToObject,
     buildGenreModel: buildGenreModel,
-    predictGenre: predictGenre
+    predictGenre: predictGenre,
+    getTrackGenre: getTrackGenre
 };
 
 
@@ -45,28 +46,24 @@ var LogisticClassifier = {
     'params': ''
 };
 
-var BayesClassifier = {
-    'classifier': 'weka.classifiers.bayes.NaiveBayes',
-    'params': ''
-};
 
 async function createModel(startDate, endDate, genreType) {
     var data = await getDataForBuildModel(startDate, endDate, genreType);
+    var trainSet = data
     //data = shuffle(data);
-    var lengthTrainningSet = parseInt(data.length * 0.8);
-    var trainSet = data.splice(0, lengthTrainningSet - 1);
-    var testSet =  data;
+    // var lengthTrainningSet = parseInt(data.length * 0.8);
+    // var trainSet = data.splice(0, lengthTrainningSet - 1);
+    // var testSet =  data;
 
     var filename = getGenreName(genreType) + "_" + convertDateToString(startDate) + "_" + convertDateToString(endDate);
     var filenameData = pathArff + filename + arffType;
     console.log("file name data: " + filenameData);
     createArff(trainSet, filenameData);
 
-    var filenameTest = filename + '_test';
-    var filenameDataTest = pathArff + filenameTest + arffType;
-    console.log("file name data test: " +testSet.length +" "+ filenameDataTest);
-    createArff(testSet, filenameDataTest);
-
+    // var filenameTest = filename + '_test';
+    // var filenameDataTest = pathArff + filenameTest + arffType;
+    // console.log("file name data test: " +testSet.length +" "+ filenameDataTest);
+    // createArff(testSet, filenameDataTest);
     var modelName = pathModel + filename + modelType;
     console.log("model name" + modelName);
     weka.classify(filenameData, modelName, BayesClassifier, function (err, result) {
@@ -79,11 +76,22 @@ async function createModel(startDate, endDate, genreType) {
         }
     });
 }
-
 function createArff(data, filename) {
     var arff = new Arff.ArffWriter(filename, Arff.MODE_OBJECT);
     var attributeList = getAudioAnalysisKey();
     for (var attributeName of attributeList) {
+        if (attributeName == 'mode') {
+            arff.addNominalAttribute("mode", [0,1]);
+            continue;
+        }
+        if (attributeName == 'key') {
+            arff.addNominalAttribute("key", [0,1,2,3,4,5,6,7,8,9,10,11]);
+            continue;
+        }
+        if (attributeName == 'time_signature') {
+            arff.addNominalAttribute("time_signature", [0,1,2,3,4,5]);
+            continue;
+        }
         arff.addNumericAttribute(attributeName);
     }
     //arff.addStringAttribute('id');
@@ -220,7 +228,7 @@ function predict(req, res) {
 var fileNameTest = 'api/public/arff/test.arff';
 async function predictModel(trackid) {
     //  var genreType = await getGenreType(trackid);
-    var genreType = 1;
+    var genreType = await getTrackGenre(trackid);
     var modelName = await getModelName(genreType);
     if (modelName == undefined ) {
         console.log("Genre type is invalid");
@@ -275,6 +283,7 @@ async function predictGenre(trackid) {
 
 function predictTrack(modelName, fileNameTest, classifier) {
     return new Promise((resolve, reject) => {
+        console.log("Predict:" , modelName, fileNameTest);
         weka.predict(modelName, fileNameTest, classifier, function (err, result) {
             if (err) {
                 console.log("Predict error" + err);
@@ -293,7 +302,7 @@ function getModelName(genreType) {
     return new Promise((resolve, reject) => {
         get(`model.${genreType}`, (err, value) => {
             if (!err) {
-                //console.log('get model name:', value);
+                console.log('get model name:', value);
                 resolve(value);
             }
             else {
@@ -304,30 +313,6 @@ function getModelName(genreType) {
     });
 }
 
-async function getTrackListForChart(date, genreType) {
-    //console.log("Start Get track list for chart", date, genreType);
-    return new Promise((resolve, reject) => {
-        console.log("Get track list for chart", date, genreType);
-        var chartTracks = new Object;
-        get(`chart.${date}.${genreType}`, async (err, value) => {
-            if (!err) {
-                var trackIds = value.split(";");
-                for (var i = 0; i < trackIds.length; i++) {
-                    var trackId = trackIds[i];
-                    if (trackId == '') {
-                        continue;
-                    }
-                    chartTracks[trackId] = i + 1;
-                }
-                resolve(chartTracks);
-            }
-            else {
-                console.log('Get track list error', date);
-                resolve(undefined);
-            }
-        });
-    });
-}
 
 function buildGenreModel() {
     createModelClassifyGenre();
@@ -362,11 +347,8 @@ async function getDataForBuildModelClassifyGenre() {
     var data = [];
     for (var trackId of trackList) {
         var track;
-        var info = await getTrackGeneralInfo(trackId);
-        if (info == undefined) {
-            continue;
-        }
-        if (info.genre != 1 && info.genre != 2 && info.genre != 3) {
+        var genre = await getTrackInfoExtra(trackId, 'genre');
+        if (genre != 1 && genre != 2 && genre != 3) {
             continue;
         }
         track = await getTrackAudioFeatures(trackId);
@@ -374,7 +356,7 @@ async function getDataForBuildModelClassifyGenre() {
             continue;
         }
         track = convertAudioFeatures(track);
-        track.genre = info.genre;
+        track.genre = genre;
         data.push(track);
     }
     console.log("Data list:", data.length);
@@ -402,6 +384,18 @@ function getAllTrack() {
 function createArffGenreClassification(data, filename) {
     var arff = new Arff.ArffWriter(filename, Arff.MODE_OBJECT);
     for (var attributeName of audioFeatureList) {
+        if (attributeName == 'mode') {
+            arff.addNominalAttribute("mode", [0,1]);
+            continue;
+        }
+        if (attributeName == 'key') {
+            arff.addNominalAttribute("key", [0,1,2,3,4,5,6,7,8,9,10,11]);
+            continue;
+        }
+        if (attributeName == 'time_signature') {
+            arff.addNominalAttribute("time_signature", [0,1,2,3,4,5]);
+            continue;
+        }
         arff.addNumericAttribute(attributeName);
     }
     arff.addNominalAttribute("genre", [1, 2,3]);
@@ -436,6 +430,57 @@ function convertAudioFeatures(featuresString) {
     featureObject.energy = parseFloat(features[12]);
     //console.log("Feature object", featureObject);
     return featureObject;
+}
+async function getTrackListForChart(date, genreType) {
+    //console.log("Start Get track list for chart", date, genreType);
+    return new Promise((resolve, reject) => {
+        console.log("Get track list for chart", date, genreType);
+        var chartTracks = new Object;
+        get(`chart.${date}.${genreType}`, async (err, value) => {
+            if (!err) {
+                var trackIds = value.split(";");
+                for (var i = 0; i < trackIds.length; i++) {
+                    var trackId = trackIds[i];
+                    if (trackId == '') {
+                        continue;
+                    }
+                    chartTracks[trackId] = i + 1;
+                }
+                resolve(chartTracks);
+            }
+            else {
+                console.log('Get track list error', date);
+                resolve(undefined);
+            }
+        });
+    });
+}
+async function getTrackGenre(trackId) {
+    var genre = await getTrackGenreFromDatabase(trackId);
+    if (genre != undefined && genre != '') {
+        return genre
+    }
+    genre = await predictGenre(trackId);
+    console.log("Genre ", trackId, genre);
+    if (genre == undefined) {
+        return
+    }
+    putSync(`track.${trackId}.genre`, parseInt(genre));
+    return genre
+}
+
+function getTrackGenreFromDatabase(trackId) {
+    //console.log('get track genre ', trackId);
+    return new Promise((resolve, reject) => {
+        get(`track.${trackId}.genre`, (err, value) => {
+            if (!err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined)
+            }
+        });
+    });
 }
 // used for get random audio feature chart for home page
 const audioFeatureList = ['speechiness',
