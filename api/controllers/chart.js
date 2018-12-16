@@ -432,12 +432,13 @@ function getReportHomePage(startDate, endDate, genreType, featureTypeList) {
         if (!hasData) {
             resolve([])
         }
+        var resultList = []
         for (var featureName of Object.keys(result)) {
             result[featureName] = convertChartObjectToList(result[featureName]);
             result[featureName]['featureName'] = featureName;
+            resultList.push(result[featureName]);
         }
-
-        resolve(result);
+        resolve(resultList);
     });
 }
 const roundNumber = 4;
