@@ -116,7 +116,7 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
     for (var trackId of Object.keys(trackListObject)) {
         var track = new Object;
         track = await getTrackAudioAnalysis(trackId);
-        if (track == undefined) {
+        if (track == undefined || track == '') {
             continue;
         }
         //track.id = trackId;
@@ -134,8 +134,6 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
     console.log("Data list:", data.length);
     return data;
 }
-
-
 
 const hitIndex = 10;
 const nonhitIndex = 30;
@@ -157,7 +155,15 @@ function labelTrackList(trackList) {
 }
 
 
+const outerInterval = 180;
 async function getChartDistinctTrackList(startDate, endDate, genreType) {
+    var startOuterDate = new Date(startDate)
+    var endOuterDate = new Date(endDate)
+    startDate = new Date()
+    endDate = new Date()
+    startDate = new Date(startDate.setTime(startOuterDate.getTime() + outerInterval * 86400000));
+    endDate = new Date(endDate.setTime(endOuterDate.getTime() - outerInterval * 86400000));
+    console.log(startOuterDate, startDate, endDate, endOuterDate)
     var dateList = getChartDateList(startDate, endDate);
     var distinctTracks = new Object;
     for (var date of dateList) {
@@ -170,6 +176,31 @@ async function getChartDistinctTrackList(startDate, endDate, genreType) {
         }
         distinctTracks = putDistinctKeyToObject(distinctTracks, chartTracks);
     }
+
+     var dateListBefore = getChartDateList(startOuterDate, startDate);
+    for (var date of dateListBefore) {
+        var date_str = date.day + date.month + date.year;
+        //console.log("Chart tracks", date_str, genreType);
+        var chartTracks = await getTrackListForChart(date_str, genreType);
+        //console.log("Chart tracks", date_str, chartTracks);
+        if (chartTracks == undefined) {
+            continue;
+        }
+        distinctTracks = putDistinctKeyToObjectOuter(distinctTracks, chartTracks);
+    }
+
+    var dateListAfter = getChartDateList(endDate, endOuterDate);
+    for (var date of dateListAfter) {
+        var date_str = date.day + date.month + date.year;
+        //console.log("Chart tracks", date_str, genreType);
+        var chartTracks = await getTrackListForChart(date_str, genreType);
+        //console.log("Chart tracks", date_str, chartTracks);
+        if (chartTracks == undefined) {
+            continue;
+        }
+        distinctTracks = putDistinctKeyToObjectOuter(distinctTracks, chartTracks);
+    }
+
     return distinctTracks;
     //console.log("Distinct chart tracks: ", distinctTracks);
 }
@@ -193,6 +224,25 @@ function putDistinctKeyToObject(object1, object2) {
     return object1;
 }
 
+
+// Add distinct key from object2 to object1
+function putDistinctKeyToObjectOuter(object1, object2) {
+    //console.log('put dinstinct key');
+    for (var key of Object.keys(object2)) {
+        // Object has no key
+        if (object1[key] == undefined) {
+           continue
+        }
+        // Object has key
+        else {
+            // If new value smaller old value
+            if (object1[key] > object2[key]) {
+                object1[key] = object2[key];
+            }
+        }
+    }
+    return object1;
+}
 
 function saveArffData() {
     var filenameList = [pathArff + 'dance_data.arff',
@@ -236,7 +286,7 @@ async function predictModel(trackid) {
     }
     var trackAnalysis = new Object;
     trackAnalysis = await getTrackAudioAnalysis(trackid);
-    if (trackAnalysis == undefined) {
+    if (trackAnalysis == undefined || trackAnalysis == '') {
         console.log("Track analysis is not found");
         return;
     }
@@ -434,7 +484,7 @@ function convertAudioFeatures(featuresString) {
 async function getTrackListForChart(date, genreType) {
     //console.log("Start Get track list for chart", date, genreType);
     return new Promise((resolve, reject) => {
-        console.log("Get track list for chart", date, genreType);
+        //console.log("Get track list for chart", date, genreType);
         var chartTracks = new Object;
         get(`chart.${date}.${genreType}`, async (err, value) => {
             if (!err) {

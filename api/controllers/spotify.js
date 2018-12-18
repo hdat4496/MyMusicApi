@@ -411,7 +411,7 @@ function calculateAudioAnalysis(audioAnalysis) {
     }
     if (duration_arr.length == 0) {
         console.log("Analysis beats empty:", duration_arr);
-        return;
+        return '';
     }
 
     for (var segment of audioAnalysis.segments) {
@@ -580,6 +580,10 @@ function calculateAudioAnalysis(audioAnalysis) {
 async function putTrackAudioAnalysis(trackid, audioAnalysis) {
     //console.log('Put track audio analysis', trackid);
     var audioAnalysisValue;
+    if (audioAnalysis == '') {
+        putSync(`track.${trackid}.analysis`, audioAnalysis);
+        return audioAnalysis;
+    }
     var audioFeatures = await getTrackAudioFeatures(trackid);
     if (audioFeatures == undefined || audioAnalysis == undefined) {
         //console.log('Audio feature value not found');
@@ -693,7 +697,7 @@ async function getTrackAudioFeaturesFromAPI(trackId) {
 
 // get audio analysis of a track
 async function getTrackAudioAnalysis(trackId) {
-    console.log('Get track audio analysis for :', trackId);
+    //console.log('Get track audio analysis for :', trackId);
     var dataFromDatabase = await getTrackAnalysisFromDatabase(trackId);
 
     //console.log('Analysis from database :', dataFromDatabase);
@@ -702,7 +706,7 @@ async function getTrackAudioAnalysis(trackId) {
         return dataFromDatabase;
     }
     var dataFromAPI = await getAudioAnalysisAPI(trackId);
-    if (dataFromAPI == undefined) {
+    if (dataFromAPI == undefined || dataFromAPI == '') {
         //console.log("Get track analysis from api error");
         return;
     }
