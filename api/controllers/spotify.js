@@ -24,8 +24,8 @@ module.exports = {
     getArtistInfo: getArtistInfo,
     getAlbumTrack: getAlbumTrack,
     getNewReleaseAlbum: getNewReleaseAlbum,
-    getTrackInfoExtra:getTrackInfoExtra
-
+    getTrackInfoExtra:getTrackInfoExtra,
+    updateTrackListen: updateTrackListen
 };
 
 // Set necessary parts of the credentials on the constructor
@@ -770,10 +770,6 @@ async function getTrackInfo(trackId) {
         .catch(async function () {
             trackInfo = await getTrackInfoFromDatabase(trackId);
         });
-    if (trackInfo != undefined) {
-        updateTrackListen(trackId);
-        trackInfo[listen] = parseInt(trackInfo[listen]) +1 ;
-    }
     return trackInfo;
 }
 // Get track info from API

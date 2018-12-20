@@ -5,8 +5,8 @@ const { generateToken, checkToken } = require('../helpers/token');
 const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
     getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo,
-    getNewReleaseAlbum, getAlbumTrack } = require('../controllers/spotify');
-const { predictModel, getTrackGenre, getAllTrack} = require('../controllers/model');
+    getNewReleaseAlbum, getAlbumTrack, updateTrackListen } = require('../controllers/spotify');
+const { predictModel, getTrackGenre, getAllTrack } = require('../controllers/model');
 const { updateUserFavoriteGenre, getUserGenreFavorite } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -35,12 +35,12 @@ module.exports = {
 
 function getAllTrackAdmin(req, res) {
     getTrackForAdmin()
-    .then(function(result){
-        res.json({ status: 200, value: result });
-    })
-    .catch(e => {
-        res.json({ status: 404, value: e });
-    })
+        .then(function (result) {
+            res.json({ status: 200, value: result });
+        })
+        .catch(e => {
+            res.json({ status: 404, value: e });
+        })
 }
 
 function getTrackForAdmin() {
@@ -58,8 +58,8 @@ function getTrackForAdmin() {
         }
         console.log("Data list:", data.length);
         var result = {
-            totalNumber:  data.length,
-            data: data.slice(data.length-101,data.length-1)
+            totalNumber: data.length,
+            data: data.slice(data.length - 101, data.length - 1)
         }
         resolve(result);
     })
@@ -150,7 +150,7 @@ function searchTrack(req, res) {
 function searchTrackAPI(req, res) {
     var title = req.swagger.params.title.value;
     title = title.trim();
-    var key = 'track:' + title +' limit:10';
+    var key = 'track:' + title + ' limit:10';
     //console.log("search track title from api", key);
     searchTrackFromAPI(title)
         .then(function (trackList) {
@@ -193,6 +193,8 @@ function getTrackDetail(trackId) {
             reject("Get track info error");
             return;
         }
+        updateTrackListen(trackId);
+        trackInfo[listen] = parseInt(trackInfo[listen]) +1 ;
         track.trackInfo = trackInfo;
         //console.log("get track audio features", trackId);
         var trackFeaturesString = await getTrackAudioFeatures(trackId);
@@ -225,7 +227,7 @@ function getHomeTrack(req, res) {
 const hitTrackNumber = 8;
 function getHitTrack(token) {
     return new Promise(async (resolve, reject) => {
-        var genreTypeList = [1,2,3]
+        var genreTypeList = [1, 2, 3]
         if (token != undefined && token != '') {
             var genre = await getUserGenreFavorite(token);
             if (genre != undefined) {
@@ -266,18 +268,18 @@ function getHitTrack(token) {
 
 function fetchNewReleaseTrack(req, res) {
     getNewReleaseTrack()
-    .then(function(tracks){
-        if (tracks.length == 0) {
-            res.json({ status: 404, value: "fetch coming hit error" });
-        }
-        else {
-            console.log("fetch coming hit track", tracks);
-            res.json({ status: 200, value: tracks });
-        }
-    })
-    .catch(e => {
-        res.json({ status: 404, value: e });
-    })
+        .then(function (tracks) {
+            if (tracks.length == 0) {
+                res.json({ status: 404, value: "fetch coming hit error" });
+            }
+            else {
+                console.log("fetch coming hit track", tracks);
+                res.json({ status: 200, value: tracks });
+            }
+        })
+        .catch(e => {
+            res.json({ status: 404, value: e });
+        })
 }
 
 function getArtist(req, res) {
@@ -325,24 +327,26 @@ function convertAudioFeatures(featuresString) {
 
 function getComingHitTrack(req, res) {
     getComingHitTrackFromDatabase()
-    .then(function (trackGeneralInfoList) {
-        if (trackGeneralInfoList == undefined) {
-            res.json({ status: 400, value: "get coming hit track error" });
-        }
-        else {
-            res.json({ status: 200, value: trackGeneralInfoList });
-        }
-    })
-    .catch(e => {
-        res.json({ status: 400, value: e });
-    });
+        .then(function (trackGeneralInfoList) {
+            if (trackGeneralInfoList == undefined) {
+                res.json({ status: 400, value: "get coming hit track error" });
+            }
+            else {
+                res.json({ status: 200, value: trackGeneralInfoList });
+            }
+        })
+        .catch(e => {
+            console.log("asfasfasfs")
+            res.json({ status: 400, value: e });
+        });
 
 }
+
 const newTrackNumber = 10
 function getComingHitTrackFromDatabase() {
     return new Promise(async (resolve, reject) => {
         get(`track.hit.predict`, async (err, value) => {
-            if (err || value =='') {
+            if (err || value == '') {
                 resolve(undefined)
             }
             else {
@@ -352,21 +356,20 @@ function getComingHitTrackFromDatabase() {
                 var newTrackIndexes = [];
                 var limit = trackIds.length < newTrackNumber ? trackIds.length : newTrackNumber
                 while (newTrackIndexes.length < limit) {
-                    var index = getRandomInt(0, trackIds.length-1);
+                    var index = getRandomInt(0, trackIds.length);
                     if (newTrackIndexes.indexOf(index) == -1) {
                         newTrackIndexes.push(index);
                     }
                 }
-                
                 for (var index of newTrackIndexes) {
                     var trackInfo = await getTrackGeneralInfo(trackIds[index]);
                     if (trackInfo == undefined) {
-                         console.log('Get track info error: ', trackIds[index]);
-                            continue;
+                        console.log('Get track info error: ', trackIds[index]);
+                        continue;
                     }
                     tracks.push(trackInfo);
                 }
-                resolve(tracks.length == 0 ? undefined: tracks)
+                resolve(tracks.length == 0 ? undefined : tracks)
             }
         })
     })
@@ -375,7 +378,7 @@ function getComingHitTrackFromDatabase() {
 function getNewReleaseTrack() {
     return new Promise(async (resolve, reject) => {
         var albumIds = await getNewReleaseAlbum()
-        if (albumIds.length == 0 ){
+        if (albumIds.length == 0) {
             console.log("New release album is empty")
             reject("New release album is empty")
         }
@@ -387,8 +390,8 @@ function getNewReleaseTrack() {
         for (var albumIds of splitAlbumIds) {
             trackIds = trackIds.concat(await getAlbumTrack(albumIds))
         }
-        console.log('Total new tracks ' ,trackIds.length );
-        if (trackIds.length == 0 ){
+        console.log('Total new tracks ', trackIds.length);
+        if (trackIds.length == 0) {
             console.log("New release track is empty")
             reject("New release track is empty")
         }
@@ -404,43 +407,43 @@ function getNewReleaseTrack() {
                 comingHitTracks.push(trackId);
                 comingHitTracksResult.push(track);
             }
-            if (comingHitTracks.length == 10 ){
+            if (comingHitTracks.length == 10) {
                 break;
             }
         }
-        if (comingHitTracks.length == 0 ){
+        if (comingHitTracks.length == 0) {
             console.log("Coming hit track is empty")
             reject("Coming hit track is empty")
         }
-        console.log('Total hit tracks ',comingHitTracks );
-        putSync(`track.hit.predict`, comingHitTracks.join(";"));
+        console.log('Total hit tracks ', comingHitTracks);
+        if (comingHitTracks.length >= 10) {
+            putSync(`track.hit.predict`, comingHitTracks.join(";"));
+        }
+        else {
+            get(`track.hit.predict`, async (err, value) => {
+                if (err || value == '') {
+                    putSync(`track.hit.predict`, comingHitTracks.join(";"));
+                }
+                else {
+                    var trackIds = value.split(";");
+                    for (var trackId of trackIds) {
+                        if (comingHitTracks.indexOf(trackId) == -1) {
+                            comingHitTracks.push(trackId);
+                            var track = await getTrackInfo(trackId)
+                            comingHitTracksResult.push(track);
+                        }
+                        if (comingHitTracks.length == 10) {
+                            break;
+                        }
+                    }
+                    putSync(`track.hit.predict`, comingHitTracks.join(";"));
+                }
+            })
+        }
         resolve(comingHitTracksResult)
     })
 }
 
-// async function predictHitTracks(trackIds) {
-//     var hitTracks = []
-//     for (var trackId of trackIds) {
-//         await getTrackInfo(trackId)
-//         var hitResult = await predictModel(trackId);
-//         if (hitResult == undefined) {
-//             continue
-//         }
-//         if (hitResult.hit > 0.5) {
-//             comingHitTracks.push(trackId);
-//         }
-//     }
-   
-// }
-
-// function storeComingHitTrack(comingHitTracks) {
-//     if (comingHitTracks.length == 0 ){
-//         console.log("Coming hit track is empty")
-//         return
-//     }
-//     console.log('Total hit tracks ',comingHitTracks );
-//     putSync(`track.hit.predict`, comingHitTracks.join(";"));
-// }
 const minorMode = 'minor';
 const majorMode = 'major';
 const beats = ' beats';
