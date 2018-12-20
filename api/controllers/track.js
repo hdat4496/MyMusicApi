@@ -6,7 +6,7 @@ const { getLastedChartTracks } = require('../controllers/chart');
 const { getTrackAudioFeatures, getTrackInfo, getTrackInfoFromDatabase, getTrackGeneralInfo,
     getRecommendTrack, searchTrackFromAPI, searchArtistFromAPI, getArtistFromDatabase, getArtistInfo,
     getNewReleaseAlbum, getAlbumTrack } = require('../controllers/spotify');
-const { predictModel, getTrackGenre} = require('../controllers/model');
+const { predictModel, getTrackGenre, getAllTrack} = require('../controllers/model');
 const { updateUserFavoriteGenre, getUserGenreFavorite } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
@@ -29,8 +29,41 @@ module.exports = {
     searchArtistAPI: searchArtistAPI,
     getArtist: getArtist,
     fetchNewReleaseTrack: fetchNewReleaseTrack,
-    getComingHitTrack: getComingHitTrack
+    getComingHitTrack: getComingHitTrack,
+    getAllTrackAdmin: getAllTrackAdmin
 };
+
+function getAllTrackAdmin(req, res) {
+    getTrackForAdmin()
+    .then(function(result){
+        res.json({ status: 200, value: result });
+    })
+    .catch(e => {
+        res.json({ status: 404, value: e });
+    })
+}
+
+function getTrackForAdmin() {
+    return new Promise(async (resolve, reject) => {
+        var trackList = await getAllTrack();
+        if (trackList == undefined) {
+            console.log("Get all track error");
+            reject("Get all track error")
+        }
+        console.log("Chart all track list:", trackList.length);
+        var data = [];
+        for (var trackId of trackList) {
+            var track = await getTrackGeneralInfo(trackId);
+            data.push(track);
+        }
+        console.log("Data list:", data.length);
+        var result = {
+            totalNumber:  data.length,
+            data: data.slice(data.length-101,data.length-1)
+        }
+        resolve(result);
+    })
+}
 
 function searchArtist(req, res) {
     var keyword = req.swagger.params.keyword.value;
@@ -231,8 +264,20 @@ function getHitTrack(token) {
     });
 }
 
-function fetchNewReleaseTrack() {
+function fetchNewReleaseTrack(req, res) {
     getNewReleaseTrack()
+    .then(function(tracks){
+        if (tracks.length == 0) {
+            res.json({ status: 404, value: "fetch coming hit error" });
+        }
+        else {
+            console.log("fetch coming hit track", tracks);
+            res.json({ status: 200, value: tracks });
+        }
+    })
+    .catch(e => {
+        res.json({ status: 404, value: e });
+    })
 }
 
 function getArtist(req, res) {
@@ -327,43 +372,75 @@ function getComingHitTrackFromDatabase() {
     })
 }
 
-async function getNewReleaseTrack() {
-    var albumIds = await getNewReleaseAlbum()
-    if (albumIds.length == 0 ){
-        console.log("New release album is empty")
-        return
-    }
-    var splitAlbumIds = [], size = 20;
-    while (albumIds.length > 0) {
-        splitAlbumIds.push(albumIds.splice(0, size));
-    }
-    var trackIds = []
-    for (var albumIds of splitAlbumIds) {
-        trackIds = trackIds.concat(await getAlbumTrack(albumIds))
-    }
-    console.log('Total new tracks ' ,trackIds.length );
-    if (trackIds.length == 0 ){
-        console.log("New release track is empty")
-        return
-    }
-    var comingHitTracks = []
-    for (var trackId of trackIds) {
-        await getTrackInfo(trackId)
-        var hitResult = await predictModel(trackId);
-        if (hitResult == undefined) {
-            continue
+function getNewReleaseTrack() {
+    return new Promise(async (resolve, reject) => {
+        var albumIds = await getNewReleaseAlbum()
+        if (albumIds.length == 0 ){
+            console.log("New release album is empty")
+            reject("New release album is empty")
         }
-        if (hitResult.hit > 0.5) {
-            comingHitTracks.push(trackId);
+        var splitAlbumIds = [], size = 20;
+        while (albumIds.length > 0) {
+            splitAlbumIds.push(albumIds.splice(0, size));
         }
-    }
-    if (comingHitTracks.length == 0 ){
-        console.log("Coming hit track is empty")
-        return
-    }
-    console.log('Total hit tracks ',comingHitTracks );
-    putSync(`track.hit.predict`, comingHitTracks.join(";"));
+        var trackIds = []
+        for (var albumIds of splitAlbumIds) {
+            trackIds = trackIds.concat(await getAlbumTrack(albumIds))
+        }
+        console.log('Total new tracks ' ,trackIds.length );
+        if (trackIds.length == 0 ){
+            console.log("New release track is empty")
+            reject("New release track is empty")
+        }
+        var comingHitTracks = []
+        var comingHitTracksResult = []
+        for (var trackId of trackIds) {
+            var track = await getTrackInfo(trackId)
+            var hitResult = await predictModel(trackId);
+            if (hitResult == undefined) {
+                continue
+            }
+            if (hitResult.hit > 0.5) {
+                comingHitTracks.push(trackId);
+                comingHitTracksResult.push(track);
+            }
+            if (comingHitTracks.length == 10 ){
+                break;
+            }
+        }
+        if (comingHitTracks.length == 0 ){
+            console.log("Coming hit track is empty")
+            reject("Coming hit track is empty")
+        }
+        console.log('Total hit tracks ',comingHitTracks );
+        putSync(`track.hit.predict`, comingHitTracks.join(";"));
+        resolve(comingHitTracksResult)
+    })
 }
+
+// async function predictHitTracks(trackIds) {
+//     var hitTracks = []
+//     for (var trackId of trackIds) {
+//         await getTrackInfo(trackId)
+//         var hitResult = await predictModel(trackId);
+//         if (hitResult == undefined) {
+//             continue
+//         }
+//         if (hitResult.hit > 0.5) {
+//             comingHitTracks.push(trackId);
+//         }
+//     }
+   
+// }
+
+// function storeComingHitTrack(comingHitTracks) {
+//     if (comingHitTracks.length == 0 ){
+//         console.log("Coming hit track is empty")
+//         return
+//     }
+//     console.log('Total hit tracks ',comingHitTracks );
+//     putSync(`track.hit.predict`, comingHitTracks.join(";"));
+// }
 const minorMode = 'minor';
 const majorMode = 'major';
 const beats = ' beats';

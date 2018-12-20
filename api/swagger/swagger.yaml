@@ -56,6 +56,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /track/get-all-track:
+    x-swagger-router-controller: track
+    get:
+      description: Get track's data for admin
+      operationId: getAllTrackAdmin
+      parameters:
+        - name: token
+          in: query
+          description: Token
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/TrackResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /track/get-coming-hit-track:
     x-swagger-router-controller: track
     get:
@@ -367,7 +386,7 @@ paths:
           in: query
           description: genreType
           type: integer
-          required: false
+          required: true
       responses:
         "200":
           description: Success

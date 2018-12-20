@@ -3,8 +3,8 @@
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
 //const { runData } = require('../helpers/data.js');
-const { getChartDateList, convertDate, getGenreTypeList } = require('../helpers/utils');
-const { putTrackData } = require('../controllers/spotify');
+const { getChartDateList, convertDate, getGenreTypeList, getGenreName } = require('../helpers/utils');
+const { putTrackData, getTrackGeneralInfo } = require('../controllers/spotify');
 const { putChartData, putChartAnalysis } = require('../controllers/chart');
 var Crawler = require("crawler");
 
@@ -12,53 +12,85 @@ module.exports = {
     crawl: crawl    
 };
 
-
 function crawl(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
     var genreType = req.swagger.params.genreType.value;
-    console.log('Crawl data');
-    var urlList = createUrlList(startDate, endDate, genreType);
-    console.log("url list:", urlList.length);
-    var c = new Crawler({
-        maxConnections: 1,
-        // This will be called for each crawled page
-        callback: async function (error, res, done) {
-            if (error) {
-                console.log(error);
-            } else {
-                var $ = res.$;
-                var tracks = [];
-                var date = $('.article-date').first().text().trim();
-                var genre = res.options.genreType;
-                console.log(date);
-                $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
-                    var position = $(ele).find('.position').text().trim();
-                    var title = $(ele).find('.title').text().trim();
-                    var artist = $(ele).find('.artist').text().trim();
+    if (startDate == undefined || endDate == undefined || genreType == undefined) {
+        res.json({ status: 400, value: "You should select all start date, end date and genre!" });
+        return;
+    }
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+    if (startDate > endDate) {
+        res.json({ status: 400, value: "Start date must be before end date!" });
+        return;
+    }
+    crawlData(startDate, endDate, genreType)
+    .then(function(result) {
+        res.json({ status: 200, value: result });
+    })
+    .catch(e => {
+        res.json({ status: 400, value: e });
+    })
+   
+}
 
-                    title = normalizeTitle(title);
-                    artist = normalizeArtistName(artist);
-                    //console.log(position, title, artist);
-                    if ((position == '') || (title == '') || (artist == '')) {
-                        return;
-                    }
-                    var track = {
-                        position: position,
-                        title: title,
-                        artist: artist,
-                        genre: genre
-                    }
-                    tracks.push(track);
-                });
-
-                console.log('Crawled data length: ', tracks.length);
-                await putData(genre, date, tracks);
-            }
-            done();
+function crawlData(startDate, endDate, genreType) {
+    return new Promise(async (resolve, reject) => {
+        console.log('Crawl data');
+        var result = []
+        var urlList = createUrlList(startDate, endDate, genreType);
+        if (urlList.length == 0) {
+            reject("No date chart found")
         }
-    });
-    c.queue(urlList);
+        var i = 0;
+        console.log("url list:", urlList.length);
+        var c = new Crawler({
+            maxConnections: 1,
+            // This will be called for each crawled page
+            callback: async function (error, res, done) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    var $ = res.$;
+                    var tracks = [];
+                    var date = $('.article-date').first().text().trim();
+                    var genre = res.options.genreType;
+                    console.log(date);
+                    $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
+                        var position = $(ele).find('.position').text().trim();
+                        var title = $(ele).find('.title').text().trim();
+                        var artist = $(ele).find('.artist').text().trim();
+    
+                        title = normalizeTitle(title);
+                        artist = normalizeArtistName(artist);
+                        //console.log(position, title, artist);
+                        if ((position == '') || (title == '') || (artist == '')) {
+                            return;
+                        }
+                        var track = {
+                            position: position,
+                            title: title,
+                            artist: artist,
+                            genre: genre
+                        }
+                        tracks.push(track);
+                    });
+    
+                    console.log('Crawled data length: ', tracks.length);
+                    var trackList = await putData(genre, date, tracks);
+                    result = result.concat(trackList);
+                    i = i + 1;
+                    if (i == urlList.length) {
+                        resolve(result);
+                    }
+                }
+                done();
+            }
+        });
+        c.queue(urlList);
+    })
 }
 
 async function putData(genre, date, tracks) {
@@ -67,6 +99,18 @@ async function putData(genre, date, tracks) {
     var dateFormat = convertDate(date);
     var dateKey = dateFormat.day + dateFormat.month + dateFormat.year;
     putChartAnalysis(dateKey, genre);
+    var result = []
+    for (var track of trackInfoList) {
+        if (track.trackId == undefined) {
+            continue;
+        }
+        var trackResult = await getTrackGeneralInfo(track.trackId);
+        trackResult.date = dateFormat.day + "/" + dateFormat.month + "/" +dateFormat.year;
+        trackResult.genre = getGenreName(genre)
+        trackResult.position = track.position
+        result.push(trackResult);
+    }
+    return result;
 }
 
 function normalizeTitle(title) {

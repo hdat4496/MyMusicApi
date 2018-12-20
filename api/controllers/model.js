@@ -20,7 +20,8 @@ module.exports = {
     putDistinctKeyToObject: putDistinctKeyToObject,
     buildGenreModel: buildGenreModel,
     predictGenre: predictGenre,
-    getTrackGenre: getTrackGenre
+    getTrackGenre: getTrackGenre,
+    getAllTrack: getAllTrack
 };
 
 

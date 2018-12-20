@@ -290,8 +290,8 @@
 
             var splitted = _.clean(stdout.split('\n')[5]).split(' ');
             console.log("Split",splitted);
-            if(splitted.length ==0) {
-              callback();
+            if(splitted[2] == undefined) {
+              callback(error, result);
               return
             }
             result.predicted = splitted[2].split(':')[1];
