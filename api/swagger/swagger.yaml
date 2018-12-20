@@ -473,6 +473,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response" 
+  /chart/get-all-chart:
+    x-swagger-router-controller: chart
+    get:
+      description: get all chart for admin
+      operationId: getAllChart
+      parameters:
+        - name: token
+          in: query
+          description: token
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response" 
   /savearff:
     x-swagger-router-controller: model
     get:

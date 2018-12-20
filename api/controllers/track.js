@@ -59,7 +59,7 @@ function getTrackForAdmin() {
         console.log("Data list:", data.length);
         var result = {
             totalNumber: data.length,
-            data: data.slice(data.length - 101, data.length - 1)
+            data: data.slice(data.length - 51, data.length - 1)
         }
         resolve(result);
     })

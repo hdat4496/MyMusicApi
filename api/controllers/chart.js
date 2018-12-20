@@ -17,8 +17,48 @@ module.exports = {
     putChartAnalysis: putChartAnalysis,
     getLastedChartTracks: getLastedChartTracks,
     getChartReport: getChartReport,
-    getChartReportHomePage: getChartReportHomePage
+    getChartReportHomePage: getChartReportHomePage,
+    getAllChart: getAllChart
 };
+
+function getAllChart (req, res) {
+    getChart()
+    .then(function (data) {
+        res.json({ status: 200, value: data });
+    })
+    .catch(e => {
+        res.json({ status: 404, value: e });
+    });
+}
+
+function getChart() {
+    return new Promise(async (resolve, reject) => {
+        var currentDate = new Date()
+        var startDate = new Date(currentDate.setTime(currentDate.getTime() - 90 * 86400000));
+        var dateList = getChartDateList(startDate, new Date());
+        var result = [];
+        var genreList = getGenreTypeList();
+        for (var date of dateList) {
+            for (var genre of genreList) {
+                var dateChart = await getChartDate(date.day + date.month + date.year, genre);
+                if (dateChart == undefined) {
+                    continue;
+                }
+                var chart = {
+                    genre: getGenreName(genre),
+                    date: dateChart
+                }
+                result.push(chart);
+            }
+        }
+        if (result.length == 0) {
+            reject("Data not found");
+        }
+        else {
+            resolve(result);
+        }
+    })
+}
 
 function putChartData(genre, date, trackInfoList) {
     if (trackInfoList == undefined || genre == undefined || date == undefined) {
@@ -445,6 +485,18 @@ const roundNumber = 4;
 // function formatNumber(value) {
 //     return parseFloat(value.toFixed(roundNumber));
 // }
+async function getChartDate(date, genreType) {
+    return new Promise((resolve, reject) => {
+        get(`chart.${date}.${genreType}.date`, (err, value) => {
+            if (!err) {
+                resolve(value);
+            }
+            else {
+                resolve(undefined);
+            }
+        });
+    });
+}
 
 async function getChartAnalysis(date, genreType) {
     return new Promise((resolve, reject) => {
