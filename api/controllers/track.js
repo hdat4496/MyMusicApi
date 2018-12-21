@@ -164,10 +164,19 @@ function searchTrackAPI(req, res) {
 
 function getTrack(req, res) {
     var trackId = req.swagger.params.id.value;
-    getTrackDetail(trackId)
+    var isAdmin = req.swagger.params.isAdmin.value;
+    getTrackDetail(trackId, isAdmin)
         .then(async function (track) {
             //console.log("Get track", track);
+            if (isAdmin == true) {
+                console.log("Get track for admin");
+                res.json({ status: 200, value: track });
+                return;
+            }
+            console.log("Get track for user");
+            track.trackInfo.listen = parseInt(track.trackInfo.listen) +1 ;
             res.json({ status: 200, value: track });
+            updateTrackListen(trackId);
             var token = req.swagger.params.token.value;
             if (token != undefined) {
                 console.log("Get track with token")
@@ -184,7 +193,7 @@ function getTrack(req, res) {
 
 
 
-function getTrackDetail(trackId) {
+function getTrackDetail(trackId, isAdmin) {
     return new Promise(async (resolve, reject) => {
         var track = new Object;
         var trackInfo = await getTrackInfo(trackId);
@@ -193,14 +202,17 @@ function getTrackDetail(trackId) {
             reject("Get track info error");
             return;
         }
-        updateTrackListen(trackId);
-        trackInfo[listen] = parseInt(trackInfo[listen]) +1 ;
         track.trackInfo = trackInfo;
         //console.log("get track audio features", trackId);
         var trackFeaturesString = await getTrackAudioFeatures(trackId);
         //console.log("Audio features", trackFeaturesString);
         var trackFeatures = convertAudioFeatures(trackFeaturesString);
         track.trackFeatures = (trackFeatures == undefined) ? '' : trackFeatures;
+        if (isAdmin == true) {
+            console.log("Get track for admin")
+            resolve(track);
+            return
+        }
         var hitResult = await predictModel(trackId);
         track.hit = (hitResult == undefined) ? '' : hitResult;
         var recommendTracks = await getRecommendTrack(trackId);

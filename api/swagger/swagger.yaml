@@ -28,6 +28,10 @@ paths:
           in: query
           description: token 
           type: string
+        - name: isAdmin
+          in: query
+          description: whether get track info for admin
+          type: boolean
       responses:
         "200":
           description: Success
