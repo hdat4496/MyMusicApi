@@ -2,8 +2,8 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-const { getTrackAudioFeatures } = require('../controllers/spotify')
-const { convertDate, getChartDateList, convertStringToDate, getRandomInt, getGenreTypeList, getGenreName } = require('../helpers/utils');
+const { getTrackAudioFeatures, getTrackGeneralInfo } = require('../controllers/spotify')
+const { convertDate, getChartDateList, convertStringToDate, getRandomInt, getGenreTypeList, getGenreName, getGenreType, convertDateToString } = require('../helpers/utils');
 const { putDistinctKeyToObject } = require('../controllers/model');
 const { getUserGenreFavorite } = require('../controllers/user');
 var Statistics = require("simple-statistics");
@@ -18,17 +18,67 @@ module.exports = {
     getLastedChartTracks: getLastedChartTracks,
     getChartReport: getChartReport,
     getChartReportHomePage: getChartReportHomePage,
-    getAllChart: getAllChart
+    getAllChart: getAllChart,
+    getTrackChart: getTrackChart
 };
-
-function getAllChart (req, res) {
-    getChart()
+function getTrackChart(req, res) {
+    var date = req.swagger.params.date.value;
+    var genre = req.swagger.params.genre.value;
+    getTrackForChart(genre, date)
     .then(function (data) {
         res.json({ status: 200, value: data });
     })
     .catch(e => {
         res.json({ status: 404, value: e });
     });
+}
+
+function getTrackForChart(genre, date) {
+    return new Promise(async (resolve, reject) => {
+        var genreType = getGenreType(genre);
+        if (genreType == -1) {
+            reject("Genre type is invalid");
+        }
+        var dateKey = convertStringToDate(date);
+        if (dateKey == undefined) {
+            reject("Date is invalid");
+            return;
+        }
+        dateKey = convertDateToString(dateKey)
+        var trackListObject = await getTrackListForChart(dateKey, genreType);
+        if (trackListObject == undefined) {
+            reject("No tracks for this chart")
+            return;
+        }
+        var result = []
+        for (var trackId of Object.keys(trackListObject)) {
+            if (trackListObject[trackId] > 40) {
+                break;
+            }
+            var track = await getTrackGeneralInfo(trackId);
+            if (track == undefined) {
+                continue;
+            }
+            track.position = trackListObject[trackId];
+            result.push(track);
+        }      
+        if (result.length == 0) {
+            reject("No tracks data for this chart")
+            return;
+        }
+        resolve(result);
+    })
+
+
+}
+function getAllChart(req, res) {
+    getChart()
+        .then(function (data) {
+            res.json({ status: 200, value: data });
+        })
+        .catch(e => {
+            res.json({ status: 404, value: e });
+        });
 }
 
 function getChart() {
@@ -319,12 +369,12 @@ const featureTypeNumber = 2;
 function getChartReportHomePage(req, res) {
     var token = req.swagger.params.token.value;
     getChartReportHomePageImp(token)
-    .then(function (result) {
+        .then(function (result) {
             res.json({ status: 200, value: result });
-    })
-    .catch(e => {
-        res.json({ status: 400, value: e });
-    });
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        });
 }
 function getChartReportHomePageImp(token) {
     return new Promise(async (resolve, reject) => {

@@ -13,7 +13,8 @@ module.exports = {
     convertStringToDate: convertStringToDate,
     getRandomInt: getRandomInt,
     getGenreTypeList: getGenreTypeList,
-    shuffle: shuffle
+    shuffle: shuffle,
+    getGenreType: getGenreType
 };
 
 function convertDate(date) {
@@ -147,7 +148,7 @@ function findStartDate(startDate) {
 function convertStringToDate(value) {
     var dateArray = value.split("/");
     if (dateArray.length < 3) {
-        console.log("chart lasted date type ", genre, " is not valid");
+        console.log("chart lasted date type ", value, " is not valid");
         return;
     }
     var date = new Date();
@@ -183,6 +184,21 @@ function getGenreName(genreType) {
             return rb;
         default:
             return all;
+    }
+}
+
+function getGenreType(genreName) {
+    switch (genreName) {
+        case dance:
+            return genreTypeList[1];
+        case rock:
+            return genreTypeList[2];
+        case rb:
+            return genreTypeList[3];
+        case all:
+            return genreTypeList[0];
+        default:
+            return -1;
     }
 }
 function shuffle(array) {
