@@ -53,6 +53,7 @@ function crawlData(startDate, endDate, genreType) {
                 if (error) {
                     console.log(error);
                 } else {
+                    i = i + 1;
                     var $ = res.$;
                     var tracks = [];
                     var date = $('.article-date').first().text().trim();
@@ -77,13 +78,20 @@ function crawlData(startDate, endDate, genreType) {
                         }
                         tracks.push(track);
                     });
-    
+                    
                     console.log('Crawled data length: ', tracks.length);
-                    var trackList = await putData(genre, date, tracks);
-                    result = result.concat(trackList);
-                    i = i + 1;
+                    if (tracks.length != 0) {
+                        var chart = await putData(genre, date, tracks);
+                        result.push(chart);
+                    }
+                   
                     if (i == urlList.length) {
-                        resolve(result);
+                        if (result.length == 0) {
+                            reject("No data crawled")
+                        }
+                        else {
+                            resolve(result);
+                        }     
                     }
                 }
                 done();
@@ -94,23 +102,28 @@ function crawlData(startDate, endDate, genreType) {
 }
 
 async function putData(genre, date, tracks) {
-    var trackInfoList = await putTrackData(tracks);
+    var trackInfoList= await putTrackData(tracks);
     await putChartData(genre, date, trackInfoList);
     var dateFormat = convertDate(date);
     var dateKey = dateFormat.day + dateFormat.month + dateFormat.year;
     putChartAnalysis(dateKey, genre);
-    var result = []
-    for (var track of trackInfoList) {
-        if (track.trackId == undefined) {
-            continue;
-        }
-        var trackResult = await getTrackGeneralInfo(track.trackId);
-        trackResult.date = dateFormat.day + "/" + dateFormat.month + "/" +dateFormat.year;
-        trackResult.genre = getGenreName(genre)
-        trackResult.position = track.position
-        result.push(trackResult);
+    var chart = {
+        genre: getGenreName(genre),
+        date: dateFormat.day + "/" + dateFormat.month + "/" +dateFormat.year
     }
-    return result;
+    // var result = []
+    // for (var track of trackInfoList) {
+    //     if (track.trackId == undefined) {
+    //         continue;
+    //     }
+    //     var trackResult = await getTrackGeneralInfo(track.trackId);
+    //     trackResult.date = dateFormat.day + "/" + dateFormat.month + "/" +dateFormat.year;
+    //     trackResult.genre = getGenreName(genre)
+    //     trackResult.position = track.position
+    //     result.push(trackResult);
+    // }
+    // return result;
+    return chart;
 }
 
 function normalizeTitle(title) {

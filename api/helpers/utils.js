@@ -79,6 +79,10 @@ function getChartDateList(startDate, endDate) {
         console.log("Chart date is invalid");
         return;
     }
+
+    if (endDate > new Date() ){
+        endDate = new Date()
+    }
     var realStartDate = findStartDate(startDate);
     var dateList = [];
     endDate = new Date(endDate);
