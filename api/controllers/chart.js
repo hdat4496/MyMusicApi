@@ -19,8 +19,86 @@ module.exports = {
     getChartReport: getChartReport,
     getChartReportHomePage: getChartReportHomePage,
     getAllChart: getAllChart,
-    getTrackChart: getTrackChart
+    getTrackChart: getTrackChart,
+    searchChart: searchChart
 };
+function searchChart(req, res) {
+    var startDate = req.swagger.params.startDate.value;
+    var endDate = req.swagger.params.endDate.value;
+    var genreType = req.swagger.params.genreType.value;
+    if (startDate == undefined && endDate == undefined && genreType == undefined) {
+        res.json({ status: 400, value: "Mode search chart is empty" });
+    }
+
+    searchChartImp(startDate, endDate, genreType)
+    .then(function (data) {
+        res.json({ status: 200, value: data });
+    })
+    .catch(e => {
+        res.json({ status: 404, value: e });
+    });
+}
+
+const searchDayInterval = 90;
+function searchChartImp(startDate, endDate, genreType) {
+    return new Promise(async (resolve, reject) => {
+        var genreList = getGenreTypeList();
+        if (genreType != undefined) {
+            if (genreList.indexOf(genreType) != -1) {
+                genreList = [genreType]
+            } else {
+                reject("Genre type is not valid")
+                return;
+            }
+        }
+    
+        var currentDate = new Date()
+        var tempDate = new Date()
+        if (startDate != undefined && genreType != undefined) {
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            if (startDate > endDate) {
+                reject("Start date must be before end date!")
+                return;
+            }
+        }
+        else {
+            if (startDate == undefined && endDate == undefined) {
+                endDate = new Date()
+                startDate = new Date(tempDate.setTime(endDate.getTime() - searchDayInterval * 86400000));
+            }
+            else if (startDate != undefined) {
+                startDate = new Date(startDate);
+                endDate = new Date(tempDate.setTime(startDate.getTime() + searchDayInterval * 86400000));
+            }
+            else{
+                endDate = new Date(endDate);
+                if (endDate > currentDate) {
+                    endDate = new Date();
+                }
+                startDate = new Date(tempDate.setTime(endDate.getTime() - searchDayInterval * 86400000));
+            }
+        }
+
+        if (startDate > currentDate) {
+            reject("No data found")
+            return;
+        }
+        if (endDate > currentDate) {
+            endDate = currentDate
+        }
+
+        var result = [];
+        result = await getChartList(startDate, endDate, genreList);
+        if (result.length == 0) {
+            reject("Data not found");
+        }
+        else {
+            resolve(result);
+        }
+    })
+  
+}
 function getTrackChart(req, res) {
     var date = req.swagger.params.date.value;
     var genre = req.swagger.params.genre.value;
@@ -85,22 +163,8 @@ function getChart() {
     return new Promise(async (resolve, reject) => {
         var currentDate = new Date()
         var startDate = new Date(currentDate.setTime(currentDate.getTime() - 90 * 86400000));
-        var dateList = getChartDateList(startDate, new Date());
         var result = [];
-        var genreList = getGenreTypeList();
-        for (var date of dateList) {
-            for (var genre of genreList) {
-                var dateChart = await getChartDate(date.day + date.month + date.year, genre);
-                if (dateChart == undefined) {
-                    continue;
-                }
-                var chart = {
-                    genre: getGenreName(genre),
-                    date: dateChart
-                }
-                result.push(chart);
-            }
-        }
+        result = await getChartList(startDate, new Date(), getGenreTypeList());
         if (result.length == 0) {
             reject("Data not found");
         }
@@ -108,6 +172,26 @@ function getChart() {
             resolve(result);
         }
     })
+}
+
+async function getChartList(startDate, endDate, genreList) {
+    console.log(startDate, endDate, genreList)
+    var dateList = getChartDateList(startDate, endDate);
+    var result = [];
+    for (var date of dateList) {
+        for (var genre of genreList) {
+            var dateChart = await getChartDate(date.day + date.month + date.year, genre);
+            if (dateChart == undefined) {
+                continue;
+            }
+            var chart = {
+                genre: getGenreName(genre),
+                date: dateChart
+            }
+            result.push(chart);
+        }
+    }
+    return result;
 }
 
 function putChartData(genre, date, trackInfoList) {

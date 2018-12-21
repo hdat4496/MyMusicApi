@@ -521,6 +521,33 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Response" 
+  /chart/search:
+    x-swagger-router-controller: chart
+    get:
+      description: get chart analysis report
+      operationId: searchChart
+      parameters:
+        - name: startDate
+          in: query
+          description: start date yyyy-MM-dd
+          type: string
+        - name: endDate
+          in: query
+          description: end date yyyy-MM-dd
+          type: string
+        - name: genreType
+          in: query
+          description: genreType
+          type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Response"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Response"  
   /savearff:
     x-swagger-router-controller: model
     get:
