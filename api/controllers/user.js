@@ -210,12 +210,16 @@ function putFavoriteSong(req, res) {
                 }
                 else {
                     idList = value.split(";");
+                    console.log("1111111111", idList);
                     var index = idList.indexOf(trackId);
+                    console.log("11111122222221111", index);
                     if (index != -1) {
+                        console.log("3333");
                         idList.splice(index);                       
                     }
+                    console.log("444444444", idList);
                     var trackList = idList.join(";");
-
+                    console.log("555555555", trackList);
                     putSync(`user.${check.user}.favorite`, trackList);
                     get(`track.${trackId}.like`, (err, value) => {
                         if (!err) {
