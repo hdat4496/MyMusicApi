@@ -699,14 +699,16 @@ async function getTrackAudioFeaturesFromAPI(trackId) {
 async function getTrackAudioAnalysis(trackId) {
     //console.log('Get track audio analysis for :', trackId);
     var dataFromDatabase = await getTrackAnalysisFromDatabase(trackId);
-
+    if (dataFromDatabase == '') {
+        return
+    }
     //console.log('Analysis from database :', dataFromDatabase);
     if (dataFromDatabase != undefined) {
         //console.log('Return track analysis from database :', trackId);
         return dataFromDatabase;
     }
     var dataFromAPI = await getAudioAnalysisAPI(trackId);
-    if (dataFromAPI == undefined || dataFromAPI == '') {
+    if (dataFromAPI == undefined || dataFromAPI.length === '') {
         //console.log("Get track analysis from api error");
         return;
     }
@@ -720,6 +722,9 @@ async function getTrackAnalysisFromDatabase(trackId) {
     return new Promise((resolve, reject) => {
         get(`track.${trackId}.analysis`, async (err, value) => {
             if (!err) {
+                if (value == '') {
+                    resolve(value)
+                }
                 var analysis_value = value.split(";");
                 trackAnalysis = convertAnalysis(analysis_value, trackId);
                 resolve(trackAnalysis);
