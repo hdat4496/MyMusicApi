@@ -54,7 +54,7 @@ function searchChartImp(startDate, endDate, genreType) {
     
         var currentDate = new Date()
         var tempDate = new Date()
-        if (startDate != undefined && genreType != undefined) {
+        if (startDate != undefined && endDate != undefined) {
             startDate = new Date(startDate);
             endDate = new Date(endDate);
             if (startDate > endDate) {
