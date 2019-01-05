@@ -270,7 +270,7 @@
    * @param cb Callback function
    */
   exports.predict = function (model, test, options, cb) {
-    console.log('predict');
+    //console.log('predict');
     
     async.waterfall([
       function (callback) {
@@ -279,8 +279,9 @@
           + options.params +
           ' -T '+ test +
           ' -l '+ model +
-          ' -no-cv -v -p 0',
+          ' -v -p 0',
           function (error, stdout, stderr) {
+            console.log(stderr)
             if (error) {
               callback(error);
               return;
@@ -289,7 +290,7 @@
             var result = {};
 
             var splitted = _.clean(stdout.split('\n')[5]).split(' ');
-            console.log("Split",splitted);
+            //console.log("Split",splitted);
             if(splitted[2] == undefined) {
               callback(error, result);
               return

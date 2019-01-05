@@ -2,8 +2,8 @@
 
 const { get, putSync } = require('../helpers/db');
 const { generateToken, checkToken } = require('../helpers/token');
-const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset, getTrackAudioFeatures, 
-    getTrackInfoExtra} = require('../controllers/spotify');
+const { getTrackAudioAnalysis, putTrackAudioFeature, putTrackAudioAnalysisForDataset, getTrackAudioFeatures,
+    getTrackInfoExtra } = require('../controllers/spotify');
 const { getChartDateList, getAudioAnalysisKey, getGenreName, convertDateToString, shuffle } = require('../helpers/utils');
 
 //const { runData } = require('../helpers/data.js');
@@ -29,8 +29,150 @@ function buildModel(req, res) {
     var startDate = req.swagger.params.startDate.value;
     var endDate = req.swagger.params.endDate.value;
     var genreType = req.swagger.params.genreType.value;
-    createModel(startDate, endDate, genreType);
+    if (genreType == -1) {
+        buildGenre()
+    } else if (genreType == -2) {
+        testModel()
+    }
+    else {
+        createModel(startDate, endDate, genreType);
+    }
     res.json({ status: 200, message: "create afff success" });
+}
+
+async function testModel() {
+    var endDate = '2018-12-31'
+    var startDate = '2017-06-30'
+    var genreTypeList = [1, 2, 3]
+    var data = []
+    for (var genreType of genreTypeList) {
+        var newdata = await getDataForBuildTest(startDate, endDate, genreType);
+        if (newdata == undefined) {
+            console.log("Data not found ", genreType);
+            continue;
+        }
+        data = data.concat(newdata)
+    }
+
+    if (data == undefined) {
+        console.log("Data not found");
+        return
+    }
+    var tp =0
+    var fp =0
+    var tn=0
+    var fn=0
+    for (var track of data) {
+        var hitResult = await predictModel(track.id);
+        if (hitResult != 'hit' && hitResult != 'non-hit') {
+            continue
+        }
+        track.predict = hitResult
+        if (track.actual == hitResult) {
+            if(hitResult == 'hit') {
+                tp = tp +1;
+            }else {
+                tn = tn +1;
+            }
+        } else {
+            if (hitResult == 'hit') {
+                fp = fp +1;
+            }
+            else {
+                fn = fn + 1;
+            }
+        }
+    }
+    console.log("TP ", tp)
+    console.log("FP ", fp)
+    console.log("TN ", tn)
+    console.log("FN ", fn)
+
+    // var hitResult = await predictModel(data[0].id);
+    // if (hitResult != 'hit' && hitResult != 'non-hit') {
+    //     console.log("predict is ",hitResult)
+    // }
+    // data.predict = hitResult
+    var filename = 'hit-test'
+    var filenameData = pathArff + filename + arffType;
+    console.log("file name data: " + filenameData);
+    createArffHitTest(data, filenameData);
+}
+
+async function buildArffTest() {
+    var endDate = '12-31-2018'
+    var startDate = '01-01-2017'
+    var genreTypeList = [1, 2, 3]
+    var data = []
+    for (var genreType of genreTypeList) {
+        var newdata = await getDataForBuildTest(startDate, endDate, genreType);
+        if (newdata == undefined) {
+            console.log("Data not found ", genreType);
+            continue;
+        }
+        data = data.concat(newdata)
+    }
+
+    if (data == undefined) {
+        console.log("Data not found");
+        return
+    }
+    console.log("data",data)
+    var filename = 'hit-test'
+    var filenameData = pathArff + filename + arffType;
+    console.log("file name data: " + filenameData);
+    createArffHitTest(data, filenameData);
+}
+
+async function buildGenre() {
+    for (var i =1; i<=3; i++) {
+        await updateGenre('1997-01-01','2019-01-01', i);
+    }
+
+}
+
+async function updateGenre(startDate, endDate, genreType) {
+    console.log("genreType", genreType)
+    var trackListObject = await getChartDistinctTrackList(startDate, endDate, genreType);
+    if (trackListObject == undefined) {
+        console.log("Get chart distinct track list error", genreType);
+        return
+    }
+   
+    for (var trackId of Object.keys(trackListObject)) {
+        putSync(`track.${trackId}.genre`, parseInt(genreType));
+    }
+}
+
+async function getDataForBuildTest(startDate, endDate, genreType) {
+    var trackListObject = await getChartDistinctTrackList(startDate, endDate, genreType);
+    if (trackListObject == undefined) {
+        console.log("Get chart distinct track list error");
+        return
+    }
+    //console.log("Chart distinct track list:", Object.keys(trackListObject).length);
+    trackListObject = labelTrackList(trackListObject);
+    //console.log("Labeled track list:", Object.keys(trackListObject).length);
+    var data = [];
+    for (var trackId of Object.keys(trackListObject)) {
+        var track = new Object;
+        track.id = trackId
+        track.actual = trackListObject[trackId];
+        data.push(track);
+    }
+    console.log("Data list:", data.length);
+    return data
+}
+
+function createArffHitTest(data, filename) {
+    var arff = new Arff.ArffWriter(filename, Arff.MODE_OBJECT);
+    arff.addStringAttribute('id');
+    arff.addNominalAttribute("actual", ["hit", "non-hit"]);
+    arff.addNominalAttribute("predict", ["hit", "non-hit"]);
+    for (var row of data) {
+        arff.addData(row);
+    }
+    arff.writeToFile(filename);
 }
 
 const pathArff = 'api/public/arff/';
@@ -50,6 +192,10 @@ var LogisticClassifier = {
 
 async function createModel(startDate, endDate, genreType) {
     var data = await getDataForBuildModel(startDate, endDate, genreType);
+    if (data == undefined) {
+        console.log("Data not found");
+        return
+    }
     var trainSet = data
     //data = shuffle(data);
     // var lengthTrainningSet = parseInt(data.length * 0.8);
@@ -67,7 +213,7 @@ async function createModel(startDate, endDate, genreType) {
     // createArff(testSet, filenameDataTest);
     var modelName = pathModel + filename + modelType;
     console.log("model name" + modelName);
-    weka.classify(filenameData, modelName, BayesClassifier, function (err, result) {
+    weka.classify(filenameData, modelName, LogisticClassifier, function (err, result) {
         if (err) {
             console.log("Build model error" + err);
         }
@@ -82,15 +228,15 @@ function createArff(data, filename) {
     var attributeList = getAudioAnalysisKey();
     for (var attributeName of attributeList) {
         if (attributeName == 'mode') {
-            arff.addNominalAttribute("mode", [0,1]);
+            arff.addNominalAttribute("mode", [0, 1]);
             continue;
         }
         if (attributeName == 'key') {
-            arff.addNominalAttribute("key", [0,1,2,3,4,5,6,7,8,9,10,11]);
+            arff.addNominalAttribute("key", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
             continue;
         }
         if (attributeName == 'time_signature') {
-            arff.addNominalAttribute("time_signature", [0,1,2,3,4,5]);
+            arff.addNominalAttribute("time_signature", [0, 1, 2, 3, 4, 5]);
             continue;
         }
         arff.addNumericAttribute(attributeName);
@@ -109,6 +255,7 @@ async function getDataForBuildModel(startDate, endDate, genreType) {
     var trackListObject = await getChartDistinctTrackList(startDate, endDate, genreType);
     if (trackListObject == undefined) {
         console.log("Get chart distinct track list error");
+        return
     }
     //console.log("Chart distinct track list:", Object.keys(trackListObject).length);
     trackListObject = labelTrackList(trackListObject);
@@ -148,7 +295,7 @@ function labelTrackList(trackList) {
         // if (hitIndex < position  && position < nonhitIndex) {
         //     newTrackList[trackId] = 'potential';
         // }
-        if (nonhitIndex <= position) {
+        if (nonhitIndex <= position && position <= 40) {
             newTrackList[trackId] = 'non-hit';
         }
     }
@@ -166,6 +313,9 @@ async function getChartDistinctTrackList(startDate, endDate, genreType) {
     endDate = new Date(endDate.setTime(endOuterDate.getTime() - outerInterval * 86400000));
     console.log(startOuterDate, startDate, endDate, endOuterDate)
     var dateList = getChartDateList(startDate, endDate);
+    if (dateList.length == 0) {
+        return
+    }
     var distinctTracks = new Object;
     for (var date of dateList) {
         var date_str = date.day + date.month + date.year;
@@ -178,7 +328,7 @@ async function getChartDistinctTrackList(startDate, endDate, genreType) {
         distinctTracks = putDistinctKeyToObject(distinctTracks, chartTracks);
     }
 
-     var dateListBefore = getChartDateList(startOuterDate, startDate);
+    var dateListBefore = getChartDateList(startOuterDate, startDate);
     for (var date of dateListBefore) {
         var date_str = date.day + date.month + date.year;
         //console.log("Chart tracks", date_str, genreType);
@@ -232,7 +382,7 @@ function putDistinctKeyToObjectOuter(object1, object2) {
     for (var key of Object.keys(object2)) {
         // Object has no key
         if (object1[key] == undefined) {
-           continue
+            continue
         }
         // Object has key
         else {
@@ -260,7 +410,7 @@ function readArff(filename) {
 
     readFile(filename, 'utf8', function (error, content) {
         if (error) {
-            return console.error(error); 
+            return console.error(error);
         }
         var data = arffReadFile.parse(content).data;
         console.log("Row : ", data.length);
@@ -268,7 +418,7 @@ function readArff(filename) {
             putTrackAudioAnalysisForDataset(row);
             putTrackAudioFeature(row);
         }
-        console.log("Done save data from "+ filename +" file to database");
+        console.log("Done save data from " + filename + " file to database");
     });
 }
 
@@ -281,7 +431,7 @@ async function predictModel(trackid) {
     //  var genreType = await getGenreType(trackid);
     var genreType = await getTrackGenre(trackid);
     var modelName = await getModelName(genreType);
-    if (modelName == undefined ) {
+    if (modelName == undefined) {
         console.log("Genre type is invalid");
         return;
     }
@@ -291,57 +441,66 @@ async function predictModel(trackid) {
         console.log("Track analysis is not found");
         return;
     }
-    trackAnalysis.hit ='?';
+    trackAnalysis.hit = '?';
     var trackData = [];
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
-    var result = await predictTrack(modelName, fileNameTest, BayesClassifier);
-    result.prediction = parseFloat(result.prediction);
-    if (result.predicted == "hit") {
-        var prediction = new Object;
-        prediction.hit = result.prediction;
-        prediction.nonhit = parseFloat((1 -result.prediction).toFixed(4));
-    }
+    var result = await predictTrack(modelName, fileNameTest, getClassifier(genreType));
+    // result.prediction = parseFloat(result.prediction);
+    // if (result.predicted == "hit") {
+    //     var prediction = new Object;
+    //     prediction.hit = result.prediction;
+    //     prediction.nonhit = parseFloat((1 - result.prediction).toFixed(4));
+    // }
 
-    if (result.predicted == "non-hit") {
-        var prediction = new Object;
-        prediction.nonhit = result.prediction;
-        prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
-    }
-    return prediction;
+    // if (result.predicted == "non-hit") {
+    //     var prediction = new Object;
+    //     prediction.nonhit = result.prediction;
+    //     prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
+    // }
+    // return prediction;
+    return result.predicted;
 }
 var fileNameGenreTest = 'api/public/arff/genre_test.arff';
 async function predictGenre(trackid) {
     //  var genreType = await getGenreType(trackid);
     var modelName = await getModelName("genre");
-    if (modelName == undefined ) {
+    if (modelName == undefined) {
         console.log("Genre model is not found");
         return;
     }
     var trackFeatures;
     trackFeatures = await getTrackAudioFeatures(trackid);
-        if (trackFeatures == undefined) {
-            return;
-        }
-        trackFeatures = convertAudioFeatures(trackFeatures);
-    trackFeatures.genre ='?';
+    if (trackFeatures == undefined) {
+        return;
+    }
+    trackFeatures = convertAudioFeatures(trackFeatures);
+    trackFeatures.genre = '?';
     var trackData = [];
     trackData.push(trackFeatures);
     await createArffGenreClassification(trackData, fileNameGenreTest);
-    var result = await predictTrack(modelName, fileNameGenreTest, LogisticClassifier);
+    var result = await predictTrack(modelName, fileNameGenreTest, BayesClassifier);
     return result.predicted;
+}
+
+function getClassifier(genreType) {
+    if (genreType == 1 || genreType == 3) {
+        return LogisticClassifier
+    }
+
+    return BayesClassifier
 }
 
 function predictTrack(modelName, fileNameTest, classifier) {
     return new Promise((resolve, reject) => {
-        console.log("Predict:" , modelName, fileNameTest);
+        //console.log("Predict:", modelName, fileNameTest);
         weka.predict(modelName, fileNameTest, classifier, function (err, result) {
             if (err) {
                 console.log("Predict error" + err);
                 resolve(undefined);
             }
             else {
-                console.log("Predict success: " + result.predicted, result.prediction);  
+                //console.log("Predict success: " + result.predicted, result.prediction);
                 resolve(result);
             }
         });
@@ -353,7 +512,7 @@ function getModelName(genreType) {
     return new Promise((resolve, reject) => {
         get(`model.${genreType}`, (err, value) => {
             if (!err) {
-                console.log('get model name:', value);
+                //console.log('get model name:', value);
                 resolve(value);
             }
             else {
@@ -390,8 +549,28 @@ async function createModelClassifyGenre() {
 }
 
 async function getDataForBuildModelClassifyGenre() {
-    var trackList = await getAllTrack();
-    if (trackList == undefined) {
+    var trackList = []
+    for (var genreType=3; genreType >=1; genreType--) {
+        var trackListObject = await getChartDistinctTrackList('1997-01-01', '2019-01-01', genreType);
+        if (trackListObject == undefined) {
+            console.log("Get chart distinct track list error", genreType);
+            continue;
+        }
+        var i =0;
+        for (var trackId of Object.keys(trackListObject)) {
+            if (trackList.indexOf(trackId) == -1) {
+                trackList.push(trackId);
+            }
+            else {
+                i = i +1;
+               // console.log("track exist:", trackId)
+            }
+            
+        }
+        console.log("track exist:", i)
+    }
+   
+    if (trackList.length == 0) {
         console.log("Get all track error");
     }
     console.log("Chart all track list:", trackList.length);
@@ -436,25 +615,25 @@ function createArffGenreClassification(data, filename) {
     var arff = new Arff.ArffWriter(filename, Arff.MODE_OBJECT);
     for (var attributeName of audioFeatureList) {
         if (attributeName == 'mode') {
-            arff.addNominalAttribute("mode", [0,1]);
+            arff.addNominalAttribute("mode", [0, 1]);
             continue;
         }
         if (attributeName == 'key') {
-            arff.addNominalAttribute("key", [0,1,2,3,4,5,6,7,8,9,10,11]);
+            arff.addNominalAttribute("key", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
             continue;
         }
         if (attributeName == 'time_signature') {
-            arff.addNominalAttribute("time_signature", [0,1,2,3,4,5]);
+            arff.addNominalAttribute("time_signature", [0, 1, 2, 3, 4, 5]);
             continue;
         }
         arff.addNumericAttribute(attributeName);
     }
-    arff.addNominalAttribute("genre", [1, 2,3]);
+    arff.addNominalAttribute("genre", [1, 2, 3]);
     for (var row of data) {
         arff.addData(row);
     }
     arff.writeToFile(filename);
-    console.log("Write arff file: ", filename);
+    //console.log("Write arff file: ", filename);
 }
 
 function convertAudioFeatures(featuresString) {
@@ -500,7 +679,7 @@ async function getTrackListForChart(date, genreType) {
                 resolve(chartTracks);
             }
             else {
-                console.log('Get track list error', date);
+                console.log('Get track list error', date, genreType);
                 resolve(undefined);
             }
         });
@@ -509,14 +688,15 @@ async function getTrackListForChart(date, genreType) {
 async function getTrackGenre(trackId) {
     var genre = await getTrackGenreFromDatabase(trackId);
     if (genre != undefined && genre != '') {
+        console.log("Track from db ", trackId, genre);
         return genre
     }
-    genre = await predictGenre(trackId);
-    console.log("Genre ", trackId, genre);
+    var genre = await predictGenre(trackId);
+    //console.log("Genre ", trackId, genre);
     if (genre == undefined) {
         return
     }
-    putSync(`track.${trackId}.genre`, parseInt(genre));
+    //putSync(`track.${trackId}.genre`, parseInt(genre));
     return genre
 }
 

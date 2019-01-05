@@ -23,6 +23,7 @@ function crawl(req, res) {
     startDate = new Date(startDate);
     endDate = new Date(endDate);
     if (startDate > endDate) {
+        console.log("Start date must be before end date!")
         res.json({ status: 400, value: "Start date must be before end date!" });
         return;
     }
@@ -58,6 +59,7 @@ function crawlData(startDate, endDate, genreType) {
                     var tracks = [];
                     var date = $('.article-date').first().text().trim();
                     var genre = res.options.genreType;
+                    console.log(res.request.uri.href)
                     console.log(date);
                     $('.chart-positions').find('tr').not('.headings').not('.mobile-actions').not('.actions-view').each((_, ele) => {
                         var position = $(ele).find('.position').text().trim();
@@ -76,8 +78,15 @@ function crawlData(startDate, endDate, genreType) {
                             artist: artist,
                             genre: genre
                         }
+                        // var number = 30 - title.length;
+                        // title = (position < 10) ? '   '+title : '  '+title
+                        // for (var i =0; i<number;i++) {
+                        //     title = title+' '
+                        // }
+                        // console.log(position,title, artist);
                         tracks.push(track);
                     });
+                    
                     
                     console.log('Crawled data length: ', tracks.length);
                     if (tracks.length != 0) {
@@ -149,8 +158,8 @@ function normalizeArtistName(artist) {
         artist = artist.replace(" VS ", " OR ");
     }
 
-    while (artist.includes(" / ")) {
-        artist = artist.replace(" / ", " OR ");
+    while (artist.includes("/")) {
+        artist = artist.replace("/", " OR ");
     }
 
     while (artist.includes(" & ")) {

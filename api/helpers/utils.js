@@ -81,7 +81,7 @@ function getChartDateList(startDate, endDate) {
         return;
     }
 
-    if (endDate > new Date() ){
+    if (endDate > new Date()) {
         endDate = new Date()
     }
     var realStartDate = findStartDate(startDate);
@@ -169,7 +169,7 @@ function getAudioAnalysisKey() {
 function getGenreTypeList() {
     return genreTypeList;
 }
-const genreTypeList = [4,1,2,3];
+const genreTypeList = [4, 1, 2, 3];
 const dance = "dance";
 const rb = "rb";
 const rock = "rock";
@@ -203,22 +203,22 @@ function getGenreType(genreName) {
 }
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-  
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-  
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
     }
-  
+
     return array;
-  }
+}
 const analysis_key =
     ['duration_ms',
         'tempo',
@@ -371,3 +371,50 @@ const analysis_key =
         'timbre_12_max',
         'timbre_12_range',
         'timbre_12_median']
+
+
+// var Crawler = require("crawler");
+// var c = new Crawler({
+//     maxConnections: 1,
+//     // This will be called for each crawled page
+//     callback: async function (error, res, done) {
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             // $ is Cheerio by default
+//             //a lean implementation of core jQuery designed specifically for the server
+//             var $ = res.$;
+//             var tracks = [];
+//             var date = $('.article-date').first().text().trim();
+//             console.log(date);
+//             var genre = res.options.genreType;
+
+//             $('.chart-positions').find('tr').not('.headings').not('.mobile-actions')
+//                 .not('.actions-view').each((_, ele) => {
+//                     var position = $(ele).find('.position').text().trim();
+//                     var title = $(ele).find('.title').text().trim();
+//                     var artist = $(ele).find('.artist').text().trim();
+
+//                     title = normalizeTitle(title);
+//                     artist = normalizeArtistName(artist);
+//                     if ((position == '') || (title == '') || (artist == '')) {
+//                         return;
+//                     }
+//                     var track = {
+//                         position: position,
+//                         title: title,
+//                         artist: artist,
+//                         genre: genre
+//                     }
+//                     tracks.push(track);
+//                 });
+//         }
+//         done();
+//     }
+// });
+
+// // Queue just one URL, with default callback
+// c.queue({
+//     uri: 'https://www.officialcharts.com/charts/dance-singles-chart/20181130/104/',
+//     genreType: 'dance'
+// })

@@ -79,7 +79,7 @@ function searchChartImp(startDate, endDate, genreType) {
                 startDate = new Date(tempDate.setTime(endDate.getTime() - searchDayInterval * 86400000));
             }
         }
-
+        
         if (startDate > currentDate) {
             reject("No data found")
             return;
@@ -90,12 +90,7 @@ function searchChartImp(startDate, endDate, genreType) {
 
         var result = [];
         result = await getChartList(startDate, endDate, genreList);
-        if (result.length == 0) {
-            reject("Data not found");
-        }
-        else {
-            resolve(result);
-        }
+        resolve(result);
     })
   
 }
