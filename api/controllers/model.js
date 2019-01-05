@@ -446,20 +446,20 @@ async function predictModel(trackid) {
     trackData.push(trackAnalysis);
     await createArff(trackData, fileNameTest);
     var result = await predictTrack(modelName, fileNameTest, getClassifier(genreType));
-    // result.prediction = parseFloat(result.prediction);
-    // if (result.predicted == "hit") {
-    //     var prediction = new Object;
-    //     prediction.hit = result.prediction;
-    //     prediction.nonhit = parseFloat((1 - result.prediction).toFixed(4));
-    // }
+    result.prediction = parseFloat(result.prediction);
+    if (result.predicted == "hit") {
+        var prediction = new Object;
+        prediction.hit = result.prediction;
+        prediction.nonhit = parseFloat((1 - result.prediction).toFixed(4));
+    }
 
-    // if (result.predicted == "non-hit") {
-    //     var prediction = new Object;
-    //     prediction.nonhit = result.prediction;
-    //     prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
-    // }
-    // return prediction;
-    return result.predicted;
+    if (result.predicted == "non-hit") {
+        var prediction = new Object;
+        prediction.nonhit = result.prediction;
+        prediction.hit = parseFloat((1 - result.prediction).toFixed(4));
+    }
+    return prediction;
+    //return result.predicted;
 }
 var fileNameGenreTest = 'api/public/arff/genre_test.arff';
 async function predictGenre(trackid) {
@@ -484,7 +484,7 @@ async function predictGenre(trackid) {
 }
 
 function getClassifier(genreType) {
-    if (genreType == 1 || genreType == 3) {
+    if (genreType == 1 || genreType == 3 || genreType == 2) {
         return LogisticClassifier
     }
 
@@ -696,7 +696,7 @@ async function getTrackGenre(trackId) {
     if (genre == undefined) {
         return
     }
-    //putSync(`track.${trackId}.genre`, parseInt(genre));
+    putSync(`track.${trackId}.genre`, parseInt(genre));
     return genre
 }
 

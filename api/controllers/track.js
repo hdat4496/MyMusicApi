@@ -10,16 +10,7 @@ const { predictModel, getTrackGenre, getAllTrack } = require('../controllers/mod
 const { updateUserFavoriteGenre, getUserGenreFavorite } = require('../controllers/user');
 const { getRandomInt } = require('../helpers/utils');
 //const { runData } = require('../helpers/data.js');
-const crypto = require('crypto');
-var arff = require('node-arff');
-var weka = require('../helpers/weka-lib.js');
-var options = {
-    'classifier': 'weka.classifiers.bayes.NaiveBayes',
-    'params': ''
-};
-var model = 'api/public/arff/abcmodel.model';
 
-// var weka = require("node-weka")
 module.exports = {
     getTrack: getTrack,
     searchTrack: searchTrack,
