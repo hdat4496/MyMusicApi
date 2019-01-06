@@ -5,11 +5,11 @@ const { generateToken, checkToken } = require('../helpers/token');
 //const { runData } = require('../helpers/data.js');
 const { getChartDateList, convertDate, getGenreTypeList, getGenreName } = require('../helpers/utils');
 const { putTrackData, getTrackGeneralInfo } = require('../controllers/spotify');
-const { putChartData, putChartAnalysis } = require('../controllers/chart');
+const { putChartData, putChartAnalysis, getChartDate } = require('../controllers/chart');
 var Crawler = require("crawler");
 
 module.exports = {
-    crawl: crawl    
+    crawl: crawl
 };
 
 function crawl(req, res) {
@@ -28,21 +28,27 @@ function crawl(req, res) {
         return;
     }
     crawlData(startDate, endDate, genreType)
-    .then(function(result) {
-        res.json({ status: 200, value: result });
-    })
-    .catch(e => {
-        res.json({ status: 400, value: e });
-    })
-   
+        .then(function (result) {
+            res.json({ status: 200, value: result });
+        })
+        .catch(e => {
+            res.json({ status: 400, value: e });
+        })
+
 }
 
 function crawlData(startDate, endDate, genreType) {
     return new Promise(async (resolve, reject) => {
         console.log('Crawl data');
         var result = []
-        var urlList = createUrlList(startDate, endDate, genreType);
+        var dateResult = await createUrlList(startDate, endDate, genreType);
+        var existChartList = dateResult[0]
+        var urlList = dateResult[1]
         if (urlList.length == 0) {
+            if (existChartList.length != 0) {
+                resolve(existChartList)
+                return;
+            }
             reject("No date chart found")
         }
         var i = 0;
@@ -65,7 +71,7 @@ function crawlData(startDate, endDate, genreType) {
                         var position = $(ele).find('.position').text().trim();
                         var title = $(ele).find('.title').text().trim();
                         var artist = $(ele).find('.artist').text().trim();
-    
+
                         title = normalizeTitle(title);
                         artist = normalizeArtistName(artist);
                         //console.log(position, title, artist);
@@ -86,21 +92,23 @@ function crawlData(startDate, endDate, genreType) {
                         // console.log(position,title, artist);
                         tracks.push(track);
                     });
-                    
-                    
+
+
                     console.log('Crawled data length: ', tracks.length);
                     if (tracks.length != 0) {
                         var chart = await putData(genre, date, tracks);
                         result.push(chart);
                     }
-                   
+
                     if (i == urlList.length) {
+                        result = result.concat(existChartList)
+
                         if (result.length == 0) {
                             reject("No data crawled")
                         }
                         else {
                             resolve(result);
-                        }     
+                        }
                     }
                 }
                 done();
@@ -111,14 +119,14 @@ function crawlData(startDate, endDate, genreType) {
 }
 
 async function putData(genre, date, tracks) {
-    var trackInfoList= await putTrackData(tracks);
+    var trackInfoList = await putTrackData(tracks);
     await putChartData(genre, date, trackInfoList);
     var dateFormat = convertDate(date);
     var dateKey = dateFormat.day + dateFormat.month + dateFormat.year;
     putChartAnalysis(dateKey, genre);
     var chart = {
         genre: getGenreName(genre),
-        date: dateFormat.day + "/" + dateFormat.month + "/" +dateFormat.year
+        date: dateFormat.day + "/" + dateFormat.month + "/" + dateFormat.year
     }
     // var result = []
     // for (var track of trackInfoList) {
@@ -145,7 +153,7 @@ function normalizeTitle(title) {
     while (title.includes("'")) {
         title = title.replace("'", "");
     }
-   
+
     return title;
 }
 
@@ -182,25 +190,36 @@ const rbBaseUrl = 'https://www.officialcharts.com/charts/r-and-b-singles-chart/'
 const allBaseUrl = 'https://www.officialcharts.com/charts/singles-chart/';
 const allPageId = '/7501/'
 
-function createUrlList(startDate, endDate, genreType) {
+async function createUrlList(startDate, endDate, genreType) {
     genreType = parseInt(genreType);
     //console.log("Genre type",genreType);
-    var result = [];
+    var urlList = [];
     var urlInfo = getUrlInfo(genreType);
     if (urlInfo == undefined || urlInfo.baseUrl == undefined || urlInfo.pageId == undefined) {
         console.log("Not get url info");
         return;
     }
     var dateList = getChartDateList(startDate, endDate);
+    var existChart = []
     for (var date of dateList) {
+        var dateChart = await getChartDate(date.day + date.month + date.year, genreType);
+        if (dateChart != undefined) {
+            var chart = {
+                genre: getGenreName(genreType),
+                date: date.day + "/" + date.month + "/" + date.year
+            }
+            existChart.push(chart)
+            continue;
+        }
         var date_str = date.year + date.month + date.day;
         var url = urlInfo.baseUrl + date_str + urlInfo.pageId;
         var urlResult = {
             uri: url,
             genreType: genreType
         }
-        result.push(urlResult)
+        urlList.push(urlResult)
     }
+    var result = [existChart, urlList]
 
     return result;
 }

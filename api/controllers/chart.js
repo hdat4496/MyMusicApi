@@ -20,7 +20,8 @@ module.exports = {
     getChartReportHomePage: getChartReportHomePage,
     getAllChart: getAllChart,
     getTrackChart: getTrackChart,
-    searchChart: searchChart
+    searchChart: searchChart,
+    getChartDate: getChartDate
 };
 function searchChart(req, res) {
     var startDate = req.swagger.params.startDate.value;

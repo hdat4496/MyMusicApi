@@ -171,7 +171,7 @@ function getGenreTypeList() {
 }
 const genreTypeList = [4, 1, 2, 3];
 const dance = "dance";
-const rb = "rb";
+const rb = "R&B";
 const rock = "rock";
 const all = "all";
 function getGenreName(genreType) {
