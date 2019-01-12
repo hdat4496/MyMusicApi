@@ -1,0 +1,215 @@
+2019/01/02-00:26:00.459050 ef8 RocksDB version: 5.3.0
+2019/01/02-00:26:00.460045 ef8 Git sha rocksdb_build_git_sha:@@GIT_SHA@@
+2019/01/02-00:26:00.460083 ef8 Compile date Oct 25 2018
+2019/01/02-00:26:00.460115 ef8 DB SUMMARY
+2019/01/02-00:26:00.463509 ef8 CURRENT file:  CURRENT
+2019/01/02-00:26:00.463565 ef8 IDENTITY file:  IDENTITY
+2019/01/02-00:26:00.463744 ef8 MANIFEST file:  MANIFEST-004550 size: 310 Bytes
+2019/01/02-00:26:00.463784 ef8 SST files in ./db dir, Total Num: 4, files: 004529.sst 004531.sst 004534.sst 004537.sst 
+2019/01/02-00:26:00.463804 ef8 Write Ahead Log file in ./db: 004551.log size: 72 ; 
+2019/01/02-00:26:00.463842 ef8                         Options.error_if_exists: 0
+2019/01/02-00:26:00.463858 ef8                       Options.create_if_missing: 1
+2019/01/02-00:26:00.464221 ef8                         Options.paranoid_checks: 0
+2019/01/02-00:26:00.464238 ef8                                     Options.env: 000001D51A826B20
+2019/01/02-00:26:00.464251 ef8                                Options.info_log: 000001D51C556020
+2019/01/02-00:26:00.464264 ef8                          Options.max_open_files: 1000
+2019/01/02-00:26:00.464275 ef8                Options.max_file_opening_threads: 16
+2019/01/02-00:26:00.464286 ef8                               Options.use_fsync: 0
+2019/01/02-00:26:00.464297 ef8                       Options.max_log_file_size: 2097152
+2019/01/02-00:26:00.464309 ef8                  Options.max_manifest_file_size: 18446744073709551615
+2019/01/02-00:26:00.464320 ef8                   Options.log_file_time_to_roll: 0
+2019/01/02-00:26:00.464331 ef8                       Options.keep_log_file_num: 1000
+2019/01/02-00:26:00.464343 ef8                    Options.recycle_log_file_num: 0
+2019/01/02-00:26:00.464354 ef8                         Options.allow_fallocate: 1
+2019/01/02-00:26:00.464364 ef8                        Options.allow_mmap_reads: 0
+2019/01/02-00:26:00.464375 ef8                       Options.allow_mmap_writes: 0
+2019/01/02-00:26:00.464386 ef8                        Options.use_direct_reads: 0
+2019/01/02-00:26:00.464396 ef8                        Options.use_direct_writes: 0
+2019/01/02-00:26:00.464407 ef8          Options.create_missing_column_families: 0
+2019/01/02-00:26:00.464418 ef8                              Options.db_log_dir: 
+2019/01/02-00:26:00.464428 ef8                                 Options.wal_dir: ./db
+2019/01/02-00:26:00.464439 ef8                Options.table_cache_numshardbits: 6
+2019/01/02-00:26:00.464450 ef8                      Options.max_subcompactions: 1
+2019/01/02-00:26:00.464461 ef8                  Options.max_background_flushes: 1
+2019/01/02-00:26:00.464475 ef8                         Options.WAL_ttl_seconds: 0
+2019/01/02-00:26:00.464484 ef8                       Options.WAL_size_limit_MB: 0
+2019/01/02-00:26:00.464495 ef8             Options.manifest_preallocation_size: 4194304
+2019/01/02-00:26:00.464504 ef8                     Options.is_fd_close_on_exec: 1
+2019/01/02-00:26:00.464515 ef8                   Options.advise_random_on_open: 1
+2019/01/02-00:26:00.464524 ef8                    Options.db_write_buffer_size: 0
+2019/01/02-00:26:00.464534 ef8         Options.access_hint_on_compaction_start: 1
+2019/01/02-00:26:00.464543 ef8  Options.new_table_reader_for_compaction_inputs: 0
+2019/01/02-00:26:00.464553 ef8               Options.compaction_readahead_size: 0
+2019/01/02-00:26:00.464562 ef8           Options.random_access_max_buffer_size: 1048576
+2019/01/02-00:26:00.464574 ef8           Options.writable_file_max_buffer_size: 1048576
+2019/01/02-00:26:00.464583 ef8                      Options.use_adaptive_mutex: 0
+2019/01/02-00:26:00.464593 ef8                            Options.rate_limiter: 0000000000000000
+2019/01/02-00:26:00.464604 ef8     Options.sst_file_manager.rate_bytes_per_sec: 0
+2019/01/02-00:26:00.464613 ef8                          Options.bytes_per_sync: 0
+2019/01/02-00:26:00.464623 ef8                      Options.wal_bytes_per_sync: 0
+2019/01/02-00:26:00.464633 ef8                       Options.wal_recovery_mode: 2
+2019/01/02-00:26:00.464643 ef8                  Options.enable_thread_tracking: 0
+2019/01/02-00:26:00.464707 ef8         Options.allow_concurrent_memtable_write: 1
+2019/01/02-00:26:00.464724 ef8      Options.enable_write_thread_adaptive_yield: 1
+2019/01/02-00:26:00.464736 ef8             Options.write_thread_max_yield_usec: 100
+2019/01/02-00:26:00.464746 ef8            Options.write_thread_slow_yield_usec: 3
+2019/01/02-00:26:00.464756 ef8                               Options.row_cache: None
+2019/01/02-00:26:00.464766 ef8                              Options.wal_filter: None
+2019/01/02-00:26:00.464778 ef8             Options.avoid_flush_during_recovery: 0
+2019/01/02-00:26:00.464791 ef8             Options.base_background_compactions: 1
+2019/01/02-00:26:00.464801 ef8             Options.max_background_compactions: 1
+2019/01/02-00:26:00.464812 ef8             Options.avoid_flush_during_shutdown: 0
+2019/01/02-00:26:00.464822 ef8             Options.delayed_write_rate : 16777216
+2019/01/02-00:26:00.464832 ef8             Options.max_total_wal_size: 0
+2019/01/02-00:26:00.464843 ef8             Options.delete_obsolete_files_period_micros: 21600000000
+2019/01/02-00:26:00.464854 ef8                   Options.stats_dump_period_sec: 600
+2019/01/02-00:26:00.464864 ef8 Compression algorithms supported:
+2019/01/02-00:26:00.464874 ef8 	Snappy supported: 1
+2019/01/02-00:26:00.464883 ef8 	Zlib supported: 0
+2019/01/02-00:26:00.464895 ef8 	Bzip supported: 0
+2019/01/02-00:26:00.464904 ef8 	LZ4 supported: 0
+2019/01/02-00:26:00.464913 ef8 	ZSTD supported: 0
+2019/01/02-00:26:00.464922 ef8 Fast CRC32 supported: 1
+2019/01/02-00:26:00.474007 ef8 [leveldb-rocksdb\db\version_set.cc:2600] Recovering from manifest file: MANIFEST-004550
+2019/01/02-00:26:00.504323 ef8 [leveldb-rocksdb\db\column_family.cc:406] --------------- Options for column family [default]:
+2019/01/02-00:26:00.504353 ef8               Options.comparator: leveldb.BytewiseComparator
+2019/01/02-00:26:00.504366 ef8           Options.merge_operator: None
+2019/01/02-00:26:00.504377 ef8        Options.compaction_filter: None
+2019/01/02-00:26:00.504387 ef8        Options.compaction_filter_factory: None
+2019/01/02-00:26:00.504398 ef8         Options.memtable_factory: SkipListFactory
+2019/01/02-00:26:00.504407 ef8            Options.table_factory: BlockBasedTable
+2019/01/02-00:26:00.504468 ef8            table_factory options:   flush_block_policy_factory: FlushBlockBySizePolicyFactory (000001D51A6AE4B0)
+  cache_index_and_filter_blocks: 0
+  cache_index_and_filter_blocks_with_high_priority: 0
+  pin_l0_filter_and_index_blocks_in_cache: 0
+  index_type: 0
+  hash_index_allow_collision: 1
+  checksum: 1
+  no_block_cache: 0
+  block_cache: 000001D51C5241C0
+  block_cache_name: LRUCache
+  block_cache_options:
+    capacity : 8388608
+    num_shard_bits : 4
+    strict_capacity_limit : 0
+    high_pri_pool_ratio: 0.000
+  block_cache_compressed: 0000000000000000
+  persistent_cache: 0000000000000000
+  block_size: 4096
+  block_size_deviation: 10
+  block_restart_interval: 16
+  index_block_restart_interval: 1
+  filter_policy: rocksdb.BuiltinBloomFilter
+  whole_key_filtering: 1
+  format_version: 2
+2019/01/02-00:26:00.504483 ef8        Options.write_buffer_size: 4194304
+2019/01/02-00:26:00.504494 ef8  Options.max_write_buffer_number: 2
+2019/01/02-00:26:00.504504 ef8          Options.compression: Snappy
+2019/01/02-00:26:00.504514 ef8                  Options.bottommost_compression: Disabled
+2019/01/02-00:26:00.504524 ef8       Options.prefix_extractor: nullptr
+2019/01/02-00:26:00.504535 ef8   Options.memtable_insert_with_hint_prefix_extractor: nullptr
+2019/01/02-00:26:00.504545 ef8             Options.num_levels: 7
+2019/01/02-00:26:00.504555 ef8        Options.min_write_buffer_number_to_merge: 1
+2019/01/02-00:26:00.504566 ef8     Options.max_write_buffer_number_to_maintain: 0
+2019/01/02-00:26:00.504577 ef8            Options.compression_opts.window_bits: -14
+2019/01/02-00:26:00.504587 ef8                  Options.compression_opts.level: -1
+2019/01/02-00:26:00.504597 ef8               Options.compression_opts.strategy: 0
+2019/01/02-00:26:00.504608 ef8         Options.compression_opts.max_dict_bytes: 0
+2019/01/02-00:26:00.504683 ef8      Options.level0_file_num_compaction_trigger: 4
+2019/01/02-00:26:00.504701 ef8          Options.level0_slowdown_writes_trigger: 20
+2019/01/02-00:26:00.504712 ef8              Options.level0_stop_writes_trigger: 36
+2019/01/02-00:26:00.504723 ef8                   Options.target_file_size_base: 67108864
+2019/01/02-00:26:00.504735 ef8             Options.target_file_size_multiplier: 1
+2019/01/02-00:26:00.504750 ef8                Options.max_bytes_for_level_base: 268435456
+2019/01/02-00:26:00.504761 ef8 Options.level_compaction_dynamic_level_bytes: 0
+2019/01/02-00:26:00.504785 ef8          Options.max_bytes_for_level_multiplier: 10.000000
+2019/01/02-00:26:00.504799 ef8 Options.max_bytes_for_level_multiplier_addtl[0]: 1
+2019/01/02-00:26:00.504810 ef8 Options.max_bytes_for_level_multiplier_addtl[1]: 1
+2019/01/02-00:26:00.504821 ef8 Options.max_bytes_for_level_multiplier_addtl[2]: 1
+2019/01/02-00:26:00.504832 ef8 Options.max_bytes_for_level_multiplier_addtl[3]: 1
+2019/01/02-00:26:00.504843 ef8 Options.max_bytes_for_level_multiplier_addtl[4]: 1
+2019/01/02-00:26:00.504853 ef8 Options.max_bytes_for_level_multiplier_addtl[5]: 1
+2019/01/02-00:26:00.504865 ef8 Options.max_bytes_for_level_multiplier_addtl[6]: 1
+2019/01/02-00:26:00.504875 ef8       Options.max_sequential_skip_in_iterations: 8
+2019/01/02-00:26:00.504885 ef8                    Options.max_compaction_bytes: 1677721600
+2019/01/02-00:26:00.504896 ef8                        Options.arena_block_size: 524288
+2019/01/02-00:26:00.504907 ef8   Options.soft_pending_compaction_bytes_limit: 68719476736
+2019/01/02-00:26:00.504918 ef8   Options.hard_pending_compaction_bytes_limit: 274877906944
+2019/01/02-00:26:00.504929 ef8       Options.rate_limit_delay_max_milliseconds: 100
+2019/01/02-00:26:00.504939 ef8                Options.disable_auto_compactions: 0
+2019/01/02-00:26:00.504951 ef8                         Options.compaction_style: kCompactionStyleLevel
+2019/01/02-00:26:00.504963 ef8                           Options.compaction_pri: kByCompensatedSize
+2019/01/02-00:26:00.504973 ef8  Options.compaction_options_universal.size_ratio: 1
+2019/01/02-00:26:00.504982 ef8 Options.compaction_options_universal.min_merge_width: 2
+2019/01/02-00:26:00.504992 ef8 Options.compaction_options_universal.max_merge_width: 4294967295
+2019/01/02-00:26:00.505005 ef8 Options.compaction_options_universal.max_size_amplification_percent: 200
+2019/01/02-00:26:00.505015 ef8 Options.compaction_options_universal.compression_size_percent: -1
+2019/01/02-00:26:00.505026 ef8 Options.compaction_options_fifo.max_table_files_size: 1073741824
+2019/01/02-00:26:00.505036 ef8                   Options.table_properties_collectors: 
+2019/01/02-00:26:00.505046 ef8                   Options.inplace_update_support: 0
+2019/01/02-00:26:00.505057 ef8                 Options.inplace_update_num_locks: 10000
+2019/01/02-00:26:00.505069 ef8               Options.memtable_prefix_bloom_size_ratio: 0.000000
+2019/01/02-00:26:00.505079 ef8   Options.memtable_huge_page_size: 0
+2019/01/02-00:26:00.505089 ef8                           Options.bloom_locality: 0
+2019/01/02-00:26:00.505100 ef8                    Options.max_successive_merges: 0
+2019/01/02-00:26:00.505109 ef8                Options.optimize_filters_for_hits: 0
+2019/01/02-00:26:00.505119 ef8                Options.paranoid_file_checks: 0
+2019/01/02-00:26:00.505129 ef8                Options.force_consistency_checks: 0
+2019/01/02-00:26:00.505139 ef8                Options.report_bg_io_stats: 0
+2019/01/02-00:26:00.506279 ef8 [leveldb-rocksdb\db\version_set.cc:2850] Recovered from manifest file:./db/MANIFEST-004550 succeeded,manifest_file_number is 4550, next_file_number is 4552, last_sequence is 313284, log_number is 0,prev_log_number is 0,max_column_family is 0
+2019/01/02-00:26:00.506304 ef8 [leveldb-rocksdb\db\version_set.cc:2858] Column family [default] (ID 0), log number is 4549
+2019/01/02-00:26:00.511992 ef8 EVENT_LOG_v1 {"time_micros": 1546363560511931, "job": 1, "event": "recovery_started", "log_files": [4551]}
+2019/01/02-00:26:00.512030 ef8 [leveldb-rocksdb\db\db_impl.cc:1468] Recovering log #4551 mode 2
+2019/01/02-00:26:00.515227 ef8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:1801] [default] [WriteLevel0TableForRecovery] Level-0 table #4552: started
+2019/01/02-00:26:00.595496 ef8 EVENT_LOG_v1 {"time_micros": 1546363560595453, "cf_name": "default", "job": 1, "event": "table_file_creation", "file_number": 4552, "file_size": 1053, "table_properties": {"data_size": 74, "index_size": 27, "filter_size": 18, "raw_key_size": 15, "raw_average_key_size": 15, "raw_value_size": 43, "raw_average_value_size": 43, "num_data_blocks": 1, "num_entries": 1, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2019/01/02-00:26:00.595528 ef8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:1831] [default] [WriteLevel0TableForRecovery] Level-0 table #4552: 1053 bytes OK
+2019/01/02-00:26:00.595580 ef8 [leveldb-rocksdb\db\version_set.cc:2386] Creating manifest 4553
+2019/01/02-00:26:00.674740 ef8 EVENT_LOG_v1 {"time_micros": 1546363560674726, "job": 1, "event": "recovery_finished"}
+2019/01/02-00:26:00.682150 ef8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//MANIFEST-004550 type=3 #4550 -- OK
+2019/01/02-00:26:00.683655 ef8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//004551.log type=0 #4551 -- OK
+2019/01/02-00:26:00.794683 ef8 [leveldb-rocksdb\db\db_impl.cc:6172] DB pointer 000001D51C55E5E0
+2019/01/02-00:26:00.800325 1920 [WARN] [leveldb-rocksdb\db\db_impl.cc:656] ------- DUMPING STATS -------
+2019/01/02-00:26:00.800356 1920 [WARN] [leveldb-rocksdb\db\db_impl.cc:657] 
+** Compaction Stats [default] **
+Level    Files   Size(MB} Score Read(GB}  Rn(GB} Rnp1(GB} Write(GB} Wnew(GB} Moved(GB} W-Amp Rd(MB/s} Wr(MB/s} Comp(sec} Comp(cnt} Avg(sec} KeyIn KeyDrop
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+  L0      4/0       0.26   1.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0         0         1    0.080       0      0
+  L1      1/0      36.49   0.1      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0         0         0    0.000       0      0
+ Sum      5/0      36.75   0.0      0.0     0.0      0.0       0.0      0.0       0.0   1.0      0.0      0.0         0         1    0.080       0      0
+ Int      0/0       0.00   0.0      0.0     0.0      0.0       0.0      0.0       0.0   1.0      0.0      0.0         0         1    0.080       0      0
+Uptime(secs): 0.3 total, 0.3 interval
+Flush(GB): cumulative 0.000, interval 0.000
+AddFile(GB): cumulative 0.000, interval 0.000
+AddFile(Total Files): cumulative 0, interval 0
+AddFile(L0 Files): cumulative 0, interval 0
+AddFile(Keys): cumulative 0, interval 0
+Cumulative compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.1 seconds
+Interval compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.1 seconds
+Stalls(count): 0 level0_slowdown, 0 level0_slowdown_with_compaction, 0 level0_numfiles, 0 level0_numfiles_with_compaction, 0 stop for pending_compaction_bytes, 0 slowdown for pending_compaction_bytes, 0 memtable_compaction, 0 memtable_slowdown, interval 0 total count
+
+** DB Stats **
+Uptime(secs): 0.3 total, 0.3 interval
+Cumulative writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 GB, 0.00 MB/s
+Cumulative WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 MB, 0.00 MB/s
+Interval WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 MB, 0.00 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+2019/01/02-00:26:00.800460 1920 [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 3] Compacting 4@0 + 1@1 files to L1, score 1.00
+2019/01/02-00:26:00.800485 1920 [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 2 Base level 0, inputs: [4552(1053B) 4537(1084B) 4534(265KB) 4531(1084B)], [4529(36MB)]
+2019/01/02-00:26:00.800602 1920 EVENT_LOG_v1 {"time_micros": 1546363560800571, "job": 3, "event": "compaction_started", "files_L0": [4552, 4537, 4534, 4531], "files_L1": [4529], "score": 1, "input_data_size": 38532788}
+2019/01/02-00:26:02.872306 1920 [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 3] Generated table #4557: 117198 keys, 38257611 bytes
+2019/01/02-00:26:02.872371 1920 EVENT_LOG_v1 {"time_micros": 1546363562872336, "cf_name": "default", "job": 3, "event": "table_file_creation", "file_number": 4557, "file_size": 38257611, "table_properties": {"data_size": 37712163, "index_size": 478598, "filter_size": 240085, "raw_key_size": 4836450, "raw_average_key_size": 41, "raw_value_size": 46309242, "raw_average_value_size": 395, "num_data_blocks": 10520, "num_entries": 117198, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2019/01/02-00:26:02.873448 1920 [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 3] Compacted 4@0 + 1@1 files to L1 => 38257611 bytes
+2019/01/02-00:26:02.900742 1920 (Original Log Time 2019/01/02-00:26:02.900288) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.14, MB/sec: 18.6 rd, 18.5 wr, level 1, files in(4, 1) out(1) MB in(0.3, 36.5) out(36.5), read-write-amplify(279.1) write-amplify(139.0) OK, records in: 126074, records dropped: 8876
+2019/01/02-00:26:02.900840 1920 (Original Log Time 2019/01/02-00:26:02.900584) EVENT_LOG_v1 {"time_micros": 1546363562900405, "job": 3, "event": "compaction_finished", "compaction_time_micros": 2072801, "output_level": 1, "num_output_files": 1, "total_output_size": 38257611, "num_input_records": 126074, "num_output_records": 117198, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2019/01/02-00:26:02.905371 1920 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 3] Delete ./db/004552.sst type=2 #4552 -- OK
+2019/01/02-00:26:02.905522 1920 EVENT_LOG_v1 {"time_micros": 1546363562905503, "job": 3, "event": "table_file_deletion", "file_number": 4552}
+2019/01/02-00:26:02.917455 1920 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 3] Delete ./db/004537.sst type=2 #4537 -- OK
+2019/01/02-00:26:02.917512 1920 EVENT_LOG_v1 {"time_micros": 1546363562917492, "job": 3, "event": "table_file_deletion", "file_number": 4537}
+2019/01/02-00:26:02.919871 1920 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 3] Delete ./db/004534.sst type=2 #4534 -- OK
+2019/01/02-00:26:02.920023 1920 EVENT_LOG_v1 {"time_micros": 1546363562919906, "job": 3, "event": "table_file_deletion", "file_number": 4534}
+2019/01/02-00:26:02.921161 1920 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 3] Delete ./db/004531.sst type=2 #4531 -- OK
+2019/01/02-00:26:02.921250 1920 EVENT_LOG_v1 {"time_micros": 1546363562921234, "job": 3, "event": "table_file_deletion", "file_number": 4531}
+2019/01/02-00:26:02.932493 1920 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 3] Delete ./db/004529.sst type=2 #4529 -- OK
+2019/01/02-00:26:02.932790 1920 EVENT_LOG_v1 {"time_micros": 1546363562932618, "job": 3, "event": "table_file_deletion", "file_number": 4529}

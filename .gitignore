@@ -33,6 +33,6 @@ node_modules
 # Runtime configuration for swagger app
 config/runtime.yaml
 
-api/helpers/db
+# api/helpers/db
 
-db
+# db

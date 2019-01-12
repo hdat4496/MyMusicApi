@@ -1,0 +1,167 @@
+2018/12/20-21:16:54.824812 2d10 RocksDB version: 5.3.0
+2018/12/20-21:16:54.825903 2d10 Git sha rocksdb_build_git_sha:@@GIT_SHA@@
+2018/12/20-21:16:54.825939 2d10 Compile date Oct 25 2018
+2018/12/20-21:16:54.825974 2d10 DB SUMMARY
+2018/12/20-21:16:54.830771 2d10 CURRENT file:  CURRENT
+2018/12/20-21:16:54.830809 2d10 IDENTITY file:  IDENTITY
+2018/12/20-21:16:54.830863 2d10 MANIFEST file:  MANIFEST-001600 size: 224 Bytes
+2018/12/20-21:16:54.830895 2d10 SST files in ./db dir, Total Num: 2, files: 001594.sst 001596.sst 
+2018/12/20-21:16:54.830923 2d10 Write Ahead Log file in ./db: 001601.log size: 0 ; 
+2018/12/20-21:16:54.830972 2d10                         Options.error_if_exists: 0
+2018/12/20-21:16:54.831033 2d10                       Options.create_if_missing: 1
+2018/12/20-21:16:54.831375 2d10                         Options.paranoid_checks: 0
+2018/12/20-21:16:54.831392 2d10                                     Options.env: 000001A282141B20
+2018/12/20-21:16:54.831405 2d10                                Options.info_log: 000001A283D99F60
+2018/12/20-21:16:54.831415 2d10                          Options.max_open_files: 1000
+2018/12/20-21:16:54.831426 2d10                Options.max_file_opening_threads: 16
+2018/12/20-21:16:54.831436 2d10                               Options.use_fsync: 0
+2018/12/20-21:16:54.831448 2d10                       Options.max_log_file_size: 2097152
+2018/12/20-21:16:54.831459 2d10                  Options.max_manifest_file_size: 18446744073709551615
+2018/12/20-21:16:54.831468 2d10                   Options.log_file_time_to_roll: 0
+2018/12/20-21:16:54.831479 2d10                       Options.keep_log_file_num: 1000
+2018/12/20-21:16:54.831488 2d10                    Options.recycle_log_file_num: 0
+2018/12/20-21:16:54.831498 2d10                         Options.allow_fallocate: 1
+2018/12/20-21:16:54.831507 2d10                        Options.allow_mmap_reads: 0
+2018/12/20-21:16:54.831516 2d10                       Options.allow_mmap_writes: 0
+2018/12/20-21:16:54.831526 2d10                        Options.use_direct_reads: 0
+2018/12/20-21:16:54.831535 2d10                        Options.use_direct_writes: 0
+2018/12/20-21:16:54.831545 2d10          Options.create_missing_column_families: 0
+2018/12/20-21:16:54.831556 2d10                              Options.db_log_dir: 
+2018/12/20-21:16:54.831567 2d10                                 Options.wal_dir: ./db
+2018/12/20-21:16:54.831576 2d10                Options.table_cache_numshardbits: 6
+2018/12/20-21:16:54.831586 2d10                      Options.max_subcompactions: 1
+2018/12/20-21:16:54.831596 2d10                  Options.max_background_flushes: 1
+2018/12/20-21:16:54.831606 2d10                         Options.WAL_ttl_seconds: 0
+2018/12/20-21:16:54.831616 2d10                       Options.WAL_size_limit_MB: 0
+2018/12/20-21:16:54.831626 2d10             Options.manifest_preallocation_size: 4194304
+2018/12/20-21:16:54.831637 2d10                     Options.is_fd_close_on_exec: 1
+2018/12/20-21:16:54.831647 2d10                   Options.advise_random_on_open: 1
+2018/12/20-21:16:54.831658 2d10                    Options.db_write_buffer_size: 0
+2018/12/20-21:16:54.831668 2d10         Options.access_hint_on_compaction_start: 1
+2018/12/20-21:16:54.831679 2d10  Options.new_table_reader_for_compaction_inputs: 0
+2018/12/20-21:16:54.831690 2d10               Options.compaction_readahead_size: 0
+2018/12/20-21:16:54.831701 2d10           Options.random_access_max_buffer_size: 1048576
+2018/12/20-21:16:54.831712 2d10           Options.writable_file_max_buffer_size: 1048576
+2018/12/20-21:16:54.831722 2d10                      Options.use_adaptive_mutex: 0
+2018/12/20-21:16:54.831733 2d10                            Options.rate_limiter: 0000000000000000
+2018/12/20-21:16:54.831744 2d10     Options.sst_file_manager.rate_bytes_per_sec: 0
+2018/12/20-21:16:54.831755 2d10                          Options.bytes_per_sync: 0
+2018/12/20-21:16:54.831766 2d10                      Options.wal_bytes_per_sync: 0
+2018/12/20-21:16:54.831776 2d10                       Options.wal_recovery_mode: 2
+2018/12/20-21:16:54.831854 2d10                  Options.enable_thread_tracking: 0
+2018/12/20-21:16:54.831874 2d10         Options.allow_concurrent_memtable_write: 1
+2018/12/20-21:16:54.831885 2d10      Options.enable_write_thread_adaptive_yield: 1
+2018/12/20-21:16:54.831896 2d10             Options.write_thread_max_yield_usec: 100
+2018/12/20-21:16:54.831908 2d10            Options.write_thread_slow_yield_usec: 3
+2018/12/20-21:16:54.831918 2d10                               Options.row_cache: None
+2018/12/20-21:16:54.831929 2d10                              Options.wal_filter: None
+2018/12/20-21:16:54.831938 2d10             Options.avoid_flush_during_recovery: 0
+2018/12/20-21:16:54.831950 2d10             Options.base_background_compactions: 1
+2018/12/20-21:16:54.831978 2d10             Options.max_background_compactions: 1
+2018/12/20-21:16:54.831996 2d10             Options.avoid_flush_during_shutdown: 0
+2018/12/20-21:16:54.832007 2d10             Options.delayed_write_rate : 16777216
+2018/12/20-21:16:54.832017 2d10             Options.max_total_wal_size: 0
+2018/12/20-21:16:54.832027 2d10             Options.delete_obsolete_files_period_micros: 21600000000
+2018/12/20-21:16:54.832036 2d10                   Options.stats_dump_period_sec: 600
+2018/12/20-21:16:54.832046 2d10 Compression algorithms supported:
+2018/12/20-21:16:54.832056 2d10 	Snappy supported: 1
+2018/12/20-21:16:54.832065 2d10 	Zlib supported: 0
+2018/12/20-21:16:54.832073 2d10 	Bzip supported: 0
+2018/12/20-21:16:54.832081 2d10 	LZ4 supported: 0
+2018/12/20-21:16:54.832089 2d10 	ZSTD supported: 0
+2018/12/20-21:16:54.832097 2d10 Fast CRC32 supported: 1
+2018/12/20-21:16:54.847334 2d10 [leveldb-rocksdb\db\version_set.cc:2600] Recovering from manifest file: MANIFEST-001600
+2018/12/20-21:16:54.854865 2d10 [leveldb-rocksdb\db\column_family.cc:406] --------------- Options for column family [default]:
+2018/12/20-21:16:54.855091 2d10               Options.comparator: leveldb.BytewiseComparator
+2018/12/20-21:16:54.855111 2d10           Options.merge_operator: None
+2018/12/20-21:16:54.855122 2d10        Options.compaction_filter: None
+2018/12/20-21:16:54.855132 2d10        Options.compaction_filter_factory: None
+2018/12/20-21:16:54.855142 2d10         Options.memtable_factory: SkipListFactory
+2018/12/20-21:16:54.855155 2d10            Options.table_factory: BlockBasedTable
+2018/12/20-21:16:54.855230 2d10            table_factory options:   flush_block_policy_factory: FlushBlockBySizePolicyFactory (000001A2820E8870)
+  cache_index_and_filter_blocks: 0
+  cache_index_and_filter_blocks_with_high_priority: 0
+  pin_l0_filter_and_index_blocks_in_cache: 0
+  index_type: 0
+  hash_index_allow_collision: 1
+  checksum: 1
+  no_block_cache: 0
+  block_cache: 000001A283D70640
+  block_cache_name: LRUCache
+  block_cache_options:
+    capacity : 8388608
+    num_shard_bits : 4
+    strict_capacity_limit : 0
+    high_pri_pool_ratio: 0.000
+  block_cache_compressed: 0000000000000000
+  persistent_cache: 0000000000000000
+  block_size: 4096
+  block_size_deviation: 10
+  block_restart_interval: 16
+  index_block_restart_interval: 1
+  filter_policy: rocksdb.BuiltinBloomFilter
+  whole_key_filtering: 1
+  format_version: 2
+2018/12/20-21:16:54.855245 2d10        Options.write_buffer_size: 4194304
+2018/12/20-21:16:54.855255 2d10  Options.max_write_buffer_number: 2
+2018/12/20-21:16:54.855265 2d10          Options.compression: Snappy
+2018/12/20-21:16:54.855275 2d10                  Options.bottommost_compression: Disabled
+2018/12/20-21:16:54.855286 2d10       Options.prefix_extractor: nullptr
+2018/12/20-21:16:54.855296 2d10   Options.memtable_insert_with_hint_prefix_extractor: nullptr
+2018/12/20-21:16:54.855306 2d10             Options.num_levels: 7
+2018/12/20-21:16:54.855315 2d10        Options.min_write_buffer_number_to_merge: 1
+2018/12/20-21:16:54.855325 2d10     Options.max_write_buffer_number_to_maintain: 0
+2018/12/20-21:16:54.855335 2d10            Options.compression_opts.window_bits: -14
+2018/12/20-21:16:54.855346 2d10                  Options.compression_opts.level: -1
+2018/12/20-21:16:54.855355 2d10               Options.compression_opts.strategy: 0
+2018/12/20-21:16:54.855449 2d10         Options.compression_opts.max_dict_bytes: 0
+2018/12/20-21:16:54.855466 2d10      Options.level0_file_num_compaction_trigger: 4
+2018/12/20-21:16:54.855476 2d10          Options.level0_slowdown_writes_trigger: 20
+2018/12/20-21:16:54.855486 2d10              Options.level0_stop_writes_trigger: 36
+2018/12/20-21:16:54.855496 2d10                   Options.target_file_size_base: 67108864
+2018/12/20-21:16:54.855505 2d10             Options.target_file_size_multiplier: 1
+2018/12/20-21:16:54.855516 2d10                Options.max_bytes_for_level_base: 268435456
+2018/12/20-21:16:54.855526 2d10 Options.level_compaction_dynamic_level_bytes: 0
+2018/12/20-21:16:54.855563 2d10          Options.max_bytes_for_level_multiplier: 10.000000
+2018/12/20-21:16:54.855576 2d10 Options.max_bytes_for_level_multiplier_addtl[0]: 1
+2018/12/20-21:16:54.855587 2d10 Options.max_bytes_for_level_multiplier_addtl[1]: 1
+2018/12/20-21:16:54.855596 2d10 Options.max_bytes_for_level_multiplier_addtl[2]: 1
+2018/12/20-21:16:54.855605 2d10 Options.max_bytes_for_level_multiplier_addtl[3]: 1
+2018/12/20-21:16:54.855614 2d10 Options.max_bytes_for_level_multiplier_addtl[4]: 1
+2018/12/20-21:16:54.855624 2d10 Options.max_bytes_for_level_multiplier_addtl[5]: 1
+2018/12/20-21:16:54.855633 2d10 Options.max_bytes_for_level_multiplier_addtl[6]: 1
+2018/12/20-21:16:54.855641 2d10       Options.max_sequential_skip_in_iterations: 8
+2018/12/20-21:16:54.855651 2d10                    Options.max_compaction_bytes: 1677721600
+2018/12/20-21:16:54.855660 2d10                        Options.arena_block_size: 524288
+2018/12/20-21:16:54.855670 2d10   Options.soft_pending_compaction_bytes_limit: 68719476736
+2018/12/20-21:16:54.855680 2d10   Options.hard_pending_compaction_bytes_limit: 274877906944
+2018/12/20-21:16:54.855689 2d10       Options.rate_limit_delay_max_milliseconds: 100
+2018/12/20-21:16:54.855699 2d10                Options.disable_auto_compactions: 0
+2018/12/20-21:16:54.855709 2d10                         Options.compaction_style: kCompactionStyleLevel
+2018/12/20-21:16:54.855720 2d10                           Options.compaction_pri: kByCompensatedSize
+2018/12/20-21:16:54.855729 2d10  Options.compaction_options_universal.size_ratio: 1
+2018/12/20-21:16:54.855739 2d10 Options.compaction_options_universal.min_merge_width: 2
+2018/12/20-21:16:54.855748 2d10 Options.compaction_options_universal.max_merge_width: 4294967295
+2018/12/20-21:16:54.855757 2d10 Options.compaction_options_universal.max_size_amplification_percent: 200
+2018/12/20-21:16:54.855766 2d10 Options.compaction_options_universal.compression_size_percent: -1
+2018/12/20-21:16:54.855775 2d10 Options.compaction_options_fifo.max_table_files_size: 1073741824
+2018/12/20-21:16:54.855785 2d10                   Options.table_properties_collectors: 
+2018/12/20-21:16:54.855794 2d10                   Options.inplace_update_support: 0
+2018/12/20-21:16:54.855803 2d10                 Options.inplace_update_num_locks: 10000
+2018/12/20-21:16:54.855814 2d10               Options.memtable_prefix_bloom_size_ratio: 0.000000
+2018/12/20-21:16:54.855825 2d10   Options.memtable_huge_page_size: 0
+2018/12/20-21:16:54.855837 2d10                           Options.bloom_locality: 0
+2018/12/20-21:16:54.855847 2d10                    Options.max_successive_merges: 0
+2018/12/20-21:16:54.855857 2d10                Options.optimize_filters_for_hits: 0
+2018/12/20-21:16:54.855866 2d10                Options.paranoid_file_checks: 0
+2018/12/20-21:16:54.855875 2d10                Options.force_consistency_checks: 0
+2018/12/20-21:16:54.855885 2d10                Options.report_bg_io_stats: 0
+2018/12/20-21:16:54.856690 2d10 [leveldb-rocksdb\db\version_set.cc:2850] Recovered from manifest file:./db/MANIFEST-001600 succeeded,manifest_file_number is 1600, next_file_number is 1602, last_sequence is 126113, log_number is 0,prev_log_number is 0,max_column_family is 0
+2018/12/20-21:16:54.856719 2d10 [leveldb-rocksdb\db\version_set.cc:2858] Column family [default] (ID 0), log number is 1599
+2018/12/20-21:16:54.862516 2d10 EVENT_LOG_v1 {"time_micros": 1545315414862455, "job": 1, "event": "recovery_started", "log_files": [1601]}
+2018/12/20-21:16:54.862552 2d10 [leveldb-rocksdb\db\db_impl.cc:1468] Recovering log #1601 mode 2
+2018/12/20-21:16:54.862697 2d10 [leveldb-rocksdb\db\version_set.cc:2386] Creating manifest 1603
+2018/12/20-21:16:54.950551 2d10 EVENT_LOG_v1 {"time_micros": 1545315414950537, "job": 1, "event": "recovery_finished"}
+2018/12/20-21:16:54.960329 2d10 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//MANIFEST-001600 type=3 #1600 -- OK
+2018/12/20-21:16:54.961530 2d10 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//001601.log type=0 #1601 -- OK
+2018/12/20-21:16:55.025830 2d10 [leveldb-rocksdb\db\db_impl.cc:6172] DB pointer 000001A283F927F0

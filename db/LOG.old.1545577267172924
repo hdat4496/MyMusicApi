@@ -1,0 +1,742 @@
+2018/12/23-21:33:24.199357 30f8 RocksDB version: 5.3.0
+2018/12/23-21:33:24.200848 30f8 Git sha rocksdb_build_git_sha:@@GIT_SHA@@
+2018/12/23-21:33:24.200889 30f8 Compile date Oct 25 2018
+2018/12/23-21:33:24.200925 30f8 DB SUMMARY
+2018/12/23-21:33:24.203944 30f8 CURRENT file:  CURRENT
+2018/12/23-21:33:24.203981 30f8 IDENTITY file:  IDENTITY
+2018/12/23-21:33:24.204059 30f8 MANIFEST file:  MANIFEST-002454 size: 304 Bytes
+2018/12/23-21:33:24.204080 30f8 SST files in ./db dir, Total Num: 3, files: 002449.sst 002451.sst 002453.sst 
+2018/12/23-21:33:24.204103 30f8 Write Ahead Log file in ./db: 002455.log size: 72 ; 
+2018/12/23-21:33:24.204161 30f8                         Options.error_if_exists: 0
+2018/12/23-21:33:24.204183 30f8                       Options.create_if_missing: 1
+2018/12/23-21:33:24.204566 30f8                         Options.paranoid_checks: 0
+2018/12/23-21:33:24.204593 30f8                                     Options.env: 000001B730509BF0
+2018/12/23-21:33:24.204606 30f8                                Options.info_log: 000001B73227D150
+2018/12/23-21:33:24.204637 30f8                          Options.max_open_files: 1000
+2018/12/23-21:33:24.204650 30f8                Options.max_file_opening_threads: 16
+2018/12/23-21:33:24.204662 30f8                               Options.use_fsync: 0
+2018/12/23-21:33:24.204671 30f8                       Options.max_log_file_size: 2097152
+2018/12/23-21:33:24.204682 30f8                  Options.max_manifest_file_size: 18446744073709551615
+2018/12/23-21:33:24.204692 30f8                   Options.log_file_time_to_roll: 0
+2018/12/23-21:33:24.204701 30f8                       Options.keep_log_file_num: 1000
+2018/12/23-21:33:24.204743 30f8                    Options.recycle_log_file_num: 0
+2018/12/23-21:33:24.204757 30f8                         Options.allow_fallocate: 1
+2018/12/23-21:33:24.204766 30f8                        Options.allow_mmap_reads: 0
+2018/12/23-21:33:24.204776 30f8                       Options.allow_mmap_writes: 0
+2018/12/23-21:33:24.204786 30f8                        Options.use_direct_reads: 0
+2018/12/23-21:33:24.204795 30f8                        Options.use_direct_writes: 0
+2018/12/23-21:33:24.204804 30f8          Options.create_missing_column_families: 0
+2018/12/23-21:33:24.204814 30f8                              Options.db_log_dir: 
+2018/12/23-21:33:24.204825 30f8                                 Options.wal_dir: ./db
+2018/12/23-21:33:24.204835 30f8                Options.table_cache_numshardbits: 6
+2018/12/23-21:33:24.204846 30f8                      Options.max_subcompactions: 1
+2018/12/23-21:33:24.204856 30f8                  Options.max_background_flushes: 1
+2018/12/23-21:33:24.204866 30f8                         Options.WAL_ttl_seconds: 0
+2018/12/23-21:33:24.204873 30f8                       Options.WAL_size_limit_MB: 0
+2018/12/23-21:33:24.204879 30f8             Options.manifest_preallocation_size: 4194304
+2018/12/23-21:33:24.204885 30f8                     Options.is_fd_close_on_exec: 1
+2018/12/23-21:33:24.204894 30f8                   Options.advise_random_on_open: 1
+2018/12/23-21:33:24.204900 30f8                    Options.db_write_buffer_size: 0
+2018/12/23-21:33:24.204906 30f8         Options.access_hint_on_compaction_start: 1
+2018/12/23-21:33:24.204912 30f8  Options.new_table_reader_for_compaction_inputs: 0
+2018/12/23-21:33:24.204918 30f8               Options.compaction_readahead_size: 0
+2018/12/23-21:33:24.204923 30f8           Options.random_access_max_buffer_size: 1048576
+2018/12/23-21:33:24.204930 30f8           Options.writable_file_max_buffer_size: 1048576
+2018/12/23-21:33:24.204936 30f8                      Options.use_adaptive_mutex: 0
+2018/12/23-21:33:24.204942 30f8                            Options.rate_limiter: 0000000000000000
+2018/12/23-21:33:24.204948 30f8     Options.sst_file_manager.rate_bytes_per_sec: 0
+2018/12/23-21:33:24.204954 30f8                          Options.bytes_per_sync: 0
+2018/12/23-21:33:24.204960 30f8                      Options.wal_bytes_per_sync: 0
+2018/12/23-21:33:24.204966 30f8                       Options.wal_recovery_mode: 2
+2018/12/23-21:33:24.205016 30f8                  Options.enable_thread_tracking: 0
+2018/12/23-21:33:24.205026 30f8         Options.allow_concurrent_memtable_write: 1
+2018/12/23-21:33:24.205032 30f8      Options.enable_write_thread_adaptive_yield: 1
+2018/12/23-21:33:24.205039 30f8             Options.write_thread_max_yield_usec: 100
+2018/12/23-21:33:24.205044 30f8            Options.write_thread_slow_yield_usec: 3
+2018/12/23-21:33:24.205051 30f8                               Options.row_cache: None
+2018/12/23-21:33:24.205061 30f8                              Options.wal_filter: None
+2018/12/23-21:33:24.205071 30f8             Options.avoid_flush_during_recovery: 0
+2018/12/23-21:33:24.205080 30f8             Options.base_background_compactions: 1
+2018/12/23-21:33:24.205086 30f8             Options.max_background_compactions: 1
+2018/12/23-21:33:24.205092 30f8             Options.avoid_flush_during_shutdown: 0
+2018/12/23-21:33:24.205099 30f8             Options.delayed_write_rate : 16777216
+2018/12/23-21:33:24.205105 30f8             Options.max_total_wal_size: 0
+2018/12/23-21:33:24.205111 30f8             Options.delete_obsolete_files_period_micros: 21600000000
+2018/12/23-21:33:24.205119 30f8                   Options.stats_dump_period_sec: 600
+2018/12/23-21:33:24.205125 30f8 Compression algorithms supported:
+2018/12/23-21:33:24.205131 30f8 	Snappy supported: 1
+2018/12/23-21:33:24.205137 30f8 	Zlib supported: 0
+2018/12/23-21:33:24.205142 30f8 	Bzip supported: 0
+2018/12/23-21:33:24.205147 30f8 	LZ4 supported: 0
+2018/12/23-21:33:24.205152 30f8 	ZSTD supported: 0
+2018/12/23-21:33:24.205158 30f8 Fast CRC32 supported: 1
+2018/12/23-21:33:24.213699 30f8 [leveldb-rocksdb\db\version_set.cc:2600] Recovering from manifest file: MANIFEST-002454
+2018/12/23-21:33:24.227846 30f8 [leveldb-rocksdb\db\column_family.cc:406] --------------- Options for column family [default]:
+2018/12/23-21:33:24.227876 30f8               Options.comparator: leveldb.BytewiseComparator
+2018/12/23-21:33:24.227888 30f8           Options.merge_operator: None
+2018/12/23-21:33:24.227898 30f8        Options.compaction_filter: None
+2018/12/23-21:33:24.227908 30f8        Options.compaction_filter_factory: None
+2018/12/23-21:33:24.227918 30f8         Options.memtable_factory: SkipListFactory
+2018/12/23-21:33:24.227928 30f8            Options.table_factory: BlockBasedTable
+2018/12/23-21:33:24.227988 30f8            table_factory options:   flush_block_policy_factory: FlushBlockBySizePolicyFactory (000001B730599150)
+  cache_index_and_filter_blocks: 0
+  cache_index_and_filter_blocks_with_high_priority: 0
+  pin_l0_filter_and_index_blocks_in_cache: 0
+  index_type: 0
+  hash_index_allow_collision: 1
+  checksum: 1
+  no_block_cache: 0
+  block_cache: 000001B7305EF660
+  block_cache_name: LRUCache
+  block_cache_options:
+    capacity : 8388608
+    num_shard_bits : 4
+    strict_capacity_limit : 0
+    high_pri_pool_ratio: 0.000
+  block_cache_compressed: 0000000000000000
+  persistent_cache: 0000000000000000
+  block_size: 4096
+  block_size_deviation: 10
+  block_restart_interval: 16
+  index_block_restart_interval: 1
+  filter_policy: rocksdb.BuiltinBloomFilter
+  whole_key_filtering: 1
+  format_version: 2
+2018/12/23-21:33:24.228002 30f8        Options.write_buffer_size: 4194304
+2018/12/23-21:33:24.228012 30f8  Options.max_write_buffer_number: 2
+2018/12/23-21:33:24.228022 30f8          Options.compression: Snappy
+2018/12/23-21:33:24.228032 30f8                  Options.bottommost_compression: Disabled
+2018/12/23-21:33:24.228042 30f8       Options.prefix_extractor: nullptr
+2018/12/23-21:33:24.228052 30f8   Options.memtable_insert_with_hint_prefix_extractor: nullptr
+2018/12/23-21:33:24.228062 30f8             Options.num_levels: 7
+2018/12/23-21:33:24.228072 30f8        Options.min_write_buffer_number_to_merge: 1
+2018/12/23-21:33:24.228082 30f8     Options.max_write_buffer_number_to_maintain: 0
+2018/12/23-21:33:24.228092 30f8            Options.compression_opts.window_bits: -14
+2018/12/23-21:33:24.228102 30f8                  Options.compression_opts.level: -1
+2018/12/23-21:33:24.228113 30f8               Options.compression_opts.strategy: 0
+2018/12/23-21:33:24.228191 30f8         Options.compression_opts.max_dict_bytes: 0
+2018/12/23-21:33:24.228207 30f8      Options.level0_file_num_compaction_trigger: 4
+2018/12/23-21:33:24.228219 30f8          Options.level0_slowdown_writes_trigger: 20
+2018/12/23-21:33:24.228229 30f8              Options.level0_stop_writes_trigger: 36
+2018/12/23-21:33:24.228240 30f8                   Options.target_file_size_base: 67108864
+2018/12/23-21:33:24.228251 30f8             Options.target_file_size_multiplier: 1
+2018/12/23-21:33:24.228261 30f8                Options.max_bytes_for_level_base: 268435456
+2018/12/23-21:33:24.228272 30f8 Options.level_compaction_dynamic_level_bytes: 0
+2018/12/23-21:33:24.228294 30f8          Options.max_bytes_for_level_multiplier: 10.000000
+2018/12/23-21:33:24.228307 30f8 Options.max_bytes_for_level_multiplier_addtl[0]: 1
+2018/12/23-21:33:24.228319 30f8 Options.max_bytes_for_level_multiplier_addtl[1]: 1
+2018/12/23-21:33:24.228332 30f8 Options.max_bytes_for_level_multiplier_addtl[2]: 1
+2018/12/23-21:33:24.228343 30f8 Options.max_bytes_for_level_multiplier_addtl[3]: 1
+2018/12/23-21:33:24.228354 30f8 Options.max_bytes_for_level_multiplier_addtl[4]: 1
+2018/12/23-21:33:24.228364 30f8 Options.max_bytes_for_level_multiplier_addtl[5]: 1
+2018/12/23-21:33:24.228376 30f8 Options.max_bytes_for_level_multiplier_addtl[6]: 1
+2018/12/23-21:33:24.228386 30f8       Options.max_sequential_skip_in_iterations: 8
+2018/12/23-21:33:24.228397 30f8                    Options.max_compaction_bytes: 1677721600
+2018/12/23-21:33:24.228426 30f8                        Options.arena_block_size: 524288
+2018/12/23-21:33:24.228438 30f8   Options.soft_pending_compaction_bytes_limit: 68719476736
+2018/12/23-21:33:24.228449 30f8   Options.hard_pending_compaction_bytes_limit: 274877906944
+2018/12/23-21:33:24.228459 30f8       Options.rate_limit_delay_max_milliseconds: 100
+2018/12/23-21:33:24.228470 30f8                Options.disable_auto_compactions: 0
+2018/12/23-21:33:24.228482 30f8                         Options.compaction_style: kCompactionStyleLevel
+2018/12/23-21:33:24.228494 30f8                           Options.compaction_pri: kByCompensatedSize
+2018/12/23-21:33:24.228505 30f8  Options.compaction_options_universal.size_ratio: 1
+2018/12/23-21:33:24.228516 30f8 Options.compaction_options_universal.min_merge_width: 2
+2018/12/23-21:33:24.228526 30f8 Options.compaction_options_universal.max_merge_width: 4294967295
+2018/12/23-21:33:24.228537 30f8 Options.compaction_options_universal.max_size_amplification_percent: 200
+2018/12/23-21:33:24.228546 30f8 Options.compaction_options_universal.compression_size_percent: -1
+2018/12/23-21:33:24.228570 30f8 Options.compaction_options_fifo.max_table_files_size: 1073741824
+2018/12/23-21:33:24.228592 30f8                   Options.table_properties_collectors: 
+2018/12/23-21:33:24.228603 30f8                   Options.inplace_update_support: 0
+2018/12/23-21:33:24.228612 30f8                 Options.inplace_update_num_locks: 10000
+2018/12/23-21:33:24.228642 30f8               Options.memtable_prefix_bloom_size_ratio: 0.000000
+2018/12/23-21:33:24.228664 30f8   Options.memtable_huge_page_size: 0
+2018/12/23-21:33:24.228676 30f8                           Options.bloom_locality: 0
+2018/12/23-21:33:24.228687 30f8                    Options.max_successive_merges: 0
+2018/12/23-21:33:24.228697 30f8                Options.optimize_filters_for_hits: 0
+2018/12/23-21:33:24.228754 30f8                Options.paranoid_file_checks: 0
+2018/12/23-21:33:24.228771 30f8                Options.force_consistency_checks: 0
+2018/12/23-21:33:24.228781 30f8                Options.report_bg_io_stats: 0
+2018/12/23-21:33:24.229622 30f8 [leveldb-rocksdb\db\version_set.cc:2850] Recovered from manifest file:./db/MANIFEST-002454 succeeded,manifest_file_number is 2454, next_file_number is 2456, last_sequence is 137134, log_number is 0,prev_log_number is 0,max_column_family is 0
+2018/12/23-21:33:24.229646 30f8 [leveldb-rocksdb\db\version_set.cc:2858] Column family [default] (ID 0), log number is 2451
+2018/12/23-21:33:24.232740 30f8 EVENT_LOG_v1 {"time_micros": 1545575604232680, "job": 1, "event": "recovery_started", "log_files": [2455]}
+2018/12/23-21:33:24.232774 30f8 [leveldb-rocksdb\db\db_impl.cc:1468] Recovering log #2455 mode 2
+2018/12/23-21:33:24.234128 30f8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:1801] [default] [WriteLevel0TableForRecovery] Level-0 table #2456: started
+2018/12/23-21:33:24.289216 30f8 EVENT_LOG_v1 {"time_micros": 1545575604289165, "cf_name": "default", "job": 1, "event": "table_file_creation", "file_number": 2456, "file_size": 1053, "table_properties": {"data_size": 74, "index_size": 27, "filter_size": 18, "raw_key_size": 15, "raw_average_key_size": 15, "raw_value_size": 43, "raw_average_value_size": 43, "num_data_blocks": 1, "num_entries": 1, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:33:24.289249 30f8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:1831] [default] [WriteLevel0TableForRecovery] Level-0 table #2456: 1053 bytes OK
+2018/12/23-21:33:24.289302 30f8 [leveldb-rocksdb\db\version_set.cc:2386] Creating manifest 2457
+2018/12/23-21:33:24.361963 30f8 EVENT_LOG_v1 {"time_micros": 1545575604361948, "job": 1, "event": "recovery_finished"}
+2018/12/23-21:33:24.368241 30f8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//MANIFEST-002454 type=3 #2454 -- OK
+2018/12/23-21:33:24.369497 30f8 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//002455.log type=0 #2455 -- OK
+2018/12/23-21:33:24.432909 30f8 [leveldb-rocksdb\db\db_impl.cc:6172] DB pointer 000001B73241E2D0
+2018/12/23-21:39:11.250070 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2461. Immutable memtables: 0.
+2018/12/23-21:39:11.250891 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 3] Syncing log #2458
+2018/12/23-21:39:11.286569 3240 (Original Log Time 2018/12/23-21:39:11.250857) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:39:11.286594 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 3] Flushing memtable with next log file: 2461
+2018/12/23-21:39:11.286625 3240 EVENT_LOG_v1 {"time_micros": 1545575951286610, "job": 3, "event": "flush_started", "num_memtables": 1, "num_entries": 82, "num_deletes": 0, "memory_usage": 4182400}
+2018/12/23-21:39:11.286635 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 3] Level-0 flush table #2462: started
+2018/12/23-21:39:11.357073 3240 EVENT_LOG_v1 {"time_micros": 1545575951357014, "cf_name": "default", "job": 3, "event": "table_file_creation", "file_number": 2462, "file_size": 460827, "table_properties": {"data_size": 458826, "index_size": 77, "filter_size": 991, "raw_key_size": 2462, "raw_average_key_size": 41, "raw_value_size": 515270, "raw_average_value_size": 8587, "num_data_blocks": 3, "num_entries": 60, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:11.357104 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 3] Level-0 flush table #2462: 460827 bytes OK
+2018/12/23-21:39:11.375662 3240 (Original Log Time 2018/12/23-21:39:11.357124) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2462 started
+2018/12/23-21:39:11.375684 3240 (Original Log Time 2018/12/23-21:39:11.375517) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2462: memtable #1 done
+2018/12/23-21:39:11.375694 3240 (Original Log Time 2018/12/23-21:39:11.375557) EVENT_LOG_v1 {"time_micros": 1545575951375528, "job": 3, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:39:11.375703 3240 (Original Log Time 2018/12/23-21:39:11.375645) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:39:11.375719 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 3] Try to delete WAL files size 4087129, prev total WAL file size 4598183, number of live WAL files 2.
+2018/12/23-21:39:11.375849 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 3] Delete ./db//002458.log type=0 #2458 -- OK
+2018/12/23-21:39:11.376928 31dc [WARN] [leveldb-rocksdb\db\db_impl.cc:656] ------- DUMPING STATS -------
+2018/12/23-21:39:11.376959 31dc [WARN] [leveldb-rocksdb\db\db_impl.cc:657] 
+** Compaction Stats [default] **
+Level    Files   Size(MB} Score Read(GB}  Rn(GB} Rnp1(GB} Write(GB} Wnew(GB} Moved(GB} W-Amp Rd(MB/s} Wr(MB/s} Comp(sec} Comp(cnt} Avg(sec} KeyIn KeyDrop
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+  L0      4/0       1.37   1.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      3.5         0         2    0.063       0      0
+  L1      1/0      24.99   0.1      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0         0         0    0.000       0      0
+ Sum      5/0      26.35   0.0      0.0     0.0      0.0       0.0      0.0       0.0   1.0      0.0      3.5         0         2    0.063       0      0
+ Int      0/0       0.00   0.0      0.0     0.0      0.0       0.0      0.0       0.0   1.0      0.0      3.5         0         2    0.063       0      0
+Uptime(secs): 347.1 total, 347.1 interval
+Flush(GB): cumulative 0.000, interval 0.000
+AddFile(GB): cumulative 0.000, interval 0.000
+AddFile(Total Files): cumulative 0, interval 0
+AddFile(L0 Files): cumulative 0, interval 0
+AddFile(Keys): cumulative 0, interval 0
+Cumulative compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.1 seconds
+Interval compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.1 seconds
+Stalls(count): 0 level0_slowdown, 0 level0_slowdown_with_compaction, 0 level0_numfiles, 0 level0_numfiles_with_compaction, 0 stop for pending_compaction_bytes, 0 slowdown for pending_compaction_bytes, 0 memtable_compaction, 0 memtable_slowdown, interval 0 total count
+
+** DB Stats **
+Uptime(secs): 347.1 total, 347.1 interval
+Cumulative writes: 92 writes, 92 keys, 70 commit groups, 1.3 writes per commit group, ingest: 0.00 GB, 0.01 MB/s
+Cumulative WAL: 92 writes, 0 syncs, 92.00 writes per sync, written: 0.00 GB, 0.01 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 92 writes, 92 keys, 70 commit groups, 1.3 writes per commit group, ingest: 4.39 MB, 0.01 MB/s
+Interval WAL: 92 writes, 0 syncs, 92.00 writes per sync, written: 0.00 MB, 0.01 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+2018/12/23-21:39:11.377070 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 4] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:39:11.377092 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 3 Base level 0, inputs: [2462(450KB) 2456(1053B) 2453(487KB) 2451(463KB)], [2449(24MB)]
+2018/12/23-21:39:11.377133 31dc EVENT_LOG_v1 {"time_micros": 1545575951377106, "job": 4, "event": "compaction_started", "files_L0": [2462, 2456, 2453, 2451], "files_L1": [2449], "score": 1, "input_data_size": 27635057}
+2018/12/23-21:39:12.525185 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 4] Generated table #2463: 75609 keys, 26263727 bytes
+2018/12/23-21:39:12.525249 31dc EVENT_LOG_v1 {"time_micros": 1545575952525215, "cf_name": "default", "job": 4, "event": "table_file_creation", "file_number": 2463, "file_size": 26263727, "table_properties": {"data_size": 25898654, "index_size": 325237, "filter_size": 160568, "raw_key_size": 3110617, "raw_average_key_size": 41, "raw_value_size": 32251187, "raw_average_value_size": 426, "num_data_blocks": 7326, "num_entries": 75609, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:12.525846 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 4] Compacted 4@0 + 1@1 files to L1 => 26263727 bytes
+2018/12/23-21:39:12.729940 31dc (Original Log Time 2018/12/23-21:39:12.729862) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 24.1 rd, 22.9 wr, level 1, files in(4, 1) out(1) MB in(1.4, 25.0) out(25.0), read-write-amplify(37.5) write-amplify(18.3) OK, records in: 75709, records dropped: 100
+2018/12/23-21:39:12.729966 31dc (Original Log Time 2018/12/23-21:39:12.729900) EVENT_LOG_v1 {"time_micros": 1545575952729874, "job": 4, "event": "compaction_finished", "compaction_time_micros": 1148692, "output_level": 1, "num_output_files": 1, "total_output_size": 26263727, "num_input_records": 75709, "num_output_records": 75609, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:39:12.731844 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 4] Delete ./db/002462.sst type=2 #2462 -- OK
+2018/12/23-21:39:12.731892 31dc EVENT_LOG_v1 {"time_micros": 1545575952731875, "job": 4, "event": "table_file_deletion", "file_number": 2462}
+2018/12/23-21:39:12.733275 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 4] Delete ./db/002456.sst type=2 #2456 -- OK
+2018/12/23-21:39:12.733319 31dc EVENT_LOG_v1 {"time_micros": 1545575952733303, "job": 4, "event": "table_file_deletion", "file_number": 2456}
+2018/12/23-21:39:12.734007 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 4] Delete ./db/002453.sst type=2 #2453 -- OK
+2018/12/23-21:39:12.734040 31dc EVENT_LOG_v1 {"time_micros": 1545575952734027, "job": 4, "event": "table_file_deletion", "file_number": 2453}
+2018/12/23-21:39:12.735471 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 4] Delete ./db/002451.sst type=2 #2451 -- OK
+2018/12/23-21:39:12.735516 31dc EVENT_LOG_v1 {"time_micros": 1545575952735501, "job": 4, "event": "table_file_deletion", "file_number": 2451}
+2018/12/23-21:39:12.740372 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 4] Delete ./db/002449.sst type=2 #2449 -- OK
+2018/12/23-21:39:12.740425 31dc EVENT_LOG_v1 {"time_micros": 1545575952740405, "job": 4, "event": "table_file_deletion", "file_number": 2449}
+2018/12/23-21:39:17.169552 30f8 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2464. Immutable memtables: 0.
+2018/12/23-21:39:17.169620 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 5] Syncing log #2461
+2018/12/23-21:39:17.220185 3240 (Original Log Time 2018/12/23-21:39:17.169608) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:39:17.220224 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 5] Flushing memtable with next log file: 2464
+2018/12/23-21:39:17.220270 3240 EVENT_LOG_v1 {"time_micros": 1545575957220245, "job": 5, "event": "flush_started", "num_memtables": 1, "num_entries": 80, "num_deletes": 0, "memory_usage": 4229320}
+2018/12/23-21:39:17.220283 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 5] Level-0 flush table #2465: started
+2018/12/23-21:39:17.424899 3240 EVENT_LOG_v1 {"time_micros": 1545575957424834, "cf_name": "default", "job": 5, "event": "table_file_creation", "file_number": 2465, "file_size": 459367, "table_properties": {"data_size": 457371, "index_size": 77, "filter_size": 986, "raw_key_size": 2447, "raw_average_key_size": 41, "raw_value_size": 514228, "raw_average_value_size": 8715, "num_data_blocks": 3, "num_entries": 59, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:17.424932 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 5] Level-0 flush table #2465: 459367 bytes OK
+2018/12/23-21:39:17.442544 3240 (Original Log Time 2018/12/23-21:39:17.424953) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2465 started
+2018/12/23-21:39:17.442567 3240 (Original Log Time 2018/12/23-21:39:17.442482) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2465: memtable #1 done
+2018/12/23-21:39:17.442573 3240 (Original Log Time 2018/12/23-21:39:17.442508) EVENT_LOG_v1 {"time_micros": 1545575957442493, "job": 5, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:39:17.442588 3240 (Original Log Time 2018/12/23-21:39:17.442529) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:39:17.442612 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 5] Try to delete WAL files size 4089167, prev total WAL file size 4600613, number of live WAL files 2.
+2018/12/23-21:39:17.442754 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 5] Delete ./db//002461.log type=0 #2461 -- OK
+2018/12/23-21:39:25.203077 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2466. Immutable memtables: 0.
+2018/12/23-21:39:25.203293 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 6] Syncing log #2464
+2018/12/23-21:39:25.265129 3240 (Original Log Time 2018/12/23-21:39:25.203278) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:39:25.265160 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 6] Flushing memtable with next log file: 2466
+2018/12/23-21:39:25.265204 3240 EVENT_LOG_v1 {"time_micros": 1545575965265183, "job": 6, "event": "flush_started", "num_memtables": 1, "num_entries": 80, "num_deletes": 0, "memory_usage": 4183816}
+2018/12/23-21:39:25.265279 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 6] Level-0 flush table #2467: started
+2018/12/23-21:39:25.355093 3240 EVENT_LOG_v1 {"time_micros": 1545575965355040, "cf_name": "default", "job": 6, "event": "table_file_creation", "file_number": 2467, "file_size": 461252, "table_properties": {"data_size": 459257, "index_size": 77, "filter_size": 985, "raw_key_size": 2273, "raw_average_key_size": 41, "raw_value_size": 515319, "raw_average_value_size": 9369, "num_data_blocks": 3, "num_entries": 55, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:25.355120 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 6] Level-0 flush table #2467: 461252 bytes OK
+2018/12/23-21:39:25.375917 3240 (Original Log Time 2018/12/23-21:39:25.355138) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2467 started
+2018/12/23-21:39:25.375941 3240 (Original Log Time 2018/12/23-21:39:25.375831) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2467: memtable #1 done
+2018/12/23-21:39:25.375971 3240 (Original Log Time 2018/12/23-21:39:25.375869) EVENT_LOG_v1 {"time_micros": 1545575965375846, "job": 6, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:39:25.375994 3240 (Original Log Time 2018/12/23-21:39:25.375897) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:39:25.376039 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 6] Try to delete WAL files size 4093429, prev total WAL file size 4605166, number of live WAL files 2.
+2018/12/23-21:39:25.376161 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 6] Delete ./db//002464.log type=0 #2464 -- OK
+2018/12/23-21:39:42.154799 1a30 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2468. Immutable memtables: 0.
+2018/12/23-21:39:42.154961 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 7] Syncing log #2466
+2018/12/23-21:39:42.220533 3240 (Original Log Time 2018/12/23-21:39:42.154946) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:39:42.220563 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 7] Flushing memtable with next log file: 2468
+2018/12/23-21:39:42.220608 3240 EVENT_LOG_v1 {"time_micros": 1545575982220586, "job": 7, "event": "flush_started", "num_memtables": 1, "num_entries": 128, "num_deletes": 0, "memory_usage": 4205048}
+2018/12/23-21:39:42.220628 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 7] Level-0 flush table #2469: started
+2018/12/23-21:39:42.294956 3240 EVENT_LOG_v1 {"time_micros": 1545575982294894, "cf_name": "default", "job": 7, "event": "table_file_creation", "file_number": 2469, "file_size": 491870, "table_properties": {"data_size": 489493, "index_size": 393, "filter_size": 1123, "raw_key_size": 4472, "raw_average_key_size": 42, "raw_value_size": 546477, "raw_average_value_size": 5155, "num_data_blocks": 10, "num_entries": 106, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:42.294992 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 7] Level-0 flush table #2469: 491870 bytes OK
+2018/12/23-21:39:42.309595 3240 (Original Log Time 2018/12/23-21:39:42.295014) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2469 started
+2018/12/23-21:39:42.309620 3240 (Original Log Time 2018/12/23-21:39:42.309475) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2469: memtable #1 done
+2018/12/23-21:39:42.309632 3240 (Original Log Time 2018/12/23-21:39:42.309512) EVENT_LOG_v1 {"time_micros": 1545575982309490, "job": 7, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:39:42.309643 3240 (Original Log Time 2018/12/23-21:39:42.309569) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:39:42.309662 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 7] Try to delete WAL files size 4129360, prev total WAL file size 4641540, number of live WAL files 2.
+2018/12/23-21:39:42.309781 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 7] Delete ./db//002466.log type=0 #2466 -- OK
+2018/12/23-21:39:51.952302 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2470. Immutable memtables: 0.
+2018/12/23-21:39:51.952378 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 8] Syncing log #2468
+2018/12/23-21:39:52.009557 3240 (Original Log Time 2018/12/23-21:39:51.952364) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:39:52.009759 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 8] Flushing memtable with next log file: 2470
+2018/12/23-21:39:52.009808 3240 EVENT_LOG_v1 {"time_micros": 1545575992009787, "job": 8, "event": "flush_started", "num_memtables": 1, "num_entries": 98, "num_deletes": 0, "memory_usage": 4232912}
+2018/12/23-21:39:52.009819 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 8] Level-0 flush table #2471: started
+2018/12/23-21:39:52.081772 3240 EVENT_LOG_v1 {"time_micros": 1545575992081724, "cf_name": "default", "job": 8, "event": "table_file_creation", "file_number": 2471, "file_size": 495457, "table_properties": {"data_size": 493182, "index_size": 325, "filter_size": 1108, "raw_key_size": 3083, "raw_average_key_size": 42, "raw_value_size": 548640, "raw_average_value_size": 7515, "num_data_blocks": 12, "num_entries": 73, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:52.081795 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 8] Level-0 flush table #2471: 495457 bytes OK
+2018/12/23-21:39:52.120852 3240 (Original Log Time 2018/12/23-21:39:52.081811) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2471 started
+2018/12/23-21:39:52.120877 3240 (Original Log Time 2018/12/23-21:39:52.120752) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2471: memtable #1 done
+2018/12/23-21:39:52.120888 3240 (Original Log Time 2018/12/23-21:39:52.120791) EVENT_LOG_v1 {"time_micros": 1545575992120768, "job": 8, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:39:52.120906 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 9] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:39:52.120997 3240 (Original Log Time 2018/12/23-21:39:52.120829) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:39:52.121001 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 8 Base level 0, inputs: [2471(483KB) 2469(480KB) 2467(450KB) 2465(448KB)], [2463(25MB)]
+2018/12/23-21:39:52.121049 31dc EVENT_LOG_v1 {"time_micros": 1545575992121021, "job": 9, "event": "compaction_started", "files_L0": [2471, 2469, 2467, 2465], "files_L1": [2463], "score": 1, "input_data_size": 28171673}
+2018/12/23-21:39:52.121035 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 8] Try to delete WAL files size 4133815, prev total WAL file size 4648495, number of live WAL files 2.
+2018/12/23-21:39:52.121254 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 8] Delete ./db//002468.log type=0 #2468 -- OK
+2018/12/23-21:39:53.600715 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 9] Generated table #2472: 75806 keys, 26337234 bytes
+2018/12/23-21:39:53.600813 31dc EVENT_LOG_v1 {"time_micros": 1545575993600755, "cf_name": "default", "job": 9, "event": "table_file_creation", "file_number": 2472, "file_size": 26337234, "table_properties": {"data_size": 25971346, "index_size": 325844, "filter_size": 160974, "raw_key_size": 3119018, "raw_average_key_size": 41, "raw_value_size": 32326359, "raw_average_value_size": 426, "num_data_blocks": 7345, "num_entries": 75806, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:39:53.601350 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 9] Compacted 4@0 + 1@1 files to L1 => 26337234 bytes
+2018/12/23-21:39:53.609200 31dc (Original Log Time 2018/12/23-21:39:53.609085) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 19.0 rd, 17.8 wr, level 1, files in(4, 1) out(1) MB in(1.8, 25.0) out(25.1), read-write-amplify(28.6) write-amplify(13.8) OK, records in: 75902, records dropped: 96
+2018/12/23-21:39:53.609229 31dc (Original Log Time 2018/12/23-21:39:53.609147) EVENT_LOG_v1 {"time_micros": 1545575993609105, "job": 9, "event": "compaction_finished", "compaction_time_micros": 1480273, "output_level": 1, "num_output_files": 1, "total_output_size": 26337234, "num_input_records": 75902, "num_output_records": 75806, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:39:53.611215 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 9] Delete ./db/002471.sst type=2 #2471 -- OK
+2018/12/23-21:39:53.611256 31dc EVENT_LOG_v1 {"time_micros": 1545575993611242, "job": 9, "event": "table_file_deletion", "file_number": 2471}
+2018/12/23-21:39:53.613126 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 9] Delete ./db/002469.sst type=2 #2469 -- OK
+2018/12/23-21:39:53.613177 31dc EVENT_LOG_v1 {"time_micros": 1545575993613161, "job": 9, "event": "table_file_deletion", "file_number": 2469}
+2018/12/23-21:39:53.613777 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 9] Delete ./db/002467.sst type=2 #2467 -- OK
+2018/12/23-21:39:53.613812 31dc EVENT_LOG_v1 {"time_micros": 1545575993613799, "job": 9, "event": "table_file_deletion", "file_number": 2467}
+2018/12/23-21:39:53.614245 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 9] Delete ./db/002465.sst type=2 #2465 -- OK
+2018/12/23-21:39:53.614277 31dc EVENT_LOG_v1 {"time_micros": 1545575993614265, "job": 9, "event": "table_file_deletion", "file_number": 2465}
+2018/12/23-21:39:53.618950 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 9] Delete ./db/002463.sst type=2 #2463 -- OK
+2018/12/23-21:39:53.618997 31dc EVENT_LOG_v1 {"time_micros": 1545575993618981, "job": 9, "event": "table_file_deletion", "file_number": 2463}
+2018/12/23-21:40:10.591561 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2473. Immutable memtables: 0.
+2018/12/23-21:40:10.591668 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 10] Syncing log #2470
+2018/12/23-21:40:10.665589 3240 (Original Log Time 2018/12/23-21:40:10.591655) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:40:10.665619 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 10] Flushing memtable with next log file: 2473
+2018/12/23-21:40:10.665652 3240 EVENT_LOG_v1 {"time_micros": 1545576010665636, "job": 10, "event": "flush_started", "num_memtables": 1, "num_entries": 118, "num_deletes": 0, "memory_usage": 4277896}
+2018/12/23-21:40:10.665659 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 10] Level-0 flush table #2474: started
+2018/12/23-21:40:10.736774 3240 EVENT_LOG_v1 {"time_micros": 1545576010736739, "cf_name": "default", "job": 10, "event": "table_file_creation", "file_number": 2474, "file_size": 500155, "table_properties": {"data_size": 497693, "index_size": 492, "filter_size": 1128, "raw_key_size": 4038, "raw_average_key_size": 42, "raw_value_size": 557419, "raw_average_value_size": 5806, "num_data_blocks": 12, "num_entries": 96, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:40:10.736794 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 10] Level-0 flush table #2474: 500155 bytes OK
+2018/12/23-21:40:10.764894 3240 (Original Log Time 2018/12/23-21:40:10.736807) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2474 started
+2018/12/23-21:40:10.764919 3240 (Original Log Time 2018/12/23-21:40:10.764797) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2474: memtable #1 done
+2018/12/23-21:40:10.764932 3240 (Original Log Time 2018/12/23-21:40:10.764835) EVENT_LOG_v1 {"time_micros": 1545576010764812, "job": 10, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:40:10.764943 3240 (Original Log Time 2018/12/23-21:40:10.764874) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:40:10.764960 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 10] Try to delete WAL files size 4146106, prev total WAL file size 4147973, number of live WAL files 2.
+2018/12/23-21:40:10.765077 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 10] Delete ./db//002470.log type=0 #2470 -- OK
+2018/12/23-21:40:41.437860 1a30 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2475. Immutable memtables: 0.
+2018/12/23-21:40:41.438001 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 11] Syncing log #2473
+2018/12/23-21:40:41.510618 3240 (Original Log Time 2018/12/23-21:40:41.437989) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:40:41.510657 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 11] Flushing memtable with next log file: 2475
+2018/12/23-21:40:41.510706 3240 EVENT_LOG_v1 {"time_micros": 1545576041510682, "job": 11, "event": "flush_started", "num_memtables": 1, "num_entries": 105, "num_deletes": 0, "memory_usage": 4397384}
+2018/12/23-21:40:41.510721 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 11] Level-0 flush table #2476: started
+2018/12/23-21:40:41.591734 3240 EVENT_LOG_v1 {"time_micros": 1545576041591679, "cf_name": "default", "job": 11, "event": "table_file_creation", "file_number": 2476, "file_size": 479255, "table_properties": {"data_size": 477038, "index_size": 265, "filter_size": 1055, "raw_key_size": 3192, "raw_average_key_size": 41, "raw_value_size": 538471, "raw_average_value_size": 6993, "num_data_blocks": 7, "num_entries": 77, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:40:41.591773 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 11] Level-0 flush table #2476: 479255 bytes OK
+2018/12/23-21:40:41.610824 3240 (Original Log Time 2018/12/23-21:40:41.591796) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2476 started
+2018/12/23-21:40:41.610852 3240 (Original Log Time 2018/12/23-21:40:41.610744) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2476: memtable #1 done
+2018/12/23-21:40:41.610863 3240 (Original Log Time 2018/12/23-21:40:41.610778) EVENT_LOG_v1 {"time_micros": 1545576041610758, "job": 11, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:40:41.610870 3240 (Original Log Time 2018/12/23-21:40:41.610805) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:40:41.610881 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 11] Try to delete WAL files size 4255468, prev total WAL file size 4257318, number of live WAL files 2.
+2018/12/23-21:40:41.610997 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 11] Delete ./db//002473.log type=0 #2473 -- OK
+2018/12/23-21:41:21.563203 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2477. Immutable memtables: 0.
+2018/12/23-21:41:21.563354 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 12] Syncing log #2475
+2018/12/23-21:41:21.643613 3240 (Original Log Time 2018/12/23-21:41:21.563341) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:41:21.643645 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 12] Flushing memtable with next log file: 2477
+2018/12/23-21:41:21.643688 3240 EVENT_LOG_v1 {"time_micros": 1545576081643666, "job": 12, "event": "flush_started", "num_memtables": 1, "num_entries": 106, "num_deletes": 0, "memory_usage": 4450400}
+2018/12/23-21:41:21.643700 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 12] Level-0 flush table #2478: started
+2018/12/23-21:41:21.733687 3240 EVENT_LOG_v1 {"time_micros": 1545576081733644, "cf_name": "default", "job": 12, "event": "table_file_creation", "file_number": 2478, "file_size": 479185, "table_properties": {"data_size": 476934, "index_size": 292, "filter_size": 1062, "raw_key_size": 3233, "raw_average_key_size": 41, "raw_value_size": 538769, "raw_average_value_size": 6907, "num_data_blocks": 8, "num_entries": 78, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:41:21.733708 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 12] Level-0 flush table #2478: 479185 bytes OK
+2018/12/23-21:41:21.767052 3240 (Original Log Time 2018/12/23-21:41:21.733721) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2478 started
+2018/12/23-21:41:21.767073 3240 (Original Log Time 2018/12/23-21:41:21.766981) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2478: memtable #1 done
+2018/12/23-21:41:21.767086 3240 (Original Log Time 2018/12/23-21:41:21.767010) EVENT_LOG_v1 {"time_micros": 1545576081766993, "job": 12, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:41:21.767096 3240 (Original Log Time 2018/12/23-21:41:21.767034) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:41:21.767114 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 12] Try to delete WAL files size 4385828, prev total WAL file size 4899789, number of live WAL files 2.
+2018/12/23-21:41:21.767225 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 12] Delete ./db//002475.log type=0 #2475 -- OK
+2018/12/23-21:42:03.472041 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2479. Immutable memtables: 0.
+2018/12/23-21:42:03.472147 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 13] Syncing log #2477
+2018/12/23-21:42:03.490145 3240 (Original Log Time 2018/12/23-21:42:03.472131) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:42:03.490174 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 13] Flushing memtable with next log file: 2479
+2018/12/23-21:42:03.490218 3240 EVENT_LOG_v1 {"time_micros": 1545576123490197, "job": 13, "event": "flush_started", "num_memtables": 1, "num_entries": 111, "num_deletes": 0, "memory_usage": 4213344}
+2018/12/23-21:42:03.490233 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 13] Level-0 flush table #2480: started
+2018/12/23-21:42:03.543680 3240 EVENT_LOG_v1 {"time_micros": 1545576123543639, "cf_name": "default", "job": 13, "event": "table_file_creation", "file_number": 2480, "file_size": 490123, "table_properties": {"data_size": 487786, "index_size": 381, "filter_size": 1104, "raw_key_size": 3625, "raw_average_key_size": 41, "raw_value_size": 553976, "raw_average_value_size": 6295, "num_data_blocks": 10, "num_entries": 88, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:42:03.543701 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 13] Level-0 flush table #2480: 490123 bytes OK
+2018/12/23-21:42:03.568153 3240 (Original Log Time 2018/12/23-21:42:03.543714) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2480 started
+2018/12/23-21:42:03.568179 3240 (Original Log Time 2018/12/23-21:42:03.568057) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2480: memtable #1 done
+2018/12/23-21:42:03.568190 3240 (Original Log Time 2018/12/23-21:42:03.568094) EVENT_LOG_v1 {"time_micros": 1545576123568071, "job": 13, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:42:03.568200 3240 (Original Log Time 2018/12/23-21:42:03.568130) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:42:03.568213 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 14] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:42:03.568217 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 13] Try to delete WAL files size 4151733, prev total WAL file size 4153544, number of live WAL files 2.
+2018/12/23-21:42:03.568238 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 13 Base level 0, inputs: [2480(478KB) 2478(467KB) 2476(468KB) 2474(488KB)], [2472(25MB)]
+2018/12/23-21:42:03.568321 31dc EVENT_LOG_v1 {"time_micros": 1545576123568250, "job": 14, "event": "compaction_started", "files_L0": [2480, 2478, 2476, 2474], "files_L1": [2472], "score": 1, "input_data_size": 28285952}
+2018/12/23-21:42:03.568356 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 13] Delete ./db//002477.log type=0 #2477 -- OK
+2018/12/23-21:42:04.742496 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 14] Generated table #2481: 76045 keys, 26445746 bytes
+2018/12/23-21:42:04.742583 31dc EVENT_LOG_v1 {"time_micros": 1545576124742535, "cf_name": "default", "job": 14, "event": "table_file_creation", "file_number": 2481, "file_size": 26445746, "table_properties": {"data_size": 26078533, "index_size": 326933, "filter_size": 161578, "raw_key_size": 3129058, "raw_average_key_size": 41, "raw_value_size": 32458382, "raw_average_value_size": 426, "num_data_blocks": 7373, "num_entries": 76045, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:42:04.742645 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 14] Compacted 4@0 + 1@1 files to L1 => 26445746 bytes
+2018/12/23-21:42:04.757312 31dc (Original Log Time 2018/12/23-21:42:04.757211) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 24.1 rd, 22.5 wr, level 1, files in(4, 1) out(1) MB in(1.9, 25.1) out(25.2), read-write-amplify(28.1) write-amplify(13.6) OK, records in: 76145, records dropped: 100
+2018/12/23-21:42:04.757341 31dc (Original Log Time 2018/12/23-21:42:04.757272) EVENT_LOG_v1 {"time_micros": 1545576124757232, "job": 14, "event": "compaction_finished", "compaction_time_micros": 1174298, "output_level": 1, "num_output_files": 1, "total_output_size": 26445746, "num_input_records": 76145, "num_output_records": 76045, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:42:04.759207 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 14] Delete ./db/002480.sst type=2 #2480 -- OK
+2018/12/23-21:42:04.759255 31dc EVENT_LOG_v1 {"time_micros": 1545576124759238, "job": 14, "event": "table_file_deletion", "file_number": 2480}
+2018/12/23-21:42:04.759811 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 14] Delete ./db/002478.sst type=2 #2478 -- OK
+2018/12/23-21:42:04.759846 31dc EVENT_LOG_v1 {"time_micros": 1545576124759833, "job": 14, "event": "table_file_deletion", "file_number": 2478}
+2018/12/23-21:42:04.760425 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 14] Delete ./db/002476.sst type=2 #2476 -- OK
+2018/12/23-21:42:04.760461 31dc EVENT_LOG_v1 {"time_micros": 1545576124760447, "job": 14, "event": "table_file_deletion", "file_number": 2476}
+2018/12/23-21:42:04.760889 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 14] Delete ./db/002474.sst type=2 #2474 -- OK
+2018/12/23-21:42:04.760922 31dc EVENT_LOG_v1 {"time_micros": 1545576124760909, "job": 14, "event": "table_file_deletion", "file_number": 2474}
+2018/12/23-21:42:04.766338 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 14] Delete ./db/002472.sst type=2 #2472 -- OK
+2018/12/23-21:42:04.766389 31dc EVENT_LOG_v1 {"time_micros": 1545576124766370, "job": 14, "event": "table_file_deletion", "file_number": 2472}
+2018/12/23-21:42:29.495137 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2482. Immutable memtables: 0.
+2018/12/23-21:42:29.495261 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 15] Syncing log #2479
+2018/12/23-21:42:29.545030 3240 (Original Log Time 2018/12/23-21:42:29.495248) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:42:29.545052 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 15] Flushing memtable with next log file: 2482
+2018/12/23-21:42:29.545083 3240 EVENT_LOG_v1 {"time_micros": 1545576149545068, "job": 15, "event": "flush_started", "num_memtables": 1, "num_entries": 98, "num_deletes": 0, "memory_usage": 4198216}
+2018/12/23-21:42:29.545090 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 15] Level-0 flush table #2483: started
+2018/12/23-21:42:29.625205 3240 EVENT_LOG_v1 {"time_micros": 1545576149625140, "cf_name": "default", "job": 15, "event": "table_file_creation", "file_number": 2483, "file_size": 480704, "table_properties": {"data_size": 478487, "index_size": 265, "filter_size": 1057, "raw_key_size": 3148, "raw_average_key_size": 41, "raw_value_size": 540009, "raw_average_value_size": 7105, "num_data_blocks": 7, "num_entries": 76, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:42:29.625234 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 15] Level-0 flush table #2483: 480704 bytes OK
+2018/12/23-21:42:29.646306 3240 (Original Log Time 2018/12/23-21:42:29.625253) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2483 started
+2018/12/23-21:42:29.646331 3240 (Original Log Time 2018/12/23-21:42:29.646218) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2483: memtable #1 done
+2018/12/23-21:42:29.646351 3240 (Original Log Time 2018/12/23-21:42:29.646253) EVENT_LOG_v1 {"time_micros": 1545576149646230, "job": 15, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:42:29.646367 3240 (Original Log Time 2018/12/23-21:42:29.646284) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:42:29.646386 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 15] Try to delete WAL files size 4140646, prev total WAL file size 4655573, number of live WAL files 2.
+2018/12/23-21:42:29.646722 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 15] Delete ./db//002479.log type=0 #2479 -- OK
+2018/12/23-21:42:52.783262 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2484. Immutable memtables: 0.
+2018/12/23-21:42:52.783424 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 16] Syncing log #2482
+2018/12/23-21:42:52.824517 3240 (Original Log Time 2018/12/23-21:42:52.783410) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:42:52.824544 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 16] Flushing memtable with next log file: 2484
+2018/12/23-21:42:52.824575 3240 EVENT_LOG_v1 {"time_micros": 1545576172824560, "job": 16, "event": "flush_started", "num_memtables": 1, "num_entries": 105, "num_deletes": 0, "memory_usage": 4207896}
+2018/12/23-21:42:52.824582 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 16] Level-0 flush table #2485: started
+2018/12/23-21:42:52.899339 3240 EVENT_LOG_v1 {"time_micros": 1545576172899273, "cf_name": "default", "job": 16, "event": "table_file_creation", "file_number": 2485, "file_size": 486690, "table_properties": {"data_size": 484380, "index_size": 365, "filter_size": 1081, "raw_key_size": 3285, "raw_average_key_size": 41, "raw_value_size": 545811, "raw_average_value_size": 6909, "num_data_blocks": 9, "num_entries": 79, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:42:52.899370 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 16] Level-0 flush table #2485: 486690 bytes OK
+2018/12/23-21:42:52.913603 3240 (Original Log Time 2018/12/23-21:42:52.899389) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2485 started
+2018/12/23-21:42:52.913629 3240 (Original Log Time 2018/12/23-21:42:52.913514) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2485: memtable #1 done
+2018/12/23-21:42:52.913642 3240 (Original Log Time 2018/12/23-21:42:52.913551) EVENT_LOG_v1 {"time_micros": 1545576172913528, "job": 16, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:42:52.913653 3240 (Original Log Time 2018/12/23-21:42:52.913579) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:42:52.913671 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 16] Try to delete WAL files size 4149995, prev total WAL file size 4665417, number of live WAL files 2.
+2018/12/23-21:42:52.913802 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 16] Delete ./db//002482.log type=0 #2482 -- OK
+2018/12/23-21:43:18.204613 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2486. Immutable memtables: 0.
+2018/12/23-21:43:18.204762 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 17] Syncing log #2484
+2018/12/23-21:43:18.236650 3240 (Original Log Time 2018/12/23-21:43:18.204749) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:43:18.236678 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 17] Flushing memtable with next log file: 2486
+2018/12/23-21:43:18.236722 3240 EVENT_LOG_v1 {"time_micros": 1545576198236699, "job": 17, "event": "flush_started", "num_memtables": 1, "num_entries": 106, "num_deletes": 0, "memory_usage": 4343920}
+2018/12/23-21:43:18.236741 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 17] Level-0 flush table #2487: started
+2018/12/23-21:43:18.350338 3240 EVENT_LOG_v1 {"time_micros": 1545576198350269, "cf_name": "default", "job": 17, "event": "table_file_creation", "file_number": 2487, "file_size": 485045, "table_properties": {"data_size": 482742, "index_size": 342, "filter_size": 1083, "raw_key_size": 3455, "raw_average_key_size": 41, "raw_value_size": 544427, "raw_average_value_size": 6559, "num_data_blocks": 9, "num_entries": 83, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:43:18.350369 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 17] Level-0 flush table #2487: 485045 bytes OK
+2018/12/23-21:43:18.380886 3240 (Original Log Time 2018/12/23-21:43:18.350389) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2487 started
+2018/12/23-21:43:18.380916 3240 (Original Log Time 2018/12/23-21:43:18.380793) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2487: memtable #1 done
+2018/12/23-21:43:18.380930 3240 (Original Log Time 2018/12/23-21:43:18.380833) EVENT_LOG_v1 {"time_micros": 1545576198380808, "job": 17, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:43:18.380941 3240 (Original Log Time 2018/12/23-21:43:18.380863) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:43:18.380961 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 17] Try to delete WAL files size 4277581, prev total WAL file size 4793330, number of live WAL files 2.
+2018/12/23-21:43:18.381104 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 17] Delete ./db//002484.log type=0 #2484 -- OK
+2018/12/23-21:44:08.589497 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2488. Immutable memtables: 0.
+2018/12/23-21:44:08.589644 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 18] Syncing log #2486
+2018/12/23-21:44:08.659550 3240 (Original Log Time 2018/12/23-21:44:08.589632) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:44:08.659580 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 18] Flushing memtable with next log file: 2488
+2018/12/23-21:44:08.659623 3240 EVENT_LOG_v1 {"time_micros": 1545576248659601, "job": 18, "event": "flush_started", "num_memtables": 1, "num_entries": 117, "num_deletes": 0, "memory_usage": 4199736}
+2018/12/23-21:44:08.659634 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 18] Level-0 flush table #2489: started
+2018/12/23-21:44:08.724060 3240 EVENT_LOG_v1 {"time_micros": 1545576248723998, "cf_name": "default", "job": 18, "event": "table_file_creation", "file_number": 2489, "file_size": 487137, "table_properties": {"data_size": 484851, "index_size": 315, "filter_size": 1092, "raw_key_size": 3892, "raw_average_key_size": 41, "raw_value_size": 545243, "raw_average_value_size": 5862, "num_data_blocks": 8, "num_entries": 93, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:44:08.725025 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 18] Level-0 flush table #2489: 487137 bytes OK
+2018/12/23-21:44:08.737612 3240 (Original Log Time 2018/12/23-21:44:08.725043) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2489 started
+2018/12/23-21:44:08.737640 3240 (Original Log Time 2018/12/23-21:44:08.737515) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2489: memtable #1 done
+2018/12/23-21:44:08.737651 3240 (Original Log Time 2018/12/23-21:44:08.737552) EVENT_LOG_v1 {"time_micros": 1545576248737530, "job": 18, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:44:08.737655 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 19] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:44:08.737672 3240 (Original Log Time 2018/12/23-21:44:08.737587) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:44:08.737698 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 18 Base level 0, inputs: [2489(475KB) 2487(473KB) 2485(475KB) 2483(469KB)], [2481(25MB)]
+2018/12/23-21:44:08.737709 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 18] Try to delete WAL files size 4145728, prev total WAL file size 4661447, number of live WAL files 2.
+2018/12/23-21:44:08.737738 31dc EVENT_LOG_v1 {"time_micros": 1545576248737711, "job": 19, "event": "compaction_started", "files_L0": [2489, 2487, 2485, 2483], "files_L1": [2481], "score": 1, "input_data_size": 28385322}
+2018/12/23-21:44:08.737869 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 18] Delete ./db//002486.log type=0 #2486 -- OK
+2018/12/23-21:44:09.861396 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 19] Generated table #2490: 76276 keys, 26534284 bytes
+2018/12/23-21:44:09.861501 31dc EVENT_LOG_v1 {"time_micros": 1545576249861434, "cf_name": "default", "job": 19, "event": "table_file_creation", "file_number": 2490, "file_size": 26534284, "table_properties": {"data_size": 26165795, "index_size": 328157, "filter_size": 162035, "raw_key_size": 3138790, "raw_average_key_size": 41, "raw_value_size": 32570434, "raw_average_value_size": 427, "num_data_blocks": 7395, "num_entries": 76276, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:44:09.862597 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 19] Compacted 4@0 + 1@1 files to L1 => 26534284 bytes
+2018/12/23-21:44:09.882187 31dc (Original Log Time 2018/12/23-21:44:09.882114) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 25.2 rd, 23.6 wr, level 1, files in(4, 1) out(1) MB in(1.8, 25.2) out(25.3), read-write-amplify(28.3) write-amplify(13.7) OK, records in: 76376, records dropped: 100
+2018/12/23-21:44:09.882206 31dc (Original Log Time 2018/12/23-21:44:09.882156) EVENT_LOG_v1 {"time_micros": 1545576249882128, "job": 19, "event": "compaction_finished", "compaction_time_micros": 1124829, "output_level": 1, "num_output_files": 1, "total_output_size": 26534284, "num_input_records": 76376, "num_output_records": 76276, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:44:09.884379 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 19] Delete ./db/002489.sst type=2 #2489 -- OK
+2018/12/23-21:44:09.884425 31dc EVENT_LOG_v1 {"time_micros": 1545576249884409, "job": 19, "event": "table_file_deletion", "file_number": 2489}
+2018/12/23-21:44:09.887146 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 19] Delete ./db/002487.sst type=2 #2487 -- OK
+2018/12/23-21:44:09.887198 31dc EVENT_LOG_v1 {"time_micros": 1545576249887179, "job": 19, "event": "table_file_deletion", "file_number": 2487}
+2018/12/23-21:44:09.888211 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 19] Delete ./db/002485.sst type=2 #2485 -- OK
+2018/12/23-21:44:09.888258 31dc EVENT_LOG_v1 {"time_micros": 1545576249888242, "job": 19, "event": "table_file_deletion", "file_number": 2485}
+2018/12/23-21:44:09.889246 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 19] Delete ./db/002483.sst type=2 #2483 -- OK
+2018/12/23-21:44:09.889286 31dc EVENT_LOG_v1 {"time_micros": 1545576249889272, "job": 19, "event": "table_file_deletion", "file_number": 2483}
+2018/12/23-21:44:09.894493 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 19] Delete ./db/002481.sst type=2 #2481 -- OK
+2018/12/23-21:44:09.894609 31dc EVENT_LOG_v1 {"time_micros": 1545576249894592, "job": 19, "event": "table_file_deletion", "file_number": 2481}
+2018/12/23-21:44:58.998505 1a30 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2491. Immutable memtables: 0.
+2018/12/23-21:44:58.998659 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 20] Syncing log #2488
+2018/12/23-21:44:59.070483 3240 (Original Log Time 2018/12/23-21:44:58.998645) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:44:59.070522 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 20] Flushing memtable with next log file: 2491
+2018/12/23-21:44:59.070567 3240 EVENT_LOG_v1 {"time_micros": 1545576299070545, "job": 20, "event": "flush_started", "num_memtables": 1, "num_entries": 92, "num_deletes": 0, "memory_usage": 4199648}
+2018/12/23-21:44:59.070582 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 20] Level-0 flush table #2492: started
+2018/12/23-21:44:59.404360 3240 EVENT_LOG_v1 {"time_micros": 1545576299404274, "cf_name": "default", "job": 20, "event": "table_file_creation", "file_number": 2492, "file_size": 476086, "table_properties": {"data_size": 473921, "index_size": 215, "filter_size": 1042, "raw_key_size": 2888, "raw_average_key_size": 41, "raw_value_size": 535658, "raw_average_value_size": 7652, "num_data_blocks": 6, "num_entries": 70, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:44:59.404399 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 20] Level-0 flush table #2492: 476086 bytes OK
+2018/12/23-21:44:59.438882 3240 (Original Log Time 2018/12/23-21:44:59.404416) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2492 started
+2018/12/23-21:44:59.438908 3240 (Original Log Time 2018/12/23-21:44:59.438541) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2492: memtable #1 done
+2018/12/23-21:44:59.438947 3240 (Original Log Time 2018/12/23-21:44:59.438643) EVENT_LOG_v1 {"time_micros": 1545576299438619, "job": 20, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:44:59.438963 3240 (Original Log Time 2018/12/23-21:44:59.438676) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:44:59.439060 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 20] Try to delete WAL files size 4147941, prev total WAL file size 4791539, number of live WAL files 2.
+2018/12/23-21:44:59.439178 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 20] Delete ./db//002488.log type=0 #2488 -- OK
+2018/12/23-21:45:20.484894 1a30 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2493. Immutable memtables: 0.
+2018/12/23-21:45:20.485045 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 21] Syncing log #2491
+2018/12/23-21:45:20.515994 3240 (Original Log Time 2018/12/23-21:45:20.485033) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:45:20.516024 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 21] Flushing memtable with next log file: 2493
+2018/12/23-21:45:20.516069 3240 EVENT_LOG_v1 {"time_micros": 1545576320516046, "job": 21, "event": "flush_started", "num_memtables": 1, "num_entries": 109, "num_deletes": 0, "memory_usage": 4030536}
+2018/12/23-21:45:20.516081 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 21] Level-0 flush table #2494: started
+2018/12/23-21:45:20.592528 3240 EVENT_LOG_v1 {"time_micros": 1545576320592468, "cf_name": "default", "job": 21, "event": "table_file_creation", "file_number": 2494, "file_size": 493607, "table_properties": {"data_size": 491286, "index_size": 343, "filter_size": 1103, "raw_key_size": 3634, "raw_average_key_size": 41, "raw_value_size": 549092, "raw_average_value_size": 6311, "num_data_blocks": 9, "num_entries": 87, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:45:20.592634 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 21] Level-0 flush table #2494: 493607 bytes OK
+2018/12/23-21:45:20.627895 3240 (Original Log Time 2018/12/23-21:45:20.592662) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2494 started
+2018/12/23-21:45:20.627919 3240 (Original Log Time 2018/12/23-21:45:20.627732) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2494: memtable #1 done
+2018/12/23-21:45:20.627930 3240 (Original Log Time 2018/12/23-21:45:20.627767) EVENT_LOG_v1 {"time_micros": 1545576320627747, "job": 21, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:45:20.627941 3240 (Original Log Time 2018/12/23-21:45:20.627871) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:45:20.627959 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 21] Try to delete WAL files size 3902672, prev total WAL file size 4292422, number of live WAL files 2.
+2018/12/23-21:45:20.628077 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 21] Delete ./db//002491.log type=0 #2491 -- OK
+2018/12/23-21:45:36.421918 30f8 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2495. Immutable memtables: 0.
+2018/12/23-21:45:36.422067 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 22] Syncing log #2493
+2018/12/23-21:45:36.494726 3240 (Original Log Time 2018/12/23-21:45:36.422053) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:45:36.494767 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 22] Flushing memtable with next log file: 2495
+2018/12/23-21:45:36.494820 3240 EVENT_LOG_v1 {"time_micros": 1545576336494795, "job": 22, "event": "flush_started", "num_memtables": 1, "num_entries": 80, "num_deletes": 0, "memory_usage": 4252480}
+2018/12/23-21:45:36.494837 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 22] Level-0 flush table #2496: started
+2018/12/23-21:45:36.559088 3240 EVENT_LOG_v1 {"time_micros": 1545576336559044, "cf_name": "default", "job": 22, "event": "table_file_creation", "file_number": 2496, "file_size": 464697, "table_properties": {"data_size": 462693, "index_size": 77, "filter_size": 994, "raw_key_size": 2447, "raw_average_key_size": 41, "raw_value_size": 520692, "raw_average_value_size": 8825, "num_data_blocks": 3, "num_entries": 59, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:45:36.559109 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 22] Level-0 flush table #2496: 464697 bytes OK
+2018/12/23-21:45:36.572706 3240 (Original Log Time 2018/12/23-21:45:36.559122) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2496 started
+2018/12/23-21:45:36.572732 3240 (Original Log Time 2018/12/23-21:45:36.572620) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2496: memtable #1 done
+2018/12/23-21:45:36.572744 3240 (Original Log Time 2018/12/23-21:45:36.572657) EVENT_LOG_v1 {"time_micros": 1545576336572635, "job": 22, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:45:36.572755 3240 (Original Log Time 2018/12/23-21:45:36.572685) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:45:36.572773 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 22] Try to delete WAL files size 4138616, prev total WAL file size 4528751, number of live WAL files 2.
+2018/12/23-21:45:36.572887 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 22] Delete ./db//002493.log type=0 #2493 -- OK
+2018/12/23-21:45:58.121157 1a30 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2497. Immutable memtables: 0.
+2018/12/23-21:45:58.121480 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 23] Syncing log #2495
+2018/12/23-21:45:58.193958 3240 (Original Log Time 2018/12/23-21:45:58.121465) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:45:58.193986 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 23] Flushing memtable with next log file: 2497
+2018/12/23-21:45:58.194018 3240 EVENT_LOG_v1 {"time_micros": 1545576358194002, "job": 23, "event": "flush_started", "num_memtables": 1, "num_entries": 112, "num_deletes": 0, "memory_usage": 4411952}
+2018/12/23-21:45:58.194025 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 23] Level-0 flush table #2498: started
+2018/12/23-21:45:58.259295 3240 EVENT_LOG_v1 {"time_micros": 1545576358259238, "cf_name": "default", "job": 23, "event": "table_file_creation", "file_number": 2498, "file_size": 495862, "table_properties": {"data_size": 493520, "index_size": 370, "filter_size": 1112, "raw_key_size": 3726, "raw_average_key_size": 41, "raw_value_size": 554607, "raw_average_value_size": 6231, "num_data_blocks": 10, "num_entries": 89, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:45:58.259324 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 23] Level-0 flush table #2498: 495862 bytes OK
+2018/12/23-21:45:58.273019 3240 (Original Log Time 2018/12/23-21:45:58.259342) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2498 started
+2018/12/23-21:45:58.273046 3240 (Original Log Time 2018/12/23-21:45:58.272922) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2498: memtable #1 done
+2018/12/23-21:45:58.273058 3240 (Original Log Time 2018/12/23-21:45:58.272958) EVENT_LOG_v1 {"time_micros": 1545576358272937, "job": 23, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:45:58.273068 3240 (Original Log Time 2018/12/23-21:45:58.272993) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:45:58.273078 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 24] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:45:58.273086 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 23] Try to delete WAL files size 4304545, prev total WAL file size 4822621, number of live WAL files 2.
+2018/12/23-21:45:58.273111 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 23 Base level 0, inputs: [2498(484KB) 2496(453KB) 2494(482KB) 2492(464KB)], [2490(25MB)]
+2018/12/23-21:45:58.273153 31dc EVENT_LOG_v1 {"time_micros": 1545576358273126, "job": 24, "event": "compaction_started", "files_L0": [2498, 2496, 2494, 2492], "files_L1": [2490], "score": 1, "input_data_size": 28464536}
+2018/12/23-21:45:58.273256 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 23] Delete ./db//002495.log type=0 #2495 -- OK
+2018/12/23-21:45:59.418008 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 24] Generated table #2499: 76481 keys, 26619770 bytes
+2018/12/23-21:45:59.418111 31dc EVENT_LOG_v1 {"time_micros": 1545576359418045, "cf_name": "default", "job": 24, "event": "table_file_creation", "file_number": 2499, "file_size": 26619770, "table_properties": {"data_size": 26250090, "index_size": 329253, "filter_size": 162463, "raw_key_size": 3147437, "raw_average_key_size": 41, "raw_value_size": 32661112, "raw_average_value_size": 427, "num_data_blocks": 7415, "num_entries": 76481, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:45:59.419008 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 24] Compacted 4@0 + 1@1 files to L1 => 26619770 bytes
+2018/12/23-21:45:59.439274 31dc (Original Log Time 2018/12/23-21:45:59.439154) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 24.8 rd, 23.2 wr, level 1, files in(4, 1) out(1) MB in(1.8, 25.3) out(25.4), read-write-amplify(28.5) write-amplify(13.8) OK, records in: 76581, records dropped: 100
+2018/12/23-21:45:59.440683 31dc (Original Log Time 2018/12/23-21:45:59.439227) EVENT_LOG_v1 {"time_micros": 1545576359439178, "job": 24, "event": "compaction_finished", "compaction_time_micros": 1145829, "output_level": 1, "num_output_files": 1, "total_output_size": 26619770, "num_input_records": 76581, "num_output_records": 76481, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:45:59.442767 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 24] Delete ./db/002498.sst type=2 #2498 -- OK
+2018/12/23-21:45:59.442818 31dc EVENT_LOG_v1 {"time_micros": 1545576359442800, "job": 24, "event": "table_file_deletion", "file_number": 2498}
+2018/12/23-21:45:59.443309 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 24] Delete ./db/002496.sst type=2 #2496 -- OK
+2018/12/23-21:45:59.443341 31dc EVENT_LOG_v1 {"time_micros": 1545576359443329, "job": 24, "event": "table_file_deletion", "file_number": 2496}
+2018/12/23-21:45:59.443755 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 24] Delete ./db/002494.sst type=2 #2494 -- OK
+2018/12/23-21:45:59.443786 31dc EVENT_LOG_v1 {"time_micros": 1545576359443774, "job": 24, "event": "table_file_deletion", "file_number": 2494}
+2018/12/23-21:45:59.444233 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 24] Delete ./db/002492.sst type=2 #2492 -- OK
+2018/12/23-21:45:59.444267 31dc EVENT_LOG_v1 {"time_micros": 1545576359444254, "job": 24, "event": "table_file_deletion", "file_number": 2492}
+2018/12/23-21:45:59.448573 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 24] Delete ./db/002490.sst type=2 #2490 -- OK
+2018/12/23-21:45:59.448624 31dc EVENT_LOG_v1 {"time_micros": 1545576359448608, "job": 24, "event": "table_file_deletion", "file_number": 2490}
+2018/12/23-21:46:05.148453 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2500. Immutable memtables: 0.
+2018/12/23-21:46:05.148531 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 25] Syncing log #2497
+2018/12/23-21:46:05.206451 3240 (Original Log Time 2018/12/23-21:46:05.148516) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:46:05.206485 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 25] Flushing memtable with next log file: 2500
+2018/12/23-21:46:05.206650 3240 EVENT_LOG_v1 {"time_micros": 1545576365206508, "job": 25, "event": "flush_started", "num_memtables": 1, "num_entries": 89, "num_deletes": 0, "memory_usage": 4393184}
+2018/12/23-21:46:05.206674 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 25] Level-0 flush table #2501: started
+2018/12/23-21:46:05.282812 3240 EVENT_LOG_v1 {"time_micros": 1545576365282765, "cf_name": "default", "job": 25, "event": "table_file_creation", "file_number": 2501, "file_size": 466819, "table_properties": {"data_size": 464801, "index_size": 77, "filter_size": 1008, "raw_key_size": 2795, "raw_average_key_size": 41, "raw_value_size": 522436, "raw_average_value_size": 7797, "num_data_blocks": 3, "num_entries": 67, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:46:05.282836 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 25] Level-0 flush table #2501: 466819 bytes OK
+2018/12/23-21:46:05.295530 3240 (Original Log Time 2018/12/23-21:46:05.282849) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2501 started
+2018/12/23-21:46:05.295549 3240 (Original Log Time 2018/12/23-21:46:05.295450) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2501: memtable #1 done
+2018/12/23-21:46:05.295616 3240 (Original Log Time 2018/12/23-21:46:05.295488) EVENT_LOG_v1 {"time_micros": 1545576365295462, "job": 25, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:46:05.295628 3240 (Original Log Time 2018/12/23-21:46:05.295513) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:46:05.295641 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 25] Try to delete WAL files size 4275550, prev total WAL file size 4793720, number of live WAL files 2.
+2018/12/23-21:46:05.295744 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 25] Delete ./db//002497.log type=0 #2497 -- OK
+2018/12/23-21:46:34.155500 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2502. Immutable memtables: 0.
+2018/12/23-21:46:34.155732 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 26] Syncing log #2500
+2018/12/23-21:46:34.205831 3240 (Original Log Time 2018/12/23-21:46:34.155716) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:46:34.205854 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 26] Flushing memtable with next log file: 2502
+2018/12/23-21:46:34.205884 3240 EVENT_LOG_v1 {"time_micros": 1545576394205869, "job": 26, "event": "flush_started", "num_memtables": 1, "num_entries": 118, "num_deletes": 0, "memory_usage": 4434112}
+2018/12/23-21:46:34.205891 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 26] Level-0 flush table #2503: started
+2018/12/23-21:46:34.273309 3240 EVENT_LOG_v1 {"time_micros": 1545576394273271, "cf_name": "default", "job": 26, "event": "table_file_creation", "file_number": 2503, "file_size": 503484, "table_properties": {"data_size": 501021, "index_size": 493, "filter_size": 1140, "raw_key_size": 3993, "raw_average_key_size": 42, "raw_value_size": 561041, "raw_average_value_size": 5905, "num_data_blocks": 12, "num_entries": 95, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:46:34.273331 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 26] Level-0 flush table #2503: 503484 bytes OK
+2018/12/23-21:46:34.285037 3240 (Original Log Time 2018/12/23-21:46:34.273344) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2503 started
+2018/12/23-21:46:34.285054 3240 (Original Log Time 2018/12/23-21:46:34.284971) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2503: memtable #1 done
+2018/12/23-21:46:34.285061 3240 (Original Log Time 2018/12/23-21:46:34.285001) EVENT_LOG_v1 {"time_micros": 1545576394284985, "job": 26, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:46:34.285067 3240 (Original Log Time 2018/12/23-21:46:34.285020) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:46:34.285078 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 26] Try to delete WAL files size 4320200, prev total WAL file size 4712169, number of live WAL files 2.
+2018/12/23-21:46:34.285174 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 26] Delete ./db//002500.log type=0 #2500 -- OK
+2018/12/23-21:47:03.074790 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2504. Immutable memtables: 0.
+2018/12/23-21:47:03.074902 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 27] Syncing log #2502
+2018/12/23-21:47:03.129996 3240 (Original Log Time 2018/12/23-21:47:03.074889) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:47:03.130022 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 27] Flushing memtable with next log file: 2504
+2018/12/23-21:47:03.130118 3240 EVENT_LOG_v1 {"time_micros": 1545576423130098, "job": 27, "event": "flush_started", "num_memtables": 1, "num_entries": 107, "num_deletes": 0, "memory_usage": 4286512}
+2018/12/23-21:47:03.130133 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 27] Level-0 flush table #2505: started
+2018/12/23-21:47:03.239650 3240 EVENT_LOG_v1 {"time_micros": 1545576423239581, "cf_name": "default", "job": 27, "event": "table_file_creation", "file_number": 2505, "file_size": 486045, "table_properties": {"data_size": 483809, "index_size": 265, "filter_size": 1079, "raw_key_size": 3498, "raw_average_key_size": 41, "raw_value_size": 546285, "raw_average_value_size": 6503, "num_data_blocks": 7, "num_entries": 84, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:47:03.239684 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 27] Level-0 flush table #2505: 486045 bytes OK
+2018/12/23-21:47:03.263492 3240 (Original Log Time 2018/12/23-21:47:03.239704) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2505 started
+2018/12/23-21:47:03.263527 3240 (Original Log Time 2018/12/23-21:47:03.263411) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2505: memtable #1 done
+2018/12/23-21:47:03.263540 3240 (Original Log Time 2018/12/23-21:47:03.263442) EVENT_LOG_v1 {"time_micros": 1545576423263423, "job": 27, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:47:03.263547 3240 (Original Log Time 2018/12/23-21:47:03.263470) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:47:03.263560 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 27] Try to delete WAL files size 4181888, prev total WAL file size 4573858, number of live WAL files 2.
+2018/12/23-21:47:03.263693 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 27] Delete ./db//002502.log type=0 #2502 -- OK
+2018/12/23-21:47:19.802995 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2506. Immutable memtables: 0.
+2018/12/23-21:47:19.803098 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 28] Syncing log #2504
+2018/12/23-21:47:19.852527 3240 (Original Log Time 2018/12/23-21:47:19.803083) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:47:19.852557 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 28] Flushing memtable with next log file: 2506
+2018/12/23-21:47:19.852599 3240 EVENT_LOG_v1 {"time_micros": 1545576439852578, "job": 28, "event": "flush_started", "num_memtables": 1, "num_entries": 83, "num_deletes": 0, "memory_usage": 4003632}
+2018/12/23-21:47:19.852610 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 28] Level-0 flush table #2507: started
+2018/12/23-21:47:19.930657 3240 EVENT_LOG_v1 {"time_micros": 1545576439930592, "cf_name": "default", "job": 28, "event": "table_file_creation", "file_number": 2507, "file_size": 473716, "table_properties": {"data_size": 471668, "index_size": 104, "filter_size": 1020, "raw_key_size": 2631, "raw_average_key_size": 41, "raw_value_size": 529273, "raw_average_value_size": 8401, "num_data_blocks": 4, "num_entries": 63, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:47:19.930688 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 28] Level-0 flush table #2507: 473716 bytes OK
+2018/12/23-21:47:19.941590 3240 (Original Log Time 2018/12/23-21:47:19.930707) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2507 started
+2018/12/23-21:47:19.941616 3240 (Original Log Time 2018/12/23-21:47:19.941509) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2507: memtable #1 done
+2018/12/23-21:47:19.941627 3240 (Original Log Time 2018/12/23-21:47:19.941537) EVENT_LOG_v1 {"time_micros": 1545576439941520, "job": 28, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:47:19.941649 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 29] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:47:19.941704 3240 (Original Log Time 2018/12/23-21:47:19.941567) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:47:19.941730 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 28 Base level 0, inputs: [2507(462KB) 2505(474KB) 2503(491KB) 2501(455KB)], [2499(25MB)]
+2018/12/23-21:47:19.941738 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 28] Try to delete WAL files size 3901421, prev total WAL file size 4293650, number of live WAL files 2.
+2018/12/23-21:47:19.941771 31dc EVENT_LOG_v1 {"time_micros": 1545576439941745, "job": 29, "event": "compaction_started", "files_L0": [2507, 2505, 2503, 2501], "files_L1": [2499], "score": 1, "input_data_size": 28549834}
+2018/12/23-21:47:19.941869 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 28] Delete ./db//002504.log type=0 #2504 -- OK
+2018/12/23-21:47:21.138207 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 29] Generated table #2508: 76670 keys, 26696584 bytes
+2018/12/23-21:47:21.138279 31dc EVENT_LOG_v1 {"time_micros": 1545576441138235, "cf_name": "default", "job": 29, "event": "table_file_creation", "file_number": 2508, "file_size": 26696584, "table_properties": {"data_size": 26325982, "index_size": 329898, "filter_size": 163002, "raw_key_size": 3155436, "raw_average_key_size": 41, "raw_value_size": 32740540, "raw_average_value_size": 427, "num_data_blocks": 7431, "num_entries": 76670, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:47:21.139062 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 29] Compacted 4@0 + 1@1 files to L1 => 26696584 bytes
+2018/12/23-21:47:21.153390 31dc (Original Log Time 2018/12/23-21:47:21.153280) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 23.8 rd, 22.3 wr, level 1, files in(4, 1) out(1) MB in(1.8, 25.4) out(25.5), read-write-amplify(28.6) write-amplify(13.8) OK, records in: 76790, records dropped: 120
+2018/12/23-21:47:21.153416 31dc (Original Log Time 2018/12/23-21:47:21.153346) EVENT_LOG_v1 {"time_micros": 1545576441153301, "job": 29, "event": "compaction_finished", "compaction_time_micros": 1197263, "output_level": 1, "num_output_files": 1, "total_output_size": 26696584, "num_input_records": 76790, "num_output_records": 76670, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:47:21.155542 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 29] Delete ./db/002507.sst type=2 #2507 -- OK
+2018/12/23-21:47:21.155591 31dc EVENT_LOG_v1 {"time_micros": 1545576441155574, "job": 29, "event": "table_file_deletion", "file_number": 2507}
+2018/12/23-21:47:21.160489 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 29] Delete ./db/002505.sst type=2 #2505 -- OK
+2018/12/23-21:47:21.160575 31dc EVENT_LOG_v1 {"time_micros": 1545576441160557, "job": 29, "event": "table_file_deletion", "file_number": 2505}
+2018/12/23-21:47:21.161234 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 29] Delete ./db/002503.sst type=2 #2503 -- OK
+2018/12/23-21:47:21.161265 31dc EVENT_LOG_v1 {"time_micros": 1545576441161253, "job": 29, "event": "table_file_deletion", "file_number": 2503}
+2018/12/23-21:47:21.161792 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 29] Delete ./db/002501.sst type=2 #2501 -- OK
+2018/12/23-21:47:21.161825 31dc EVENT_LOG_v1 {"time_micros": 1545576441161814, "job": 29, "event": "table_file_deletion", "file_number": 2501}
+2018/12/23-21:47:21.165498 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 29] Delete ./db/002499.sst type=2 #2499 -- OK
+2018/12/23-21:47:21.165614 31dc EVENT_LOG_v1 {"time_micros": 1545576441165597, "job": 29, "event": "table_file_deletion", "file_number": 2499}
+2018/12/23-21:48:35.077513 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2509. Immutable memtables: 0.
+2018/12/23-21:48:35.077616 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 30] Syncing log #2506
+2018/12/23-21:48:35.152889 3240 (Original Log Time 2018/12/23-21:48:35.077604) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:48:35.152916 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 30] Flushing memtable with next log file: 2509
+2018/12/23-21:48:35.152946 3240 EVENT_LOG_v1 {"time_micros": 1545576515152931, "job": 30, "event": "flush_started", "num_memtables": 1, "num_entries": 113, "num_deletes": 0, "memory_usage": 4307192}
+2018/12/23-21:48:35.152953 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 30] Level-0 flush table #2510: started
+2018/12/23-21:48:35.229674 3240 EVENT_LOG_v1 {"time_micros": 1545576515229622, "cf_name": "default", "job": 30, "event": "table_file_creation", "file_number": 2510, "file_size": 504943, "table_properties": {"data_size": 502586, "index_size": 385, "filter_size": 1130, "raw_key_size": 3500, "raw_average_key_size": 41, "raw_value_size": 565577, "raw_average_value_size": 6653, "num_data_blocks": 11, "num_entries": 85, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:48:35.229695 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 30] Level-0 flush table #2510: 504943 bytes OK
+2018/12/23-21:48:35.264034 3240 (Original Log Time 2018/12/23-21:48:35.229708) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2510 started
+2018/12/23-21:48:35.264058 3240 (Original Log Time 2018/12/23-21:48:35.263969) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2510: memtable #1 done
+2018/12/23-21:48:35.264066 3240 (Original Log Time 2018/12/23-21:48:35.263996) EVENT_LOG_v1 {"time_micros": 1545576515263980, "job": 30, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:48:35.264071 3240 (Original Log Time 2018/12/23-21:48:35.264017) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:48:35.264083 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 30] Try to delete WAL files size 4207184, prev total WAL file size 4600476, number of live WAL files 2.
+2018/12/23-21:48:35.264217 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 30] Delete ./db//002506.log type=0 #2506 -- OK
+2018/12/23-21:49:09.219105 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2511. Immutable memtables: 0.
+2018/12/23-21:49:09.219254 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 31] Syncing log #2509
+2018/12/23-21:49:09.264725 3240 (Original Log Time 2018/12/23-21:49:09.219241) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:49:09.264755 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 31] Flushing memtable with next log file: 2511
+2018/12/23-21:49:09.264801 3240 EVENT_LOG_v1 {"time_micros": 1545576549264778, "job": 31, "event": "flush_started", "num_memtables": 1, "num_entries": 102, "num_deletes": 0, "memory_usage": 4290112}
+2018/12/23-21:49:09.264813 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 31] Level-0 flush table #2512: started
+2018/12/23-21:49:09.331581 3240 EVENT_LOG_v1 {"time_micros": 1545576549331506, "cf_name": "default", "job": 31, "event": "table_file_creation", "file_number": 2512, "file_size": 488336, "table_properties": {"data_size": 486063, "index_size": 315, "filter_size": 1079, "raw_key_size": 3281, "raw_average_key_size": 41, "raw_value_size": 547971, "raw_average_value_size": 6936, "num_data_blocks": 8, "num_entries": 79, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:49:09.331682 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 31] Level-0 flush table #2512: 488336 bytes OK
+2018/12/23-21:49:09.344450 3240 (Original Log Time 2018/12/23-21:49:09.331707) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2512 started
+2018/12/23-21:49:09.344659 3240 (Original Log Time 2018/12/23-21:49:09.344144) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2512: memtable #1 done
+2018/12/23-21:49:09.344678 3240 (Original Log Time 2018/12/23-21:49:09.344261) EVENT_LOG_v1 {"time_micros": 1545576549344211, "job": 31, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:49:09.344690 3240 (Original Log Time 2018/12/23-21:49:09.344371) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:49:09.344720 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 31] Try to delete WAL files size 4191175, prev total WAL file size 4584440, number of live WAL files 2.
+2018/12/23-21:49:09.345001 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 31] Delete ./db//002509.log type=0 #2509 -- OK
+2018/12/23-21:50:34.187913 1328 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2513. Immutable memtables: 0.
+2018/12/23-21:50:34.188325 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 32] Syncing log #2511
+2018/12/23-21:50:34.234457 3240 (Original Log Time 2018/12/23-21:50:34.188308) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:50:34.234488 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 32] Flushing memtable with next log file: 2513
+2018/12/23-21:50:34.234532 3240 EVENT_LOG_v1 {"time_micros": 1545576634234511, "job": 32, "event": "flush_started", "num_memtables": 1, "num_entries": 104, "num_deletes": 0, "memory_usage": 4293088}
+2018/12/23-21:50:34.234543 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 32] Level-0 flush table #2514: started
+2018/12/23-21:50:34.302901 3240 EVENT_LOG_v1 {"time_micros": 1545576634302852, "cf_name": "default", "job": 32, "event": "table_file_creation", "file_number": 2514, "file_size": 491816, "table_properties": {"data_size": 489533, "index_size": 315, "filter_size": 1089, "raw_key_size": 3370, "raw_average_key_size": 41, "raw_value_size": 550137, "raw_average_value_size": 6791, "num_data_blocks": 8, "num_entries": 81, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:50:34.302922 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 32] Level-0 flush table #2514: 491816 bytes OK
+2018/12/23-21:50:34.323570 3240 (Original Log Time 2018/12/23-21:50:34.302935) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2514 started
+2018/12/23-21:50:34.323601 3240 (Original Log Time 2018/12/23-21:50:34.323304) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2514: memtable #1 done
+2018/12/23-21:50:34.323612 3240 (Original Log Time 2018/12/23-21:50:34.323343) EVENT_LOG_v1 {"time_micros": 1545576634323320, "job": 32, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:50:34.323622 3240 (Original Log Time 2018/12/23-21:50:34.323375) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:50:34.323640 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 32] Try to delete WAL files size 4196128, prev total WAL file size 4589729, number of live WAL files 2.
+2018/12/23-21:50:34.323861 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 32] Delete ./db//002511.log type=0 #2511 -- OK
+2018/12/23-21:50:58.914312 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2515. Immutable memtables: 0.
+2018/12/23-21:50:58.914909 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 33] Syncing log #2513
+2018/12/23-21:50:58.978206 3240 (Original Log Time 2018/12/23-21:50:58.914887) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:50:58.978230 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 33] Flushing memtable with next log file: 2515
+2018/12/23-21:50:58.978262 3240 EVENT_LOG_v1 {"time_micros": 1545576658978245, "job": 33, "event": "flush_started", "num_memtables": 1, "num_entries": 106, "num_deletes": 0, "memory_usage": 4420008}
+2018/12/23-21:50:58.978270 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 33] Level-0 flush table #2516: started
+2018/12/23-21:50:59.090004 3240 EVENT_LOG_v1 {"time_micros": 1545576659089941, "cf_name": "default", "job": 33, "event": "table_file_creation", "file_number": 2516, "file_size": 485913, "table_properties": {"data_size": 483670, "index_size": 265, "filter_size": 1083, "raw_key_size": 3451, "raw_average_key_size": 41, "raw_value_size": 544610, "raw_average_value_size": 6561, "num_data_blocks": 7, "num_entries": 83, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:50:59.090034 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 33] Level-0 flush table #2516: 485913 bytes OK
+2018/12/23-21:50:59.279038 3240 (Original Log Time 2018/12/23-21:50:59.090052) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2516 started
+2018/12/23-21:50:59.279069 3240 (Original Log Time 2018/12/23-21:50:59.278961) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2516: memtable #1 done
+2018/12/23-21:50:59.279081 3240 (Original Log Time 2018/12/23-21:50:59.278988) EVENT_LOG_v1 {"time_micros": 1545576659278972, "job": 33, "event": "flush_finished", "lsm_state": [4, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:50:59.279091 3240 (Original Log Time 2018/12/23-21:50:59.279017) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[4 1 0 0 0 0 0] max score 1.00
+2018/12/23-21:50:59.279109 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 33] Try to delete WAL files size 4320872, prev total WAL file size 4842814, number of live WAL files 2.
+2018/12/23-21:50:59.279238 31dc [WARN] [leveldb-rocksdb\db\db_impl.cc:656] ------- DUMPING STATS -------
+2018/12/23-21:50:59.279271 31dc [WARN] [leveldb-rocksdb\db\db_impl.cc:657] 
+** Compaction Stats [default] **
+Level    Files   Size(MB} Score Read(GB}  Rn(GB} Rnp1(GB} Write(GB} Wnew(GB} Moved(GB} W-Amp Rd(MB/s} Wr(MB/s} Comp(sec} Comp(cnt} Avg(sec} KeyIn KeyDrop
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+  L0      4/0       1.88   1.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      4.8         2        26    0.092       0      0
+  L1      1/0      25.46   0.1      0.2     0.0      0.1       0.1      0.0       0.0  14.3     22.2     20.8         7         6    1.212    457K    616
+ Sum      5/0      27.34   0.0      0.2     0.0      0.1       0.2      0.0       0.0  14.1     16.7     16.9        10        32    0.302    457K    616
+ Int      0/0       0.00   0.0      0.2     0.0      0.1       0.2      0.0       0.0  14.7     16.9     17.0        10        30    0.318    457K    616
+Uptime(secs): 1055.1 total, 1055.1 interval
+Flush(GB): cumulative 0.011, interval 0.011
+AddFile(GB): cumulative 0.000, interval 0.000
+AddFile(Total Files): cumulative 0, interval 0
+AddFile(L0 Files): cumulative 0, interval 0
+AddFile(Keys): cumulative 0, interval 0
+Cumulative compaction: 0.16 GB write, 0.15 MB/s write, 0.16 GB read, 0.15 MB/s read, 9.7 seconds
+Interval compaction: 0.16 GB write, 0.15 MB/s write, 0.16 GB read, 0.15 MB/s read, 9.5 seconds
+Stalls(count): 0 level0_slowdown, 0 level0_slowdown_with_compaction, 0 level0_numfiles, 0 level0_numfiles_with_compaction, 0 stop for pending_compaction_bytes, 0 slowdown for pending_compaction_bytes, 0 memtable_compaction, 0 memtable_slowdown, interval 0 total count
+
+** DB Stats **
+Uptime(secs): 1055.1 total, 707.9 interval
+Cumulative writes: 2556 writes, 2556 keys, 2038 commit groups, 1.3 writes per commit group, ingest: 0.10 GB, 0.09 MB/s
+Cumulative WAL: 2556 writes, 0 syncs, 2556.00 writes per sync, written: 0.10 GB, 0.09 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 2464 writes, 2464 keys, 1968 commit groups, 1.3 writes per commit group, ingest: 95.56 MB, 0.13 MB/s
+Interval WAL: 2464 writes, 0 syncs, 2464.00 writes per sync, written: 0.09 MB, 0.13 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+2018/12/23-21:50:59.279278 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 33] Delete ./db//002513.log type=0 #2513 -- OK
+2018/12/23-21:50:59.279402 31dc [leveldb-rocksdb\db\compaction_job.cc:1382] [default] [JOB 34] Compacting 4@0 + 1@1 files to L1, score 1.00
+2018/12/23-21:50:59.279435 31dc [leveldb-rocksdb\db\compaction_job.cc:1386] [default] Compaction start summary: Base version 33 Base level 0, inputs: [2516(474KB) 2514(480KB) 2512(476KB) 2510(493KB)], [2508(25MB)]
+2018/12/23-21:50:59.279477 31dc EVENT_LOG_v1 {"time_micros": 1545576659279448, "job": 34, "event": "compaction_started", "files_L0": [2516, 2514, 2512, 2510], "files_L1": [2508], "score": 1, "input_data_size": 28667592}
+2018/12/23-21:51:00.430930 31dc [leveldb-rocksdb\db\compaction_job.cc:1099] [default] [JOB 34] Generated table #2517: 76882 keys, 26808555 bytes
+2018/12/23-21:51:00.431001 31dc EVENT_LOG_v1 {"time_micros": 1545576660430959, "cf_name": "default", "job": 34, "event": "table_file_creation", "file_number": 2517, "file_size": 26808555, "table_properties": {"data_size": 26436713, "index_size": 331087, "filter_size": 163513, "raw_key_size": 3164294, "raw_average_key_size": 41, "raw_value_size": 32863150, "raw_average_value_size": 427, "num_data_blocks": 7455, "num_entries": 76882, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:51:00.431050 31dc [leveldb-rocksdb\db\compaction_job.cc:1156] [default] [JOB 34] Compacted 4@0 + 1@1 files to L1 => 26808555 bytes
+2018/12/23-21:51:00.446373 31dc (Original Log Time 2018/12/23-21:51:00.446288) [leveldb-rocksdb\db\compaction_job.cc:620] [default] compacted to: base level 1 max bytes base 268435456 files[0 1 0 0 0 0 0] max score 0.10, MB/sec: 24.9 rd, 23.3 wr, level 1, files in(4, 1) out(1) MB in(1.9, 25.5) out(25.6), read-write-amplify(28.1) write-amplify(13.6) OK, records in: 76998, records dropped: 116
+2018/12/23-21:51:00.446397 31dc (Original Log Time 2018/12/23-21:51:00.446335) EVENT_LOG_v1 {"time_micros": 1545576660446303, "job": 34, "event": "compaction_finished", "compaction_time_micros": 1151553, "output_level": 1, "num_output_files": 1, "total_output_size": 26808555, "num_input_records": 76998, "num_output_records": 76882, "num_subcompactions": 1, "num_single_delete_mismatches": 0, "num_single_delete_fallthrough": 0, "lsm_state": [0, 1, 0, 0, 0, 0, 0]}
+2018/12/23-21:51:00.448481 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 34] Delete ./db/002516.sst type=2 #2516 -- OK
+2018/12/23-21:51:00.448526 31dc EVENT_LOG_v1 {"time_micros": 1545576660448509, "job": 34, "event": "table_file_deletion", "file_number": 2516}
+2018/12/23-21:51:00.449746 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 34] Delete ./db/002514.sst type=2 #2514 -- OK
+2018/12/23-21:51:00.449781 31dc EVENT_LOG_v1 {"time_micros": 1545576660449770, "job": 34, "event": "table_file_deletion", "file_number": 2514}
+2018/12/23-21:51:00.450178 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 34] Delete ./db/002512.sst type=2 #2512 -- OK
+2018/12/23-21:51:00.450263 31dc EVENT_LOG_v1 {"time_micros": 1545576660450252, "job": 34, "event": "table_file_deletion", "file_number": 2512}
+2018/12/23-21:51:00.450701 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 34] Delete ./db/002510.sst type=2 #2510 -- OK
+2018/12/23-21:51:00.450736 31dc EVENT_LOG_v1 {"time_micros": 1545576660450723, "job": 34, "event": "table_file_deletion", "file_number": 2510}
+2018/12/23-21:51:00.456552 31dc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 34] Delete ./db/002508.sst type=2 #2508 -- OK
+2018/12/23-21:51:00.456609 31dc EVENT_LOG_v1 {"time_micros": 1545576660456589, "job": 34, "event": "table_file_deletion", "file_number": 2508}
+2018/12/23-21:51:29.038953 30f8 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2518. Immutable memtables: 0.
+2018/12/23-21:51:29.039122 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 35] Syncing log #2515
+2018/12/23-21:51:29.113448 3240 (Original Log Time 2018/12/23-21:51:29.039108) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:51:29.113478 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 35] Flushing memtable with next log file: 2518
+2018/12/23-21:51:29.113510 3240 EVENT_LOG_v1 {"time_micros": 1545576689113494, "job": 35, "event": "flush_started", "num_memtables": 1, "num_entries": 111, "num_deletes": 0, "memory_usage": 4430056}
+2018/12/23-21:51:29.113518 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 35] Level-0 flush table #2519: started
+2018/12/23-21:51:29.179142 3240 EVENT_LOG_v1 {"time_micros": 1545576689179069, "cf_name": "default", "job": 35, "event": "table_file_creation", "file_number": 2519, "file_size": 494917, "table_properties": {"data_size": 492580, "index_size": 365, "filter_size": 1098, "raw_key_size": 3459, "raw_average_key_size": 41, "raw_value_size": 554191, "raw_average_value_size": 6677, "num_data_blocks": 9, "num_entries": 83, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:51:29.179173 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 35] Level-0 flush table #2519: 494917 bytes OK
+2018/12/23-21:51:29.213492 3240 (Original Log Time 2018/12/23-21:51:29.179192) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2519 started
+2018/12/23-21:51:29.213524 3240 (Original Log Time 2018/12/23-21:51:29.213402) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2519: memtable #1 done
+2018/12/23-21:51:29.213537 3240 (Original Log Time 2018/12/23-21:51:29.213441) EVENT_LOG_v1 {"time_micros": 1545576689213416, "job": 35, "event": "flush_finished", "lsm_state": [1, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:51:29.213549 3240 (Original Log Time 2018/12/23-21:51:29.213469) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[1 1 0 0 0 0 0] max score 0.25
+2018/12/23-21:51:29.213567 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 35] Try to delete WAL files size 4334510, prev total WAL file size 4728568, number of live WAL files 2.
+2018/12/23-21:51:29.213736 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 35] Delete ./db//002515.log type=0 #2515 -- OK
+2018/12/23-21:53:13.001168 1728 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2520. Immutable memtables: 0.
+2018/12/23-21:53:13.001319 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 36] Syncing log #2518
+2018/12/23-21:53:13.004566 3240 (Original Log Time 2018/12/23-21:53:13.001307) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:53:13.004597 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 36] Flushing memtable with next log file: 2520
+2018/12/23-21:53:13.004644 3240 EVENT_LOG_v1 {"time_micros": 1545576793004621, "job": 36, "event": "flush_started", "num_memtables": 1, "num_entries": 103, "num_deletes": 0, "memory_usage": 4366624}
+2018/12/23-21:53:13.004732 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 36] Level-0 flush table #2521: started
+2018/12/23-21:53:13.077011 3240 EVENT_LOG_v1 {"time_micros": 1545576793076961, "cf_name": "default", "job": 36, "event": "table_file_creation", "file_number": 2521, "file_size": 493269, "table_properties": {"data_size": 490970, "index_size": 353, "filter_size": 1083, "raw_key_size": 2930, "raw_average_key_size": 40, "raw_value_size": 557560, "raw_average_value_size": 7743, "num_data_blocks": 9, "num_entries": 72, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:53:13.077034 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 36] Level-0 flush table #2521: 493269 bytes OK
+2018/12/23-21:53:13.093640 3240 (Original Log Time 2018/12/23-21:53:13.077048) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2521 started
+2018/12/23-21:53:13.093659 3240 (Original Log Time 2018/12/23-21:53:13.093573) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2521: memtable #1 done
+2018/12/23-21:53:13.093666 3240 (Original Log Time 2018/12/23-21:53:13.093601) EVENT_LOG_v1 {"time_micros": 1545576793093585, "job": 36, "event": "flush_finished", "lsm_state": [2, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:53:13.093671 3240 (Original Log Time 2018/12/23-21:53:13.093624) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[2 1 0 0 0 0 0] max score 0.50
+2018/12/23-21:53:13.093683 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 36] Try to delete WAL files size 4213061, prev total WAL file size 4735654, number of live WAL files 2.
+2018/12/23-21:53:13.093784 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 36] Delete ./db//002518.log type=0 #2518 -- OK
+2018/12/23-21:53:45.986177 1a30 [leveldb-rocksdb\db\db_impl.cc:5310] [default] New memtable created with log file: #2522. Immutable memtables: 0.
+2018/12/23-21:53:45.986324 3240 [leveldb-rocksdb\db\db_impl.cc:1882] [JOB 37] Syncing log #2520
+2018/12/23-21:53:46.037419 3240 (Original Log Time 2018/12/23-21:53:45.986311) [leveldb-rocksdb\db\db_impl.cc:3255] Calling FlushMemTableToOutputFile with column family [default], flush slots available 1, compaction slots allowed 1, compaction slots scheduled 1
+2018/12/23-21:53:46.037453 3240 [leveldb-rocksdb\db\flush_job.cc:264] [default] [JOB 37] Flushing memtable with next log file: 2522
+2018/12/23-21:53:46.037496 3240 EVENT_LOG_v1 {"time_micros": 1545576826037474, "job": 37, "event": "flush_started", "num_memtables": 1, "num_entries": 106, "num_deletes": 0, "memory_usage": 4360488}
+2018/12/23-21:53:46.037508 3240 [leveldb-rocksdb\db\flush_job.cc:293] [default] [JOB 37] Level-0 flush table #2523: started
+2018/12/23-21:53:46.091531 3240 EVENT_LOG_v1 {"time_micros": 1545576826091463, "cf_name": "default", "job": 37, "event": "table_file_creation", "file_number": 2523, "file_size": 490820, "table_properties": {"data_size": 488537, "index_size": 315, "filter_size": 1091, "raw_key_size": 3406, "raw_average_key_size": 41, "raw_value_size": 550337, "raw_average_value_size": 6711, "num_data_blocks": 8, "num_entries": 82, "filter_policy_name": "rocksdb.BuiltinBloomFilter", "kDeletedKeys": "0", "kMergeOperands": "0"}}
+2018/12/23-21:53:46.091567 3240 [leveldb-rocksdb\db\flush_job.cc:317] [default] [JOB 37] Level-0 flush table #2523: 490820 bytes OK
+2018/12/23-21:53:46.105491 3240 (Original Log Time 2018/12/23-21:53:46.091587) [leveldb-rocksdb\db\memtable_list.cc:360] [default] Level-0 commit table #2523 started
+2018/12/23-21:53:46.105509 3240 (Original Log Time 2018/12/23-21:53:46.105421) [leveldb-rocksdb\db\memtable_list.cc:383] [default] Level-0 commit table #2523: memtable #1 done
+2018/12/23-21:53:46.105517 3240 (Original Log Time 2018/12/23-21:53:46.105451) EVENT_LOG_v1 {"time_micros": 1545576826105434, "job": 37, "event": "flush_finished", "lsm_state": [3, 1, 0, 0, 0, 0, 0], "immutable_memtables": 0}
+2018/12/23-21:53:46.105579 3240 (Original Log Time 2018/12/23-21:53:46.105474) [leveldb-rocksdb\db\db_impl.cc:1959] [default] Level summary: base level 1 max bytes base 268435456 files[3 1 0 0 0 0 0] max score 0.75
+2018/12/23-21:53:46.105596 3240 [leveldb-rocksdb\db\db_impl.cc:1050] [JOB 37] Try to delete WAL files size 4335250, prev total WAL file size 4730477, number of live WAL files 2.
+2018/12/23-21:53:46.105694 3240 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 37] Delete ./db//002520.log type=0 #2520 -- OK

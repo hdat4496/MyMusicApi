@@ -1,0 +1,167 @@
+2018/12/30-08:49:37.655858 2848 RocksDB version: 5.3.0
+2018/12/30-08:49:37.656783 2848 Git sha rocksdb_build_git_sha:@@GIT_SHA@@
+2018/12/30-08:49:37.656817 2848 Compile date Oct 25 2018
+2018/12/30-08:49:37.656847 2848 DB SUMMARY
+2018/12/30-08:49:37.660096 2848 CURRENT file:  CURRENT
+2018/12/30-08:49:37.660170 2848 IDENTITY file:  IDENTITY
+2018/12/30-08:49:37.660411 2848 MANIFEST file:  MANIFEST-003329 size: 224 Bytes
+2018/12/30-08:49:37.660458 2848 SST files in ./db dir, Total Num: 2, files: 003311.sst 003313.sst 
+2018/12/30-08:49:37.660485 2848 Write Ahead Log file in ./db: 003330.log size: 0 ; 
+2018/12/30-08:49:37.660539 2848                         Options.error_if_exists: 0
+2018/12/30-08:49:37.660565 2848                       Options.create_if_missing: 1
+2018/12/30-08:49:37.660902 2848                         Options.paranoid_checks: 0
+2018/12/30-08:49:37.660919 2848                                     Options.env: 000001EF39A118B0
+2018/12/30-08:49:37.660930 2848                                Options.info_log: 000001EF3B67B2D0
+2018/12/30-08:49:37.660940 2848                          Options.max_open_files: 1000
+2018/12/30-08:49:37.660950 2848                Options.max_file_opening_threads: 16
+2018/12/30-08:49:37.660959 2848                               Options.use_fsync: 0
+2018/12/30-08:49:37.660969 2848                       Options.max_log_file_size: 2097152
+2018/12/30-08:49:37.661071 2848                  Options.max_manifest_file_size: 18446744073709551615
+2018/12/30-08:49:37.661086 2848                   Options.log_file_time_to_roll: 0
+2018/12/30-08:49:37.661118 2848                       Options.keep_log_file_num: 1000
+2018/12/30-08:49:37.661132 2848                    Options.recycle_log_file_num: 0
+2018/12/30-08:49:37.661159 2848                         Options.allow_fallocate: 1
+2018/12/30-08:49:37.661176 2848                        Options.allow_mmap_reads: 0
+2018/12/30-08:49:37.661185 2848                       Options.allow_mmap_writes: 0
+2018/12/30-08:49:37.661195 2848                        Options.use_direct_reads: 0
+2018/12/30-08:49:37.661205 2848                        Options.use_direct_writes: 0
+2018/12/30-08:49:37.661215 2848          Options.create_missing_column_families: 0
+2018/12/30-08:49:37.661244 2848                              Options.db_log_dir: 
+2018/12/30-08:49:37.661266 2848                                 Options.wal_dir: ./db
+2018/12/30-08:49:37.661402 2848                Options.table_cache_numshardbits: 6
+2018/12/30-08:49:37.661415 2848                      Options.max_subcompactions: 1
+2018/12/30-08:49:37.661425 2848                  Options.max_background_flushes: 1
+2018/12/30-08:49:37.661435 2848                         Options.WAL_ttl_seconds: 0
+2018/12/30-08:49:37.661444 2848                       Options.WAL_size_limit_MB: 0
+2018/12/30-08:49:37.661454 2848             Options.manifest_preallocation_size: 4194304
+2018/12/30-08:49:37.661464 2848                     Options.is_fd_close_on_exec: 1
+2018/12/30-08:49:37.661473 2848                   Options.advise_random_on_open: 1
+2018/12/30-08:49:37.661483 2848                    Options.db_write_buffer_size: 0
+2018/12/30-08:49:37.661493 2848         Options.access_hint_on_compaction_start: 1
+2018/12/30-08:49:37.661503 2848  Options.new_table_reader_for_compaction_inputs: 0
+2018/12/30-08:49:37.661513 2848               Options.compaction_readahead_size: 0
+2018/12/30-08:49:37.661523 2848           Options.random_access_max_buffer_size: 1048576
+2018/12/30-08:49:37.661533 2848           Options.writable_file_max_buffer_size: 1048576
+2018/12/30-08:49:37.661543 2848                      Options.use_adaptive_mutex: 0
+2018/12/30-08:49:37.661554 2848                            Options.rate_limiter: 0000000000000000
+2018/12/30-08:49:37.661564 2848     Options.sst_file_manager.rate_bytes_per_sec: 0
+2018/12/30-08:49:37.661574 2848                          Options.bytes_per_sync: 0
+2018/12/30-08:49:37.661584 2848                      Options.wal_bytes_per_sync: 0
+2018/12/30-08:49:37.661594 2848                       Options.wal_recovery_mode: 2
+2018/12/30-08:49:37.661669 2848                  Options.enable_thread_tracking: 0
+2018/12/30-08:49:37.661684 2848         Options.allow_concurrent_memtable_write: 1
+2018/12/30-08:49:37.661694 2848      Options.enable_write_thread_adaptive_yield: 1
+2018/12/30-08:49:37.661704 2848             Options.write_thread_max_yield_usec: 100
+2018/12/30-08:49:37.661713 2848            Options.write_thread_slow_yield_usec: 3
+2018/12/30-08:49:37.661721 2848                               Options.row_cache: None
+2018/12/30-08:49:37.661731 2848                              Options.wal_filter: None
+2018/12/30-08:49:37.661741 2848             Options.avoid_flush_during_recovery: 0
+2018/12/30-08:49:37.661750 2848             Options.base_background_compactions: 1
+2018/12/30-08:49:37.661760 2848             Options.max_background_compactions: 1
+2018/12/30-08:49:37.661768 2848             Options.avoid_flush_during_shutdown: 0
+2018/12/30-08:49:37.661777 2848             Options.delayed_write_rate : 16777216
+2018/12/30-08:49:37.661787 2848             Options.max_total_wal_size: 0
+2018/12/30-08:49:37.661796 2848             Options.delete_obsolete_files_period_micros: 21600000000
+2018/12/30-08:49:37.661806 2848                   Options.stats_dump_period_sec: 600
+2018/12/30-08:49:37.661815 2848 Compression algorithms supported:
+2018/12/30-08:49:37.661825 2848 	Snappy supported: 1
+2018/12/30-08:49:37.661834 2848 	Zlib supported: 0
+2018/12/30-08:49:37.661842 2848 	Bzip supported: 0
+2018/12/30-08:49:37.661850 2848 	LZ4 supported: 0
+2018/12/30-08:49:37.661858 2848 	ZSTD supported: 0
+2018/12/30-08:49:37.661866 2848 Fast CRC32 supported: 1
+2018/12/30-08:49:37.672375 2848 [leveldb-rocksdb\db\version_set.cc:2600] Recovering from manifest file: MANIFEST-003329
+2018/12/30-08:49:37.691268 2848 [leveldb-rocksdb\db\column_family.cc:406] --------------- Options for column family [default]:
+2018/12/30-08:49:37.691300 2848               Options.comparator: leveldb.BytewiseComparator
+2018/12/30-08:49:37.691313 2848           Options.merge_operator: None
+2018/12/30-08:49:37.691323 2848        Options.compaction_filter: None
+2018/12/30-08:49:37.691333 2848        Options.compaction_filter_factory: None
+2018/12/30-08:49:37.691343 2848         Options.memtable_factory: SkipListFactory
+2018/12/30-08:49:37.691353 2848            Options.table_factory: BlockBasedTable
+2018/12/30-08:49:37.691421 2848            table_factory options:   flush_block_policy_factory: FlushBlockBySizePolicyFactory (000001EF399CE2A0)
+  cache_index_and_filter_blocks: 0
+  cache_index_and_filter_blocks_with_high_priority: 0
+  pin_l0_filter_and_index_blocks_in_cache: 0
+  index_type: 0
+  hash_index_allow_collision: 1
+  checksum: 1
+  no_block_cache: 0
+  block_cache: 000001EF39A12EF0
+  block_cache_name: LRUCache
+  block_cache_options:
+    capacity : 8388608
+    num_shard_bits : 4
+    strict_capacity_limit : 0
+    high_pri_pool_ratio: 0.000
+  block_cache_compressed: 0000000000000000
+  persistent_cache: 0000000000000000
+  block_size: 4096
+  block_size_deviation: 10
+  block_restart_interval: 16
+  index_block_restart_interval: 1
+  filter_policy: rocksdb.BuiltinBloomFilter
+  whole_key_filtering: 1
+  format_version: 2
+2018/12/30-08:49:37.691437 2848        Options.write_buffer_size: 4194304
+2018/12/30-08:49:37.691448 2848  Options.max_write_buffer_number: 2
+2018/12/30-08:49:37.691458 2848          Options.compression: Snappy
+2018/12/30-08:49:37.691469 2848                  Options.bottommost_compression: Disabled
+2018/12/30-08:49:37.691478 2848       Options.prefix_extractor: nullptr
+2018/12/30-08:49:37.691489 2848   Options.memtable_insert_with_hint_prefix_extractor: nullptr
+2018/12/30-08:49:37.691499 2848             Options.num_levels: 7
+2018/12/30-08:49:37.691509 2848        Options.min_write_buffer_number_to_merge: 1
+2018/12/30-08:49:37.691519 2848     Options.max_write_buffer_number_to_maintain: 0
+2018/12/30-08:49:37.691529 2848            Options.compression_opts.window_bits: -14
+2018/12/30-08:49:37.691539 2848                  Options.compression_opts.level: -1
+2018/12/30-08:49:37.691549 2848               Options.compression_opts.strategy: 0
+2018/12/30-08:49:37.691626 2848         Options.compression_opts.max_dict_bytes: 0
+2018/12/30-08:49:37.691643 2848      Options.level0_file_num_compaction_trigger: 4
+2018/12/30-08:49:37.691655 2848          Options.level0_slowdown_writes_trigger: 20
+2018/12/30-08:49:37.691666 2848              Options.level0_stop_writes_trigger: 36
+2018/12/30-08:49:37.691676 2848                   Options.target_file_size_base: 67108864
+2018/12/30-08:49:37.691687 2848             Options.target_file_size_multiplier: 1
+2018/12/30-08:49:37.691698 2848                Options.max_bytes_for_level_base: 268435456
+2018/12/30-08:49:37.691709 2848 Options.level_compaction_dynamic_level_bytes: 0
+2018/12/30-08:49:37.691750 2848          Options.max_bytes_for_level_multiplier: 10.000000
+2018/12/30-08:49:37.691765 2848 Options.max_bytes_for_level_multiplier_addtl[0]: 1
+2018/12/30-08:49:37.691776 2848 Options.max_bytes_for_level_multiplier_addtl[1]: 1
+2018/12/30-08:49:37.691787 2848 Options.max_bytes_for_level_multiplier_addtl[2]: 1
+2018/12/30-08:49:37.691797 2848 Options.max_bytes_for_level_multiplier_addtl[3]: 1
+2018/12/30-08:49:37.691808 2848 Options.max_bytes_for_level_multiplier_addtl[4]: 1
+2018/12/30-08:49:37.691818 2848 Options.max_bytes_for_level_multiplier_addtl[5]: 1
+2018/12/30-08:49:37.691829 2848 Options.max_bytes_for_level_multiplier_addtl[6]: 1
+2018/12/30-08:49:37.691840 2848       Options.max_sequential_skip_in_iterations: 8
+2018/12/30-08:49:37.691851 2848                    Options.max_compaction_bytes: 1677721600
+2018/12/30-08:49:37.691862 2848                        Options.arena_block_size: 524288
+2018/12/30-08:49:37.691872 2848   Options.soft_pending_compaction_bytes_limit: 68719476736
+2018/12/30-08:49:37.691878 2848   Options.hard_pending_compaction_bytes_limit: 274877906944
+2018/12/30-08:49:37.691885 2848       Options.rate_limit_delay_max_milliseconds: 100
+2018/12/30-08:49:37.691896 2848                Options.disable_auto_compactions: 0
+2018/12/30-08:49:37.691909 2848                         Options.compaction_style: kCompactionStyleLevel
+2018/12/30-08:49:37.691921 2848                           Options.compaction_pri: kByCompensatedSize
+2018/12/30-08:49:37.691932 2848  Options.compaction_options_universal.size_ratio: 1
+2018/12/30-08:49:37.691942 2848 Options.compaction_options_universal.min_merge_width: 2
+2018/12/30-08:49:37.691959 2848 Options.compaction_options_universal.max_merge_width: 4294967295
+2018/12/30-08:49:37.691971 2848 Options.compaction_options_universal.max_size_amplification_percent: 200
+2018/12/30-08:49:37.691982 2848 Options.compaction_options_universal.compression_size_percent: -1
+2018/12/30-08:49:37.691993 2848 Options.compaction_options_fifo.max_table_files_size: 1073741824
+2018/12/30-08:49:37.692004 2848                   Options.table_properties_collectors: 
+2018/12/30-08:49:37.692015 2848                   Options.inplace_update_support: 0
+2018/12/30-08:49:37.692036 2848                 Options.inplace_update_num_locks: 10000
+2018/12/30-08:49:37.692049 2848               Options.memtable_prefix_bloom_size_ratio: 0.000000
+2018/12/30-08:49:37.692060 2848   Options.memtable_huge_page_size: 0
+2018/12/30-08:49:37.692071 2848                           Options.bloom_locality: 0
+2018/12/30-08:49:37.692081 2848                    Options.max_successive_merges: 0
+2018/12/30-08:49:37.692091 2848                Options.optimize_filters_for_hits: 0
+2018/12/30-08:49:37.692101 2848                Options.paranoid_file_checks: 0
+2018/12/30-08:49:37.692111 2848                Options.force_consistency_checks: 0
+2018/12/30-08:49:37.692121 2848                Options.report_bg_io_stats: 0
+2018/12/30-08:49:37.692796 2848 [leveldb-rocksdb\db\version_set.cc:2850] Recovered from manifest file:./db/MANIFEST-003329 succeeded,manifest_file_number is 3329, next_file_number is 3331, last_sequence is 170374, log_number is 0,prev_log_number is 0,max_column_family is 0
+2018/12/30-08:49:37.692819 2848 [leveldb-rocksdb\db\version_set.cc:2858] Column family [default] (ID 0), log number is 3328
+2018/12/30-08:49:37.697661 2848 EVENT_LOG_v1 {"time_micros": 1546134577697597, "job": 1, "event": "recovery_started", "log_files": [3330]}
+2018/12/30-08:49:37.697718 2848 [leveldb-rocksdb\db\db_impl.cc:1468] Recovering log #3330 mode 2
+2018/12/30-08:49:37.698021 2848 [leveldb-rocksdb\db\version_set.cc:2386] Creating manifest 3332
+2018/12/30-08:49:37.785958 2848 EVENT_LOG_v1 {"time_micros": 1546134577785944, "job": 1, "event": "recovery_finished"}
+2018/12/30-08:49:37.792832 2848 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//MANIFEST-003329 type=3 #3329 -- OK
+2018/12/30-08:49:37.794089 2848 [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//003330.log type=0 #3330 -- OK
+2018/12/30-08:49:37.867985 2848 [leveldb-rocksdb\db\db_impl.cc:6172] DB pointer 000001EF3B783A80

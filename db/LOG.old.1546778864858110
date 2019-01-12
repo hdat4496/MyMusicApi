@@ -1,0 +1,167 @@
+2019/01/06-05:38:31.796985 1efc RocksDB version: 5.3.0
+2019/01/06-05:38:31.799605 1efc Git sha rocksdb_build_git_sha:@@GIT_SHA@@
+2019/01/06-05:38:31.799717 1efc Compile date Oct 25 2018
+2019/01/06-05:38:31.799817 1efc DB SUMMARY
+2019/01/06-05:38:31.811116 1efc CURRENT file:  CURRENT
+2019/01/06-05:38:31.811245 1efc IDENTITY file:  IDENTITY
+2019/01/06-05:38:31.811758 1efc MANIFEST file:  MANIFEST-004657 size: 302 Bytes
+2019/01/06-05:38:31.811857 1efc SST files in ./db dir, Total Num: 3, files: 004643.sst 004647.sst 004650.sst 
+2019/01/06-05:38:31.811938 1efc Write Ahead Log file in ./db: 004658.log size: 0 ; 
+2019/01/06-05:38:31.812129 1efc                         Options.error_if_exists: 0
+2019/01/06-05:38:31.812209 1efc                       Options.create_if_missing: 1
+2019/01/06-05:38:31.813004 1efc                         Options.paranoid_checks: 0
+2019/01/06-05:38:31.813063 1efc                                     Options.env: 000001758BC65C40
+2019/01/06-05:38:31.813099 1efc                                Options.info_log: 000001758BD35940
+2019/01/06-05:38:31.813132 1efc                          Options.max_open_files: 1000
+2019/01/06-05:38:31.813162 1efc                Options.max_file_opening_threads: 16
+2019/01/06-05:38:31.813191 1efc                               Options.use_fsync: 0
+2019/01/06-05:38:31.813222 1efc                       Options.max_log_file_size: 2097152
+2019/01/06-05:38:31.813254 1efc                  Options.max_manifest_file_size: 18446744073709551615
+2019/01/06-05:38:31.813287 1efc                   Options.log_file_time_to_roll: 0
+2019/01/06-05:38:31.813319 1efc                       Options.keep_log_file_num: 1000
+2019/01/06-05:38:31.813350 1efc                    Options.recycle_log_file_num: 0
+2019/01/06-05:38:31.813382 1efc                         Options.allow_fallocate: 1
+2019/01/06-05:38:31.813413 1efc                        Options.allow_mmap_reads: 0
+2019/01/06-05:38:31.813444 1efc                       Options.allow_mmap_writes: 0
+2019/01/06-05:38:31.813475 1efc                        Options.use_direct_reads: 0
+2019/01/06-05:38:31.813506 1efc                        Options.use_direct_writes: 0
+2019/01/06-05:38:31.813537 1efc          Options.create_missing_column_families: 0
+2019/01/06-05:38:31.813570 1efc                              Options.db_log_dir: 
+2019/01/06-05:38:31.813602 1efc                                 Options.wal_dir: ./db
+2019/01/06-05:38:31.813638 1efc                Options.table_cache_numshardbits: 6
+2019/01/06-05:38:31.813670 1efc                      Options.max_subcompactions: 1
+2019/01/06-05:38:31.813703 1efc                  Options.max_background_flushes: 1
+2019/01/06-05:38:31.813738 1efc                         Options.WAL_ttl_seconds: 0
+2019/01/06-05:38:31.813770 1efc                       Options.WAL_size_limit_MB: 0
+2019/01/06-05:38:31.813802 1efc             Options.manifest_preallocation_size: 4194304
+2019/01/06-05:38:31.813832 1efc                     Options.is_fd_close_on_exec: 1
+2019/01/06-05:38:31.813863 1efc                   Options.advise_random_on_open: 1
+2019/01/06-05:38:31.813895 1efc                    Options.db_write_buffer_size: 0
+2019/01/06-05:38:31.813925 1efc         Options.access_hint_on_compaction_start: 1
+2019/01/06-05:38:31.813956 1efc  Options.new_table_reader_for_compaction_inputs: 0
+2019/01/06-05:38:31.813987 1efc               Options.compaction_readahead_size: 0
+2019/01/06-05:38:31.814018 1efc           Options.random_access_max_buffer_size: 1048576
+2019/01/06-05:38:31.814047 1efc           Options.writable_file_max_buffer_size: 1048576
+2019/01/06-05:38:31.814076 1efc                      Options.use_adaptive_mutex: 0
+2019/01/06-05:38:31.814107 1efc                            Options.rate_limiter: 0000000000000000
+2019/01/06-05:38:31.814138 1efc     Options.sst_file_manager.rate_bytes_per_sec: 0
+2019/01/06-05:38:31.814166 1efc                          Options.bytes_per_sync: 0
+2019/01/06-05:38:31.814194 1efc                      Options.wal_bytes_per_sync: 0
+2019/01/06-05:38:31.814222 1efc                       Options.wal_recovery_mode: 2
+2019/01/06-05:38:31.814416 1efc                  Options.enable_thread_tracking: 0
+2019/01/06-05:38:31.814465 1efc         Options.allow_concurrent_memtable_write: 1
+2019/01/06-05:38:31.814495 1efc      Options.enable_write_thread_adaptive_yield: 1
+2019/01/06-05:38:31.814524 1efc             Options.write_thread_max_yield_usec: 100
+2019/01/06-05:38:31.814553 1efc            Options.write_thread_slow_yield_usec: 3
+2019/01/06-05:38:31.814587 1efc                               Options.row_cache: None
+2019/01/06-05:38:31.814618 1efc                              Options.wal_filter: None
+2019/01/06-05:38:31.814647 1efc             Options.avoid_flush_during_recovery: 0
+2019/01/06-05:38:31.814676 1efc             Options.base_background_compactions: 1
+2019/01/06-05:38:31.814705 1efc             Options.max_background_compactions: 1
+2019/01/06-05:38:31.814740 1efc             Options.avoid_flush_during_shutdown: 0
+2019/01/06-05:38:31.814771 1efc             Options.delayed_write_rate : 16777216
+2019/01/06-05:38:31.814799 1efc             Options.max_total_wal_size: 0
+2019/01/06-05:38:31.814819 1efc             Options.delete_obsolete_files_period_micros: 21600000000
+2019/01/06-05:38:31.814838 1efc                   Options.stats_dump_period_sec: 600
+2019/01/06-05:38:31.814856 1efc Compression algorithms supported:
+2019/01/06-05:38:31.814873 1efc 	Snappy supported: 1
+2019/01/06-05:38:31.814890 1efc 	Zlib supported: 0
+2019/01/06-05:38:31.814905 1efc 	Bzip supported: 0
+2019/01/06-05:38:31.814921 1efc 	LZ4 supported: 0
+2019/01/06-05:38:31.814936 1efc 	ZSTD supported: 0
+2019/01/06-05:38:31.814952 1efc Fast CRC32 supported: 1
+2019/01/06-05:38:31.841053 1efc [leveldb-rocksdb\db\version_set.cc:2600] Recovering from manifest file: MANIFEST-004657
+2019/01/06-05:38:31.861236 1efc [leveldb-rocksdb\db\column_family.cc:406] --------------- Options for column family [default]:
+2019/01/06-05:38:31.861330 1efc               Options.comparator: leveldb.BytewiseComparator
+2019/01/06-05:38:31.861374 1efc           Options.merge_operator: None
+2019/01/06-05:38:31.861407 1efc        Options.compaction_filter: None
+2019/01/06-05:38:31.861438 1efc        Options.compaction_filter_factory: None
+2019/01/06-05:38:31.861470 1efc         Options.memtable_factory: SkipListFactory
+2019/01/06-05:38:31.861499 1efc            Options.table_factory: BlockBasedTable
+2019/01/06-05:38:31.861689 1efc            table_factory options:   flush_block_policy_factory: FlushBlockBySizePolicyFactory (000001758BCDA210)
+  cache_index_and_filter_blocks: 0
+  cache_index_and_filter_blocks_with_high_priority: 0
+  pin_l0_filter_and_index_blocks_in_cache: 0
+  index_type: 0
+  hash_index_allow_collision: 1
+  checksum: 1
+  no_block_cache: 0
+  block_cache: 000001758BD23980
+  block_cache_name: LRUCache
+  block_cache_options:
+    capacity : 8388608
+    num_shard_bits : 4
+    strict_capacity_limit : 0
+    high_pri_pool_ratio: 0.000
+  block_cache_compressed: 0000000000000000
+  persistent_cache: 0000000000000000
+  block_size: 4096
+  block_size_deviation: 10
+  block_restart_interval: 16
+  index_block_restart_interval: 1
+  filter_policy: rocksdb.BuiltinBloomFilter
+  whole_key_filtering: 1
+  format_version: 2
+2019/01/06-05:38:31.861734 1efc        Options.write_buffer_size: 4194304
+2019/01/06-05:38:31.861765 1efc  Options.max_write_buffer_number: 2
+2019/01/06-05:38:31.861795 1efc          Options.compression: Snappy
+2019/01/06-05:38:31.861826 1efc                  Options.bottommost_compression: Disabled
+2019/01/06-05:38:31.861856 1efc       Options.prefix_extractor: nullptr
+2019/01/06-05:38:31.861887 1efc   Options.memtable_insert_with_hint_prefix_extractor: nullptr
+2019/01/06-05:38:31.861917 1efc             Options.num_levels: 7
+2019/01/06-05:38:31.862679 1efc        Options.min_write_buffer_number_to_merge: 1
+2019/01/06-05:38:31.862877 1efc     Options.max_write_buffer_number_to_maintain: 0
+2019/01/06-05:38:31.862927 1efc            Options.compression_opts.window_bits: -14
+2019/01/06-05:38:31.862961 1efc                  Options.compression_opts.level: -1
+2019/01/06-05:38:31.862992 1efc               Options.compression_opts.strategy: 0
+2019/01/06-05:38:31.863514 1efc         Options.compression_opts.max_dict_bytes: 0
+2019/01/06-05:38:31.863566 1efc      Options.level0_file_num_compaction_trigger: 4
+2019/01/06-05:38:31.863600 1efc          Options.level0_slowdown_writes_trigger: 20
+2019/01/06-05:38:31.863631 1efc              Options.level0_stop_writes_trigger: 36
+2019/01/06-05:38:31.863664 1efc                   Options.target_file_size_base: 67108864
+2019/01/06-05:38:31.863697 1efc             Options.target_file_size_multiplier: 1
+2019/01/06-05:38:31.863733 1efc                Options.max_bytes_for_level_base: 268435456
+2019/01/06-05:38:31.863766 1efc Options.level_compaction_dynamic_level_bytes: 0
+2019/01/06-05:38:31.863839 1efc          Options.max_bytes_for_level_multiplier: 10.000000
+2019/01/06-05:38:31.863877 1efc Options.max_bytes_for_level_multiplier_addtl[0]: 1
+2019/01/06-05:38:31.863910 1efc Options.max_bytes_for_level_multiplier_addtl[1]: 1
+2019/01/06-05:38:31.863942 1efc Options.max_bytes_for_level_multiplier_addtl[2]: 1
+2019/01/06-05:38:31.863974 1efc Options.max_bytes_for_level_multiplier_addtl[3]: 1
+2019/01/06-05:38:31.864006 1efc Options.max_bytes_for_level_multiplier_addtl[4]: 1
+2019/01/06-05:38:31.864040 1efc Options.max_bytes_for_level_multiplier_addtl[5]: 1
+2019/01/06-05:38:31.864079 1efc Options.max_bytes_for_level_multiplier_addtl[6]: 1
+2019/01/06-05:38:31.864112 1efc       Options.max_sequential_skip_in_iterations: 8
+2019/01/06-05:38:31.864143 1efc                    Options.max_compaction_bytes: 1677721600
+2019/01/06-05:38:31.864176 1efc                        Options.arena_block_size: 524288
+2019/01/06-05:38:31.864207 1efc   Options.soft_pending_compaction_bytes_limit: 68719476736
+2019/01/06-05:38:31.864239 1efc   Options.hard_pending_compaction_bytes_limit: 274877906944
+2019/01/06-05:38:31.864271 1efc       Options.rate_limit_delay_max_milliseconds: 100
+2019/01/06-05:38:31.864302 1efc                Options.disable_auto_compactions: 0
+2019/01/06-05:38:31.864337 1efc                         Options.compaction_style: kCompactionStyleLevel
+2019/01/06-05:38:31.864371 1efc                           Options.compaction_pri: kByCompensatedSize
+2019/01/06-05:38:31.864403 1efc  Options.compaction_options_universal.size_ratio: 1
+2019/01/06-05:38:31.864434 1efc Options.compaction_options_universal.min_merge_width: 2
+2019/01/06-05:38:31.864468 1efc Options.compaction_options_universal.max_merge_width: 4294967295
+2019/01/06-05:38:31.864508 1efc Options.compaction_options_universal.max_size_amplification_percent: 200
+2019/01/06-05:38:31.864542 1efc Options.compaction_options_universal.compression_size_percent: -1
+2019/01/06-05:38:31.864575 1efc Options.compaction_options_fifo.max_table_files_size: 1073741824
+2019/01/06-05:38:31.864608 1efc                   Options.table_properties_collectors: 
+2019/01/06-05:38:31.864637 1efc                   Options.inplace_update_support: 0
+2019/01/06-05:38:31.864669 1efc                 Options.inplace_update_num_locks: 10000
+2019/01/06-05:38:31.864703 1efc               Options.memtable_prefix_bloom_size_ratio: 0.000000
+2019/01/06-05:38:31.864738 1efc   Options.memtable_huge_page_size: 0
+2019/01/06-05:38:31.864768 1efc                           Options.bloom_locality: 0
+2019/01/06-05:38:31.864800 1efc                    Options.max_successive_merges: 0
+2019/01/06-05:38:31.864832 1efc                Options.optimize_filters_for_hits: 0
+2019/01/06-05:38:31.864862 1efc                Options.paranoid_file_checks: 0
+2019/01/06-05:38:31.864893 1efc                Options.force_consistency_checks: 0
+2019/01/06-05:38:31.864924 1efc                Options.report_bg_io_stats: 0
+2019/01/06-05:38:31.867853 1efc [leveldb-rocksdb\db\version_set.cc:2850] Recovered from manifest file:./db/MANIFEST-004657 succeeded,manifest_file_number is 4657, next_file_number is 4659, last_sequence is 314093, log_number is 0,prev_log_number is 0,max_column_family is 0
+2019/01/06-05:38:31.868049 1efc [leveldb-rocksdb\db\version_set.cc:2858] Column family [default] (ID 0), log number is 4656
+2019/01/06-05:38:31.878736 1efc EVENT_LOG_v1 {"time_micros": 1546727911878626, "job": 1, "event": "recovery_started", "log_files": [4658]}
+2019/01/06-05:38:31.878808 1efc [leveldb-rocksdb\db\db_impl.cc:1468] Recovering log #4658 mode 2
+2019/01/06-05:38:31.879320 1efc [leveldb-rocksdb\db\version_set.cc:2386] Creating manifest 4660
+2019/01/06-05:38:32.010412 1efc EVENT_LOG_v1 {"time_micros": 1546727912010375, "job": 1, "event": "recovery_finished"}
+2019/01/06-05:38:32.030385 1efc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//MANIFEST-004657 type=3 #4657 -- OK
+2019/01/06-05:38:32.032767 1efc [DEBUG] [leveldb-rocksdb\db\db_impl.cc:969] [JOB 2] Delete ./db//004658.log type=0 #4658 -- OK
+2019/01/06-05:38:32.149903 1efc [leveldb-rocksdb\db\db_impl.cc:6172] DB pointer 000001758DC5CD60
